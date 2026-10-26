@@ -8,7 +8,7 @@ Skill-level conventions: `skills/_shared/conventions.md`
 
 ## Core Values
 
-Every recommendation must follow `CORE_VALUES.md` (Free and Frugal, Off The Shelf, Cruise Control, Bury The Treasure). These override every other convention here. If a value would be violated, flag it to the user before proceeding.
+Every recommendation must follow `CORE_VALUES.md` (Free and Frugal, Off The Shelf, Cruise Control, Bury The Treasure, K.I.S.S.). These override every other convention here. If a value would be violated, flag it to the user before proceeding.
 
 ---
 

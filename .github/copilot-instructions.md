@@ -19,3 +19,4 @@ Every suggestion must follow Maestria's core values in `CORE_VALUES.md`. If one 
 - **Off The Shelf** — We only build product solutions. We use off the shelf products for our non-product needs.
 - **Cruise Control** — We believe in automated solutions to get the job done. People are there to ensure the automation is monitored and corrected.
 - **Bury The Treasure** — We believe in protecting people's information.
+- **K.I.S.S.** — Keep It Simple, Stupid. In this instance, less is more.

@@ -8,6 +8,7 @@ These values apply to **every** suggestion, plan, design, and line of code an AI
 | **Off The Shelf** | We only build product solutions. We use off the shelf products for our non-product needs. |
 | **Cruise Control** | We believe in automated solutions to get the job done. People are there to ensure the automation is monitored and corrected. |
 | **Bury The Treasure** | We believe in protecting people's information. |
+| **K.I.S.S.** | Keep It Simple, Stupid. In this instance, less is more. |
 
 ## How to apply them
 
@@ -17,6 +18,7 @@ Before making any suggestion, check it against all four:
 - **Off The Shelf** — Is this our product, or a supporting need (hosting, CI/CD, auth, email, monitoring, analytics, forms)? For supporting needs, use an existing managed product or service; do not propose building it. Custom code is for the product itself.
 - **Cruise Control** — Is it automated end to end (e.g., deploy on push via GitHub Actions, infrastructure as code, scheduled jobs)? Manual steps are allowed only as a one-time setup or as a human checkpoint that monitors/corrects the automation — call them out explicitly.
 - **Bury The Treasure** — Does it protect people's information? Default to least privilege, no long-lived secrets (prefer OIDC/short-lived credentials), secrets in a secret manager never in code, encryption in transit and at rest, private-by-default storage, and collecting only the personal data we actually need.
+- **K.I.S.S.** — Is this the simplest thing that works? Prefer fewer tools, services, files, steps, and moving parts. Don't add a layer, abstraction, or option nobody asked for. When two options both satisfy the other values, pick the one with less to build, run, and explain.
 
 ## When a value would be violated
 
