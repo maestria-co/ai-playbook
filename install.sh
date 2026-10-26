@@ -37,6 +37,10 @@ echo "  skills/_shared/ ($(find "$REPO_DIR/skills/_shared" -type f | wc -l | tr 
 cp "$REPO_DIR/skills/GUIDE.md" "$INSTALL_DIR/skills/GUIDE.md"
 echo "  skills/GUIDE.md"
 
+# Core values (imported into CLAUDE.md so they're always in context)
+cp "$REPO_DIR/CORE_VALUES.md" "$INSTALL_DIR/CORE_VALUES.md"
+echo "  CORE_VALUES.md"
+
 # Each skill folder
 for dir in "$REPO_DIR/skills/"/*/; do
   name=$(basename "$dir")
@@ -76,6 +80,12 @@ if $CLAUDE_MODE; then
 
   # Build skills table
   SKILLS_BLOCK="$MARKER_START
+## Maestria Core Values (always apply)
+
+Every suggestion must follow these. If one would be violated, tell the user first.
+
+@~/.claude/CORE_VALUES.md
+
 ## Agent-Defs Skills
 
 The following skills are installed at \`~/.claude/skills/\`. When a task matches
