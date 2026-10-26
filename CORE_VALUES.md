@@ -12,7 +12,7 @@ These values apply to **every** suggestion, plan, design, and line of code an AI
 
 ## How to apply them
 
-Before making any suggestion, check it against all four:
+Before making any suggestion, check it against all five:
 
 - **Free and Frugal** — Does it run on a free tier or always-free offering? If anything costs money (even cents, a trial that expires, or a usage limit we could exceed), say what it costs, why no free option works, and how to cap the spend (budgets, alerts, hard limits).
 - **Off The Shelf** — Is this our product, or a supporting need (hosting, CI/CD, auth, email, monitoring, analytics, forms)? For supporting needs, use an existing managed product or service; do not propose building it. Custom code is for the product itself.
