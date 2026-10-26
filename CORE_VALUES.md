@@ -8,7 +8,7 @@ These values apply to **every** suggestion, plan, design, and line of code an AI
 | **Off The Shelf** | We only build product solutions. We use off the shelf products for our non-product needs. |
 | **Cruise Control** | We believe in automated solutions to get the job done. People are there to ensure the automation is monitored and corrected. |
 | **Bury The Treasure** | We believe in protecting people's information. |
-| **K.I.S.S.** | Keep It Simple, Stupid. In this instance, less is more. |
+| **K.I.S.S.** | Keep It Simple, Stupid. Think less is more. |
 
 ## How to apply them
 
