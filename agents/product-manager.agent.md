@@ -15,7 +15,7 @@ description: >
 name: Product-Manager
 model: claude-sonnet-4.5
 user-invocable: false
-tools: [read, agent, edit, search, web]
+tools: ["read", "agent", "edit", "search", "web", "skill"]
 ---
 
 # Product-Manager Agent

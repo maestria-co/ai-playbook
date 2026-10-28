@@ -71,6 +71,78 @@ done
 
 echo ""
 
+# ── Claude Code: translate agent frontmatter ──────────────────────────────────
+# Agent definitions are authored in Copilot's vocabulary (lowercase capability
+# tokens, dotted model versions). Claude Code expects concrete tool names and
+# dash-separated model ids. Translate on install so a single source of truth in
+# the repo serves both targets — never hand-edit the installed copies, they are
+# overwritten on every run.
+
+if $CLAUDE_MODE; then
+  python3 - "$INSTALL_DIR/agents" <<'PYEOF'
+import pathlib, re, sys
+
+TOOL_MAP = {
+    "agent":   ["Agent"],
+    "read":    ["Read"],
+    "edit":    ["Edit", "Write"],
+    "search":  ["Grep", "Glob"],
+    "execute": ["Bash"],
+    "web":     ["WebFetch", "WebSearch"],
+    "skill":   ["Skill"],
+    "*":       ["*"],
+}
+
+def map_tools(raw):
+    tokens = [t.strip().strip('"\'') for t in raw.strip().lstrip("[").rstrip("]").split(",")]
+    out, seen = [], set()
+    for tok in tokens:
+        if not tok:
+            continue
+        mapped = TOOL_MAP.get(tok.lower())
+        if mapped is None:
+            print(f"    WARNING: unknown tool token '{tok}' — passed through", file=sys.stderr)
+            mapped = [tok]
+        for name in mapped:
+            if name not in seen:
+                seen.add(name)
+                out.append(name)
+    return "[" + ", ".join(f'"{n}"' for n in out) + "]"
+
+def map_model(raw):
+    # claude-sonnet-4.5 -> claude-sonnet-4-5 ; strip any quoting
+    return raw.strip().strip('"\'').replace(".", "-")
+
+changed = 0
+for path in sorted(pathlib.Path(sys.argv[1]).glob("*.agent.md")):
+    lines = path.read_text().split("\n")
+    # frontmatter only: between the first and second '---'
+    bounds = [i for i, l in enumerate(lines) if l.strip() == "---"][:2]
+    if len(bounds) < 2:
+        continue
+    start, end = bounds
+    dirty = False
+    for i in range(start + 1, end):
+        m = re.match(r"^(tools:\s*)(.+)$", lines[i])
+        if m:
+            new = m.group(1) + map_tools(m.group(2))
+            if new != lines[i]:
+                lines[i], dirty = new, True
+            continue
+        m = re.match(r"^(model:\s*)(.+)$", lines[i])
+        if m:
+            new = m.group(1) + map_model(m.group(2))
+            if new != lines[i]:
+                lines[i], dirty = new, True
+    if dirty:
+        path.write_text("\n".join(lines))
+        changed += 1
+
+print(f"  translated frontmatter in {changed} agent file(s)")
+PYEOF
+  echo ""
+fi
+
 # ── Claude Code: update CLAUDE.md ─────────────────────────────────────────────
 
 if $CLAUDE_MODE; then
