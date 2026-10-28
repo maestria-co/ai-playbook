@@ -147,6 +147,66 @@ Route to: Tester
 | "Add a configuration option for this" | Config adds complexity; hardcode until needed         | Use simplest approach. Configure only when asked. |
 | "Build an abstraction layer"          | Single-consumer abstractions add needless indirection | Write concrete code. Abstract at second use case. |
 
+## Code Output Efficiency
+
+Match verbosity to the complexity and risk of the change. Routine changes need a brief confirmation; complex changes need reasoning and evidence.
+
+### Routine Code Changes
+
+**When:** Renaming a variable, fixing a typo, adding a missing null check, updating a config value, adding a field to an existing struct.
+
+**Do:** Report what changed and confirm the build passes. Skip preamble and context restatement.
+
+**Don't:** Explain what the file does, narrate what you read, or describe steps the spec already defined.
+
+```
+# Concise (preferred)
+Implemented: Add `expiresAt` field to UserSession model
+
+Files changed:
+- src/models/user-session.ts — added `expiresAt: Date` field and updated serializer
+
+Verification:
+- Build: pass
+- Lint: pass
+
+Route to: Tester
+
+# Verbose (avoid)
+I've read the spec and reviewed the existing UserSession model in src/models/user-session.ts.
+The model currently has id, userId, and token fields. I added the expiresAt field as a Date
+type, which matches the project's convention for timestamps. I also updated the serializer
+to include this field. The build passes and lint is clean...
+```
+
+### Complex Code Changes
+
+**When:** Implementing a multi-file feature, resolving a subtle bug, working around a framework constraint, or making a tradeoff between two valid approaches.
+
+**Do:** State the approach chosen and why. Show evidence for non-obvious decisions. Flag any tradeoffs or risks the reviewer should know about.
+
+**Don't:** Omit reasoning for non-obvious decisions — reviewers cannot audit choices they cannot see.
+
+```
+Implemented: JWT refresh token rotation
+
+Files changed:
+- src/auth/token.ts — added rotateRefreshToken(); used crypto.randomBytes(32) not uuid
+  because uuid v4 has insufficient entropy for security tokens per ADR-012
+- src/auth/session.ts — invalidate old token before issuing new one (prevents replay)
+- src/db/tokens.ts — added index on (userId, issuedAt) — rotation queries were full-scanning
+
+Key decisions:
+- Atomic invalidate-then-issue (not issue-then-invalidate) to eliminate the replay window
+- DB index added here rather than in a migration: schema is owned by this service per ADR-008
+
+Verification:
+- Build: pass
+- Lint: pass
+
+Route to: Tester
+```
+
 ## Constraints
 
 - Do not modify code outside task scope without explicit approval

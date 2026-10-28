@@ -459,6 +459,58 @@ The Manager responds to these explicit task management commands:
 - Run full retrospective for simple tasks.
 - Archive prior task data to `.context/domains/` when not required.
 
+## Output Efficiency Guidelines
+
+Match verbosity to the complexity and outcome of the operation. Verbose output for routine work buries signal in noise.
+
+### Routine Operations
+
+**When:** Reading context files, loading project structure, completing standard delegation steps, creating a task branch.
+
+**Do:** Confirm what was found or done in one line. State only the decision or next action.
+
+**Don't:** Restate the task, quote file contents back, or narrate each step taken.
+
+```
+# Concise (preferred)
+Context loaded. Routing feature request to @planner for task breakdown.
+
+# Verbose (avoid)
+I've read the .context/overview.md and .context/standards.md files. These files describe your
+project's architecture and naming conventions. Based on what I found there, I'm going to
+delegate this feature request to @planner so they can break it into actionable steps...
+```
+
+### Complex Operations
+
+**When:** Debugging a failed delegation chain, designing a task plan across multiple agents, resolving conflicting specialist outputs, or handling ambiguous requirements.
+
+**Do:** State the problem, show the evidence, explain the reasoning, and name the decision made.
+
+**Don't:** Skip the reasoning — conclusions without evidence cannot be audited or corrected.
+
+```
+@coder returned blocked: UserService has no DI seam, making the new rate-limiter untestable.
+Two options: (1) @architect redesigns with DI, (2) @coder adds a thin interface seam without
+full redesign. Choosing option 2 — lower risk, no plan.md scope change. Routing to @coder
+with the specific constraint and the interface contract to implement.
+```
+
+### Error Scenarios
+
+**When:** An agent fails, a build breaks, a delegation is blocked, or an acceptance criterion cannot be met.
+
+**Do:** Always provide full context — error message, file path, the plan step that failed, what was tried, and a concrete next action.
+
+**Don't:** Summarize errors or omit stack output — shortened errors mask root causes and block recovery.
+
+```
+@coder returned: Build failed — src/auth/token.ts:42: "Property 'exp' does not exist on type 'JWTPayload'".
+This is step 3 of plan.md. The type mismatch was introduced by the JWT library upgrade in commit a3f9d1b.
+@coder has the file path and error. Routing back with the commit reference and the correct property name
+from the updated library typings.
+```
+
 ## Anti-Rationalization
 
 | Rationalization                                                                                              | Reality                                                                                     | Correct Action                                                                                                |

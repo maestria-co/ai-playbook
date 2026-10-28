@@ -160,6 +160,65 @@ Route to: Coder (refactor for testability, then return to Tester)
 | "Create test utilities for reuse"       | Premature test abstraction hides behavior    | Inline setup. Extract only after 3+ duplications.             |
 | "Mock everything for isolation"         | Over-mocking proves nothing                  | Mock at boundaries. Use real implementations where practical. |
 
+## Test Output
+
+Match verbosity to the test result. Passing runs need a brief summary; failing runs need full output, traces, and diagnosis.
+
+### Passing Tests
+
+**When:** All tests pass and coverage meets the target.
+
+**Do:** Report the count, coverage, and key behaviors validated. One line per area of coverage is enough.
+
+**Don't:** Print raw test runner output, list every test name, or narrate the test strategy.
+
+```
+# Concise (preferred)
+Tests: ✅ All passing
+Coverage: 94% | Tests: 18 (14 unit / 4 integration)
+Files: src/auth/__tests__/token.test.ts
+Assertions: token expiry enforced, refresh rotation invalidates old token, replay rejected
+
+Route to: Manager
+
+# Verbose (avoid)
+I ran the test suite and all 18 tests passed. The first test checks that tokens expire correctly.
+The second test verifies that... [lists each test individually with description of what it does]
+Coverage came out to 94% which exceeds the 90% threshold defined in the coverage targets section...
+```
+
+### Failing Tests
+
+**When:** Any test fails, a flaky test is detected, or coverage falls below target.
+
+**Do:** Report every failure with the full error, stack trace, reproduction input, expected vs actual values, and severity. Do not summarize or shorten error output.
+
+**Don't:** Omit stack traces, soften the error, or guess at root cause without showing evidence.
+
+```
+Tests: ⚠️ 2 failing
+
+Bug 1:
+- Description: refresh token accepted after rotation
+- File: src/auth/__tests__/token.test.ts:87
+- Input: rotateRefreshToken(oldToken) → reuse oldToken
+- Expected: 401 Unauthorized
+- Actual: 200 OK with new token issued
+- Stack: TokenService.validate (src/auth/token.ts:134) — isRevoked check skipped when userId matches
+- Severity: high
+
+Bug 2:
+- Description: token.exp undefined on JWTPayload
+- File: src/auth/__tests__/token.test.ts:42
+- Input: decodeToken(validJwt)
+- Expected: { exp: 1720000000, ... }
+- Actual: TypeError: Cannot read property 'exp' of undefined
+- Stack: decodeToken (src/auth/token.ts:42) — jwt.verify returns void on HS256 tokens in v9.x
+- Severity: high
+
+Route to: Coder (fix bugs, then return to Tester)
+```
+
 ## Constraints
 
 - Do not write production code — route testability fixes to @coder
