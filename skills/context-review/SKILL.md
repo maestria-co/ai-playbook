@@ -79,6 +79,32 @@ Target: all `*.md` files in `.context/standards.md`
 
 ---
 
+### Step 5 — `.context/workflows/pull-requests.md`
+
+Every repo needs a documented PR format. If this file is missing, create it.
+
+1. Copy `pull-requests.md` from `skills/_shared/context_template/context/workflows/`
+   (create `.context/workflows/` if absent).
+2. Fill the **Repo Configuration** table from observed evidence — never guess:
+
+```bash
+# ticket prefix and number format — most frequent wins
+{ git branch -a --format='%(refname:short)'; git tag; git log --format='%s%n%b' -500; } \
+  | grep -oiE '[A-Z]+-[0-9]+' | tr 'a-z' 'A-Z' | sort | uniq -c | sort -rn | head
+# integration branch
+git branch -r --format='%(refname:short)' | grep -E 'origin/(dev|develop)$'
+```
+
+3. Replace the `<PREFIX>` placeholder in its Step 2 fallback command with the resolved prefix.
+4. If a `branching.md` exists, reconcile it: `pull-requests.md` is the source of truth for
+   PR titles and descriptions. Remove any rival PR template from `branching.md` and correct
+   any branch-naming rule that contradicts observed branch names.
+
+If no ticket pattern exists anywhere in history, leave the prefix as a TODO and tell the
+human rather than inventing a scheme.
+
+---
+
 ## Cache Write
 
 After completing all steps (or confirming nothing changed), write `.context/cache/context_update.md`. Create `.context/cache/` if it does not exist.
@@ -91,7 +117,7 @@ triggered_by: architect-agent
 
 ## Summary
 
-- **Reviewed:** `overview.md`, `domains/`, `architecture.md`, `standards.md`
+- **Reviewed:** `overview.md`, `domains/`, `architecture.md`, `standards.md`, `workflows/pull-requests.md`
 - **Changes made:** yes / no
 - **Files updated:**
   - [list files that were changed, or "none"]

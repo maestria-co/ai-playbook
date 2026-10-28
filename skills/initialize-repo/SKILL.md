@@ -91,10 +91,12 @@ Record findings. These feed into Step 3.
 Create the following directories:
 
 ```bash
-mkdir -p .context/{decisions,retrospectives,tasks}
+mkdir -p .context/{decisions,retrospectives,tasks,workflows}
 ```
 
-If the project has non-obvious workflows (complex branching, multi-step CI), also create `.context/workflows/`.
+`workflows/` is always created — every repo needs a documented PR format (see Step 3a).
+Add `branching.md` and `ci-cd.md` alongside it only if the project has non-obvious
+workflows (complex branching, multi-step CI).
 If the project has a rich domain with many entities or project-specific terminology, also create `.context/domains/`.
 
 ### Step 3 — Copy and Populate Files
@@ -105,6 +107,30 @@ If the project has a rich domain with many entities or project-specific terminol
 - `decisions/index.md`
 - `decisions/ADR-001-example-decision.md`
 - `retrospectives/README.md`
+
+### Step 3a — Populate `workflows/pull-requests.md`
+
+Copy `workflows/pull-requests.md` from the template, then fill in its **Repo Configuration**
+table from observed evidence. Do not guess — derive each value:
+
+| Setting | How to derive |
+| --- | --- |
+| Ticket prefix | Most frequent `[A-Z]+-[0-9]+` token across branches, tags and commit subjects. If none exists, ask the human rather than inventing one. |
+| Ticket number format | Digit count and zero-padding of the matches found above (`MAE-0009` → 4 digits, zero-padded). |
+| Default target branch | `dev`/`develop` if present on the remote, else `main`. |
+| Secondary integration branch | `dev` if it exists and is not already the default, else _none_. |
+| Tracker | From repo config, README, or ask the human. |
+
+```bash
+# ticket prefix and format
+{ git branch -a --format='%(refname:short)'; git tag; git log --format='%s%n%b' -500; } \
+  | grep -oiE '[A-Z]+-[0-9]+' | tr 'a-z' 'A-Z' | sort | uniq -c | sort -rn | head
+# integration branch
+git branch -r --format='%(refname:short)' | grep -E 'origin/(dev|develop)$'
+```
+
+Also replace the `<PREFIX>` placeholder in the Step 2 fallback command with the resolved
+prefix, and swap the illustrative worked example for a real PR from this repo if one exists.
 
 **Project-specific files (generate from Step 1 scan):**
 
