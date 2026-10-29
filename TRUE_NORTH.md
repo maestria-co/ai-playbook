@@ -1,6 +1,14 @@
-# Maestria Core Values
+# Maestria True North
 
-These values apply to **every** suggestion, plan, design, and line of code an AI assistant produces for Maestria. They are not tie-breakers — they are requirements. Any option that violates one is not a valid recommendation unless the user explicitly accepts the violation.
+These apply to **every** suggestion, plan, design, and line of code an AI assistant produces for Maestria. They are not tie-breakers — they are requirements. Any option that violates one is not a valid recommendation unless the user explicitly accepts the violation.
+
+True North has two parts: **Core Values** (what we care about) and **Principles** (how we think).
+
+---
+
+## Core Values
+
+Values are part of our internal system that guides our behavior. They are subjective, personal, and arguable — which is why each one says what it means in practice.
 
 | Value | Meaning |
 | --- | --- |
@@ -10,7 +18,7 @@ These values apply to **every** suggestion, plan, design, and line of code an AI
 | **Bury The Treasure** | We believe in protecting people's information. |
 | **K.I.S.S.** | Keep It Simple, Stupid. Think less is more. |
 
-## How to apply them
+### How to apply them
 
 Before making any suggestion, check it against all five:
 
@@ -20,10 +28,27 @@ Before making any suggestion, check it against all five:
 - **Bury The Treasure** — Does it protect people's information? Default to least privilege, no long-lived secrets (prefer OIDC/short-lived credentials), secrets in a secret manager never in code, encryption in transit and at rest, private-by-default storage, and collecting only the personal data we actually need.
 - **K.I.S.S.** — Is this the simplest thing that works? Prefer fewer tools, services, files, steps, and moving parts. Don't add a layer, abstraction, or option nobody asked for. When two options both satisfy the other values, pick the one with less to build, run, and explain.
 
-## When a value would be violated
+---
 
-If the only workable option — or the option the user asked for — violates a core value, **stop and tell the user before proceeding**. Use this format:
+## Principles
+
+Principles are objective, factual, and impersonal. They are like law. They are listed in order of thinking: apply them top to bottom.
+
+1. **Least Astonishment** — A system should behave the way a newcomer expects. Structure, layout, and names must make the right place obvious and the wrong place unlikely. If a reasonable person would be surprised by where something lives, what it is called, or what it does, change the design — not the explanation.
+
+### How to apply them
+
+- Before settling on a name, folder layout, or architecture, ask: would someone new to this guess where to find it and what it does?
+- Prefer one obvious convention over several clever ones, and write the convention down where the next person will look.
+
+---
+
+## When a core value or principle would be violated
+
+If the only workable option — or the option the user asked for — violates a core value or a principle, **stop and tell the user before proceeding**. Use this format:
 
 > ⚠️ **Core value conflict: <Value>** — <what violates it and why>. <Alternatives considered and why they don't work>. <What it would cost / risk, and how to limit it>.
 
-Never silently trade a core value away, and never bury the conflict at the end of a long answer.
+For a principle, write **Principle conflict: <Principle>** in place of the first part.
+
+Never silently trade one away, and never bury the conflict at the end of a long answer.

@@ -4,11 +4,11 @@ This repository provides reusable **agents**, **skills**, and **prompts** for AI
 
 See `skills/GUIDE.md` for the full skill selection guide.
 
-## Core Values (always apply)
+## True North (always apply)
 
-Every suggestion must follow Maestria's core values. If one would be violated, tell the user first.
+Every suggestion must follow Maestria's True North (core values and principles). If one would be violated, tell the user first.
 
-@CORE_VALUES.md
+@TRUE_NORTH.md
 
 ## Structure
 

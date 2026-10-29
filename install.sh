@@ -38,8 +38,8 @@ cp "$REPO_DIR/skills/GUIDE.md" "$INSTALL_DIR/skills/GUIDE.md"
 echo "  skills/GUIDE.md"
 
 # Core values (imported into CLAUDE.md so they're always in context)
-cp "$REPO_DIR/CORE_VALUES.md" "$INSTALL_DIR/CORE_VALUES.md"
-echo "  CORE_VALUES.md"
+cp "$REPO_DIR/TRUE_NORTH.md" "$INSTALL_DIR/TRUE_NORTH.md"
+echo "  TRUE_NORTH.md"
 
 # Each skill folder
 for dir in "$REPO_DIR/skills/"/*/; do
@@ -80,11 +80,11 @@ if $CLAUDE_MODE; then
 
   # Build skills table
   SKILLS_BLOCK="$MARKER_START
-## Maestria Core Values (always apply)
+## Maestria True North (always apply)
 
 Every suggestion must follow these. If one would be violated, tell the user first.
 
-@~/.claude/CORE_VALUES.md
+@~/.claude/TRUE_NORTH.md
 
 ## Agent-Defs Skills
 
