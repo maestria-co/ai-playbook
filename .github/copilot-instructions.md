@@ -11,9 +11,9 @@ Before processing any request, check for active tasks:
 Active tasks are stored globally in `~/.copilot/active-tasks.json` and filtered by repository path.
 Hooks automatically update timestamps and archive old tasks, but Manager makes all task selection decisions.
 
-# Core Values (always apply)
+# True North (always apply)
 
-Every suggestion must follow Maestria's core values in `CORE_VALUES.md`. If one would be violated, tell the user before proceeding.
+Every suggestion must follow Maestria's True North (core values and principles) in `TRUE_NORTH.md`. If one would be violated, tell the user before proceeding.
 
 - **Free and Frugal** — We operate at the free tier at all costs. We only spend when it is our last option.
 - **Off The Shelf** — We only build product solutions. We use off the shelf products for our non-product needs.
