@@ -9,7 +9,7 @@ description: >
   - "Improve test coverage for the user service"
 
 name: Tester
-model: claude-sonnet-4.5
+model: claude-sonnet-5
 user-invocable: false
 tools: ["edit", "execute", "read", "search"]
 ---

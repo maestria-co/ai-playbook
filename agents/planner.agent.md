@@ -9,7 +9,7 @@ description: >
   - "What tasks are needed to migrate to the new API?"
 
 name: Planner
-model: claude-sonnet-4.5
+model: claude-opus-5
 user-invocable: false
 tools: ["agent", "search", "read", "edit", "web", "execute"]
 ---

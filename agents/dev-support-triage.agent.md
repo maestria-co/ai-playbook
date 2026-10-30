@@ -9,7 +9,7 @@ description: >
   - "Reproduce and categorize this reported issue"
 
 name: Dev-Support-Triage
-model: claude-sonnet-4.5
+model: claude-sonnet-5
 user-invocable: false
 tools: ["search", "execute", "web", "read", "edit"]
 ---

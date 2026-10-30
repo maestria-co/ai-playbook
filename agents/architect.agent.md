@@ -9,7 +9,7 @@ description: >
   - "Evaluate the impact of splitting this service"
 
 name: Architect
-model: claude-sonnet-4.5
+model: claude-opus-5
 user-invocable: false
 tools: ["agent", "read", "edit", "search", "web"]
 ---

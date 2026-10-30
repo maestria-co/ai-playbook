@@ -9,7 +9,7 @@ description: >
   - "Review the auth middleware changes before merging"
 
 name: Reviewer
-model: claude-haiku-4.5
+model: claude-sonnet-5
 user-invocable: false
 tools: ["read", "search", "edit", "execute"]
 ---

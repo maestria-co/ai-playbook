@@ -13,7 +13,7 @@ description: >
   - "We need a story for [feature] in Asana/Linear/Jira"
 
 name: Product-Manager
-model: claude-sonnet-4.5
+model: claude-opus-5
 user-invocable: false
 tools: ["read", "agent", "edit", "search", "web", "skill"]
 ---
