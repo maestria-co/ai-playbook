@@ -37,7 +37,7 @@ Use `kebab-case` for the description. Keep it under 5 words. Always include the 
 
 1. **Create** from `develop` (or `main` for hotfixes)
 2. **Develop** on the branch — commit early, commit often
-3. **Open PR** against `develop` — link the ticket, fill in the PR template
+3. **Open PR** against `develop` — follow `pull-requests.md` for title and description
 4. **Pass CI** — all checks must be green before review
 5. **Get approval** — at least 1 reviewer approval required
 6. **Merge** via squash merge — keeps history clean
@@ -65,6 +65,9 @@ Keep the subject line under 72 characters. Add a body if the *why* isn't obvious
 ---
 
 ## PR Rules
+
+> PR **title and description format** live in `pull-requests.md` — that file is the
+> source of truth. Do not add a competing PR template here.
 
 [PLACEHOLDER — document what's required for a PR to be merged]
 
