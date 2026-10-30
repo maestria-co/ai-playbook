@@ -150,6 +150,28 @@ Copy all skills and agents into your AI tool's config folder:
 
 Re-run after any `git pull` to pick up updates. The `--claude` / `-Claude` flag installs to `~/.claude/skills/` and `~/.claude/agents/`, then automatically updates your `~/.claude/CLAUDE.md` with a skills reference table so Claude Code knows what's available.
 
+### Agent frontmatter is translated on install
+
+Agent definitions are authored once in a tool-neutral vocabulary. `install.sh --claude`
+rewrites `tools:` and `model:` into Claude Code's names as it installs:
+
+| Authored token | Claude Code tools |
+| --- | --- |
+| `agent` | `Agent` |
+| `read` | `Read` |
+| `edit` | `Edit`, `Write` |
+| `search` | `Grep`, `Glob` |
+| `execute` | `Bash` |
+| `web` | `WebFetch`, `WebSearch` |
+| `skill` | `Skill` |
+| `*` | `*` |
+
+`model:` has its dots converted to dashes (`claude-sonnet-4.5` → `claude-sonnet-4-5`).
+An unrecognized token is passed through unchanged with a warning rather than dropped.
+
+> **Never hand-edit the installed files in `~/.claude/agents/`.** Every install overwrites
+> them. Edit the agent in this repo and re-run the installer.
+
 ---
 
 ## Task Tracking with Hooks
