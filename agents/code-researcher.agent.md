@@ -10,7 +10,7 @@ description: >
   - "What patterns do we use for database access?"
 
 name: Code-Researcher
-model: claude-sonnet-4.5
+model: claude-sonnet-5
 user-invocable: false
 tools: ["read", "search", "execute"]
 ---

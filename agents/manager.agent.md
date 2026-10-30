@@ -1,7 +1,7 @@
 ---
 description: "Orchestrates software development tasks — start here for any request. Reads project context, selects specialist agents, tracks progress persistently, and enforces discipline constraints throughout."
 name: Manager
-model: claude-haiku-4.5
+model: claude-sonnet-5
 user-invocable: true
 tools: ["*"]
 ---

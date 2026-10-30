@@ -9,7 +9,7 @@ description: >
   - "Investigate best practices for refresh token rotation"
 
 name: Researcher
-model: claude-sonnet-4.5
+model: claude-sonnet-5
 user-invocable: false
 tools: ["search", "read", "edit", "web"]
 ---

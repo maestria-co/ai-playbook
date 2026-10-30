@@ -9,7 +9,7 @@ description: >
   - "Refactor the auth middleware to use the new token format"
 
 name: Coder
-model: claude-sonnet-4.6
+model: claude-sonnet-5
 user-invocable: false
 tools: ["edit", "execute", "search", "web", "read"]
 ---

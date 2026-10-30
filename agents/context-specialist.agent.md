@@ -5,7 +5,7 @@ description: >
   monorepo/workspace roots (root). Invoked by initialize-repo, initialize-monorepo,
   and initialize-workspace. Cannot further delegate to sub-agents.
 name: Context-Specialist
-model: "claude-sonnet-4.5"
+model: claude-sonnet-5
 user-invocable: false
 tools: ["read", "edit", "search", "execute"]
 ---
