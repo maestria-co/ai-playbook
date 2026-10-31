@@ -16,6 +16,14 @@ Consistent git practices make history readable, bisect usable, and collaboration
 This skill defines commit message format, branch naming, atomicity rules, and what
 should (and shouldn't) be committed.
 
+### Enforcement
+
+`scripts/git-hooks/commit-msg` rejects any message that doesn't match this format. Turn it on once per machine:
+
+```
+git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+```
+
 ---
 
 ## Commit Message Format
