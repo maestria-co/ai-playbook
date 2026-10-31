@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# commit-msg — reject commits that don't follow Conventional Commits.
+# Rules live in skills/commit-discipline/SKILL.md.
+# Install once for every repo on this machine:
+#   git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+
+first_line=$(head -n1 "$1")
+
+# Let git's own generated messages through.
+case "$first_line" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *) exit 0 ;;
+esac
+
+pattern='^(feat|fix|docs|refactor|test|chore|style|perf)(\([^)]+\))?!?: .+'
+
+if ! [[ "$first_line" =~ $pattern ]]; then
+  cat >&2 <<MSG
+Commit rejected: message must follow Conventional Commits.
+
+  <type>(<scope>): <short description>
+
+  types: feat | fix | docs | refactor | test | chore | style | perf
+  e.g.   feat(auth): add token refresh
+
+Got: $first_line
+See ai-playbook/skills/commit-discipline/SKILL.md
+MSG
+  exit 1
+fi
