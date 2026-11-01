@@ -28,6 +28,16 @@ Before making any suggestion, check it against all five:
 - **Bury The Treasure** — Does it protect people's information? Default to least privilege, no long-lived secrets (prefer OIDC/short-lived credentials), secrets in a secret manager never in code, encryption in transit and at rest, private-by-default storage, and collecting only the personal data we actually need.
 - **K.I.S.S.** — Is this the simplest thing that works? Prefer fewer tools, services, files, steps, and moving parts. Don't add a layer, abstraction, or option nobody asked for. When two options both satisfy the other values, pick the one with less to build, run, and explain.
 
+### When values pull against each other
+
+Core values are all requirements, but when two of them cannot both be fully met, rank them:
+
+1. **Bury The Treasure** comes first.
+2. **Cruise Control** comes second.
+3. **K.I.S.S.** comes last.
+
+**Free and Frugal** and **Off The Shelf** sit between Cruise Control and K.I.S.S.; their order relative to each other is not decided yet. So extra moving parts (files, jobs, roles) are acceptable to protect information or to keep something automated, and a manual step is not acceptable just to keep something simple. When you trade one value for another, say which one gave way.
+
 ---
 
 ## Principles
