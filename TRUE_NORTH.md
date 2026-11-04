@@ -50,6 +50,9 @@ Principles are objective, factual, and impersonal. They are like law. They are l
 
 - Before settling on a name, folder layout, or architecture, ask: would someone new to this guess where to find it and what it does?
 - Prefer one obvious convention over several clever ones, and write the convention down where the next person will look.
+- A name that makes the reader flip a "not" in their head astonishes them. Name a setting or flag for the state it turns on (`secureCookies`, not `disableSecureCookies`), and never apply `!` to an already-negative name. Microsoft's *Framework Design Guidelines* say the same: "DO name Boolean properties with an affirmative phrase (`CanSeek` instead of `CantSeek`)" ([Names of Type Members](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-type-members)). *Clean Code* lists "avoid negative conditionals" among its understandability tips ([a summary of the book](https://gist.github.com/baciotti/c49805814fea2a2987935ea7acda47fd)), and the advice against negative Boolean names such as `notfound` is at least as old as a 1986 [comp.lang.c thread](https://www.tuhs.org/Usenet/comp.lang.c/1986-July/008233.html). If a name needs a "not" to read right, rename it. A name forced on you by a library, protocol, or command-line tool you do not own is the exception.
+- Environment variables are strings, so `"false"` is truthy. Compare one to an exact value and never apply `!` to it, or a negated "disable" setting will treat `"false"` as "disable".
+- When you touch code that already surprises its reader this way, rename it as part of the change and say so in the PR.
 
 ---
 
