@@ -45,11 +45,15 @@ Core values are all requirements, but when two of them cannot both be fully met,
 Principles are objective, factual, and impersonal. They are like law. They are listed in order of thinking: apply them top to bottom.
 
 1. **Least Astonishment** — A system should behave the way a newcomer expects. Structure, layout, and names must make the right place obvious and the wrong place unlikely. If a reasonable person would be surprised by where something lives, what it is called, or what it does, change the design — not the explanation.
+2. **Say it plainly** — Code reads like the English sentence it stands for. Name a flag, setting, variable, or function for what is true when it is on, so nobody has to flip a "not" in their head. No `disable`, `no`, `not`, `skip`, or `hide` names, and no `!` applied to a name that is already negative: `!disabled` is a double negative that says "enabled" the hard way. If a name needs a "not" to read right, rename it. The only exception is a name forced on you by a library, protocol, or command-line tool you do not own.
 
 ### How to apply them
 
 - Before settling on a name, folder layout, or architecture, ask: would someone new to this guess where to find it and what it does?
 - Prefer one obvious convention over several clever ones, and write the convention down where the next person will look.
+- Name a setting for the state it turns on: `secureCookies`, `consentRequired`, `emailVerified` — not `disableSecureCookies`, `skipConsent`, `isNotVerified`.
+- Environment variables are strings. Compare one to an exact value and never apply `!` to it: the string `"false"` is truthy, so a negated "disable" setting treats `"false"` as "disable".
+- When you touch code that already breaks this, rename it as part of the change and say so in the PR.
 
 ---
 
