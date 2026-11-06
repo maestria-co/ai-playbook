@@ -44,7 +44,7 @@ Core values are all requirements, but when two of them cannot both be fully met,
 
 Principles are objective, factual, and impersonal. They are like law. They are listed in order of thinking: apply them top to bottom.
 
-1. **Least Astonishment** — A system should behave the way a newcomer expects. Structure, layout, and names must make the right place obvious and the wrong place unlikely. If a reasonable person would be surprised by where something lives, what it is called, or what it does, change the design — not the explanation.
+1. **Least Astonishment** — A system should behave the way a newcomer expects. Structure, layout, and names must make the right place obvious and the wrong place unlikely. If a reasonable person would be surprised by where something lives, what it is called, or what it does, change the design — not the explanation. Sources: Cowlishaw, "The design of the REXX language", *IBM Systems Journal* 23(4), 1984, says a feature with "a high astonishment factor … is therefore undesirable" and that "it may be necessary to redesign the feature" ([PDF](https://speleotrove.com/mfc/files/cowlishaw1984-design-of-REXX.pdf)). Raymond, *The Art of Unix Programming*, 2003, names it the Rule of Least Surprise: "always do the least surprising thing", "also widely known as the Principle of Least Astonishment" ([ch. 1](http://catb.org/esr/writings/taoup/html/ch01s06.html)).
 
 ### How to apply them
 
