@@ -238,6 +238,26 @@ GOOD: Flagging that the command swallows all errors, asking if that's intentiona
 
 ---
 
+## Constraint 8: Documentation Currency
+
+**Why this matters:** `task-plan-phase-completion` already loads `context-maintenance`
+when a task plan is in play — but ad-hoc work never passes through that phase, so
+nothing triggers it. In one session, docs drifted badly during ad-hoc work: a standards
+file described middleware registration, status mappings, and a response field that no
+longer existed, and two rules in an architecture doc were INVERTED — following one as
+written would have produced exactly the bug it existed to prevent. The user had to
+prompt for a documentation pass manually.
+
+The trigger is **"a rule changed,"** not **"a plan phase ended."** When your work
+establishes, changes, or invalidates a rule others must follow — regardless of whether
+a task plan is in play — run `context-maintenance` before declaring done.
+
+Specifically re-check docs that DESCRIBE code you changed. Stale docs are merely
+unhelpful; inverted docs are actively harmful — they teach the bug the rule was meant
+to prevent.
+
+---
+
 ## Quick Reference
 
 | Constraint        | One-liner                             |
@@ -249,3 +269,4 @@ GOOD: Flagging that the command swallows all errors, asking if that's intentiona
 | Self-review       | Check your own work                   |
 | Scope             | Do what was asked, no more            |
 | Shell self-check  | Inspect commands before running them  |
+| Documentation currency | Rule changed → update docs, plan or no plan  |
