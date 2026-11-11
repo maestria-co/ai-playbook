@@ -134,6 +134,32 @@ Before creating branches, check:
 
 ---
 
+## Stacked PRs
+
+Stacking means PR B's base branch is PR A, not the trunk. A "merged: true" response
+from the platform does not mean the trunk has the change — it only means the branch
+merged into whatever its base was. In one session a 4-deep stack (#20→#21→#22→#23) was
+built to avoid a merge conflict with no green baseline; three of the four PRs then
+merged into their PARENT branches instead of `main`. All four reported `merged: true`.
+`main` silently lacked three PRs' worth of work until a source file was checked
+directly on disk — caught only by luck, and costing a recovery PR.
+
+- **Default max stack depth: 1.** Prefer waiting for the parent to land, then branching
+  from the trunk, over stacking.
+- **Never have more than one open PR whose base is not the trunk.**
+- If you must stack, do one of:
+  - Retarget each child PR to the trunk *before* merging it, or
+  - Delete each parent branch immediately after its merge, so the child retargets
+    itself automatically.
+  - GitHub only auto-retargets children when the parent branch is **deleted** — don't
+    assume retargeting happens from the merge alone.
+- **Squash-merging a stack rewrites history** — children end up with SHAs the trunk
+  doesn't have and will show spurious conflicts. Use merge commits for a stack, or
+  don't stack.
+- State the stack depth and merge order explicitly in every PR body in the stack.
+
+---
+
 ## Atomic Commits
 
 ### One Logical Change Per Commit
@@ -224,3 +250,4 @@ If the project has no established convention, use Conventional Commits as define
 - Follow project conventions over this skill's defaults when they differ
 - Write commit messages in English unless the project explicitly uses another language
 - Every commit on main/develop should leave the build in a passing state
+- Default stacked-PR depth is 1 — verify each PR's base is the trunk before merging, don't trust a `merged: true` response alone
