@@ -121,6 +121,21 @@ fixing blind changes costs hours.
 3. Check `.context/` for any documented configuration patterns
 4. Only then make changes
 
+### Before Recommending an Approach
+
+Read-First applies to recommendations, not just edits — a recommendation is a
+deliverable, and reversing one costs the human's time and your credibility even when
+the reversal is correct. In one session, "use C# `required` members for request-body
+fields" was reversed after reading the code: `required` cannot be applied to positional
+record parameters without rewriting 22 records, and would have reversed a 422 contract
+merged three days earlier. A second recommendation — consolidate all ADRs into one
+directory because a numbering collision suggested a broken convention — was reversed
+the same way: the files showed the convention was coherent and only one file was
+orphaned.
+
+Read the files a recommendation depends on before making it, or label the
+recommendation explicitly provisional and say what would confirm it.
+
 ### Violations
 
 ```
