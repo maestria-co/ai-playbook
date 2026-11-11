@@ -53,6 +53,25 @@ GOOD: "Running `npm test` — 47 tests passed, 0 failed. Output: [paste]"
 Before reporting a task as complete, show at least one piece of concrete evidence
 that the acceptance criteria are met.
 
+### Platform Responses Are Not Verification
+
+A `merged: true` API response, a green CI badge, and a "success" exit code are all
+INPUTS to verification, not verification itself — they describe what the platform did,
+not what state the target actually ended up in. In one session, four PRs each reported
+`merged: true`; three had merged into feature branches instead of `main`, and the agent
+told the user "all four merged" based on that response alone. The mistake was only
+caught by diffing a source file on disk against what main actually contained.
+
+Verify the END STATE you care about, with a command that checks it directly:
+
+```
+BAD:  Reporting "PR #22 merged" because the merge API call returned merged: true
+GOOD: git merge-base --is-ancestor <PR's head SHA> origin/main && echo "on main"
+```
+
+When reporting that something landed, the evidence is the end state you observed —
+not the operation you performed.
+
 ---
 
 ## Constraint 2: Failure Escalation
@@ -101,6 +120,21 @@ fixing blind changes costs hours.
 2. Check if other config files reference it
 3. Check `.context/` for any documented configuration patterns
 4. Only then make changes
+
+### Before Recommending an Approach
+
+Read-First applies to recommendations, not just edits — a recommendation is a
+deliverable, and reversing one costs the human's time and your credibility even when
+the reversal is correct. In one session, "use C# `required` members for request-body
+fields" was reversed after reading the code: `required` cannot be applied to positional
+record parameters without rewriting 22 records, and would have reversed a 422 contract
+merged three days earlier. A second recommendation — consolidate all ADRs into one
+directory because a numbering collision suggested a broken convention — was reversed
+the same way: the files showed the convention was coherent and only one file was
+orphaned.
+
+Read the files a recommendation depends on before making it, or label the
+recommendation explicitly provisional and say what would confirm it.
 
 ### Violations
 
@@ -204,6 +238,26 @@ GOOD: Flagging that the command swallows all errors, asking if that's intentiona
 
 ---
 
+## Constraint 8: Documentation Currency
+
+**Why this matters:** `task-plan-phase-completion` already loads `context-maintenance`
+when a task plan is in play — but ad-hoc work never passes through that phase, so
+nothing triggers it. In one session, docs drifted badly during ad-hoc work: a standards
+file described middleware registration, status mappings, and a response field that no
+longer existed, and two rules in an architecture doc were INVERTED — following one as
+written would have produced exactly the bug it existed to prevent. The user had to
+prompt for a documentation pass manually.
+
+The trigger is **"a rule changed,"** not **"a plan phase ended."** When your work
+establishes, changes, or invalidates a rule others must follow — regardless of whether
+a task plan is in play — run `context-maintenance` before declaring done.
+
+Specifically re-check docs that DESCRIBE code you changed. Stale docs are merely
+unhelpful; inverted docs are actively harmful — they teach the bug the rule was meant
+to prevent.
+
+---
+
 ## Quick Reference
 
 | Constraint        | One-liner                             |
@@ -215,3 +269,4 @@ GOOD: Flagging that the command swallows all errors, asking if that's intentiona
 | Self-review       | Check your own work                   |
 | Scope             | Do what was asked, no more            |
 | Shell self-check  | Inspect commands before running them  |
+| Documentation currency | Rule changed → update docs, plan or no plan  |

@@ -213,6 +213,41 @@ it('deactivates user', () => {
 
 ---
 
+## Passing For the Wrong Reason
+
+A test that passes can still be a false claim — "tests are green" means nothing if a
+test never exercised what its name says it does. Three real instances from one
+session:
+
+- A test asserted `403 Forbidden` while sending NO auth token at all. It passed, but
+  never exercised the authorization policy it was named after — it exercises
+  authentication being missing, not authorization being denied.
+- `Create_WithZeroAmount_Returns422` sent an invalid enum value alongside the zero
+  amount. The request body failed to **bind** and returned 400 before the validator
+  ran — the test had never once exercised the zero-amount rule it claimed to cover.
+- Six test classes had dead setup code (see `code-quality-rules` on structural fixes).
+  Enabling the setup made one class go from 7 failures to 8 — a test had been
+  "passing" only because the broken setup never ran.
+
+**Rules:**
+
+- After fixing a harness, fixture, or infrastructure bug, re-examine the tests that
+  were PASSING before the fix. Some were green only because the broken thing never
+  executed.
+- Expect the pass count to DROP before it rises once a harness bug is fixed. Treat
+  that as progress and report it as such — don't read a falling count as a regression.
+- Before trusting a test, ask what would have to be true for it to pass for the wrong
+  reason. A test whose name describes a behavior it cannot reach is worse than no test.
+- **Flaky vs. regression:** before calling a failure either one, check the test's
+  history and re-run it in isolation. Example: a wall-clock test failed at 8.9s against
+  a 2s budget, then ran at 245ms on re-run and 330ms on a clean trunk — machine
+  contention, not a regression. Guessing either way would have been wrong.
+- Prefer a structural assertion over a wall-clock one where possible. "This work
+  happens off the request path" survives machine noise; "this responds in under 2s"
+  doesn't.
+
+---
+
 ## Constraints
 
 - Never skip failing tests to make the build pass — fix the test or the code
