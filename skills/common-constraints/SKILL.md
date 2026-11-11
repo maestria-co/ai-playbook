@@ -53,6 +53,25 @@ GOOD: "Running `npm test` — 47 tests passed, 0 failed. Output: [paste]"
 Before reporting a task as complete, show at least one piece of concrete evidence
 that the acceptance criteria are met.
 
+### Platform Responses Are Not Verification
+
+A `merged: true` API response, a green CI badge, and a "success" exit code are all
+INPUTS to verification, not verification itself — they describe what the platform did,
+not what state the target actually ended up in. In one session, four PRs each reported
+`merged: true`; three had merged into feature branches instead of `main`, and the agent
+told the user "all four merged" based on that response alone. The mistake was only
+caught by diffing a source file on disk against what main actually contained.
+
+Verify the END STATE you care about, with a command that checks it directly:
+
+```
+BAD:  Reporting "PR #22 merged" because the merge API call returned merged: true
+GOOD: git merge-base --is-ancestor <PR's head SHA> origin/main && echo "on main"
+```
+
+When reporting that something landed, the evidence is the end state you observed —
+not the operation you performed.
+
 ---
 
 ## Constraint 2: Failure Escalation
