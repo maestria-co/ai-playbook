@@ -9,7 +9,7 @@
   `context-specialist` — that would have silently degraded agent behavior
 - The Anti-Rationalization and Scope Guard tables are genuinely useful;
   adding them to all agents creates a consistent discipline layer across the entire fleet
-- Adapting skills by stripping topology-cache and iconrc references before
+- Adapting skills by stripping external tool-specific references before
   committing kept the repo self-contained with no external dependencies
 
 ### What Could Be Improved
