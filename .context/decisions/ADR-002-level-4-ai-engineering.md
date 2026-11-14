@@ -40,23 +40,82 @@ unless it adds or strengthens an automated pass/fail signal.** Better prompts
 are Level 2 and 3 work. We will keep doing it, but we will not count it as
 progress on this axis.
 
-## What Level 4 means for a definitions repo
+## What "the specs pass" means here
 
 This repo ships Markdown — agents, skills, prompts — not a running
-application. "Tests pass" has to be defined concretely or the target is
-vacuous. Two kinds of oracle apply:
+application. The Level 4 clause "iterate until the specs pass" has to be
+defined concretely or the target is vacuous.
 
-1. **Structural checks** — invariants over the artifacts themselves:
-   frontmatter is valid and complete, skill references resolve to real
-   directories, declared models exist, index tables in `CLAUDE.md` and
-   `skills/GUIDE.md` match what is on disk, no stale agent names. This is
-   what `scripts/validate.py` already does.
-2. **Behavioral evals** — given a prompt, does the agent route, refuse,
-   or produce the shape we expect? This is the part that does not exist yet
-   and is the real work of reaching Level 4.
+### Two oracles, by lifetime
 
-Structural checks catch "the artifact is malformed." Only behavioral evals
-catch "the artifact is well-formed and wrong." Level 4 needs both.
+The spec is the definition of done. A standing validator is not, and the two
+must not be confused.
+
+| | Standing invariants | Per-task acceptance checks |
+|---|---|---|
+| Question answered | "Did I break the repo?" | "Did I build the thing asked for?" |
+| Scope | Every branch, every task | This task only |
+| Changes per task | Never | Always |
+| Lifetime | Permanent | Dies with the task |
+| Today | `scripts/validate.py` | `plan.md` prose checkboxes |
+
+`validate.py` is a regression guard. It can prove an agent damaged nothing.
+It can never prove the agent did what was asked: a branch that implements
+the wrong feature flawlessly passes it green. Only the per-task checks,
+derived from the spec, close that gap.
+
+### Why the per-task half does not work today
+
+`skills/task-plan/SKILL.md` defines acceptance criteria as checkboxes that
+are "independently verifiable" and "updated to `[x]` only when verified with
+evidence." Both are prose aspirations. In practice the agent that did the
+work also decides the box is ticked — worker and judge are the same party.
+
+This is the exact failure `skills/common-constraints/` exists to prevent,
+and it attempts the prevention with more prose. A rule instructing an agent
+not to rationalize is itself available to be rationalized past. A
+self-assessment problem is not fixable with better instructions to the self.
+It is fixable only by moving the judgment outside the agent.
+
+### Criteria need a tier label
+
+Not every criterion can execute. Taking the criteria from
+`.context/tasks/mje0008/plan.md` as a worked example:
+
+| Criterion | Mechanizable |
+|---|---|
+| Ladder recorded with the repo's current position | Yes — file exists, table has six levels, states a position |
+| Core value conflicts surfaced, not buried | Yes — contains `Core value conflict:`, and not only in the final section |
+| Phases sized to one PR each | Weak — file-count proxy at best |
+| Level 4 given a non-vacuous meaning | No — judgment |
+
+So each criterion is labelled machine-checked or human-judged. The agent
+iterates unattended against the machine-checked ones. The human reviews only
+the judged ones.
+
+This is the real payoff, and it is worth stating plainly: Level 4 is not
+"no human review" — that is Level 5. It is that the review queue shrinks to
+the few items that need a brain, because everything mechanical was proven
+before it arrived.
+
+### Behavioral evals are a third thing
+
+Structural checks catch "the artifact is malformed." Per-task checks catch
+"the task was not done." Neither catches "the artifact is well-formed and
+wrong" — an agent that routes to the wrong specialist, or skips a handoff.
+That needs behavioral evals: given a prompt, does the agent route, refuse,
+or produce the expected shape? These are standing like `validate.py`, but
+assert on agent behavior rather than on files. They do not exist yet.
+
+### How the halves connect
+
+Because this repo ships files, most per-task criteria are assertions about
+files — the same shape `validate.py` already evaluates. Same runner,
+different lifetime. That gives a pipeline: a per-task check that proves
+generally true graduates into `validate.py` as a permanent invariant.
+
+That is `skills/knowledge-graduation/` applied to checks instead of docs.
+The harness already has the concept; it is pointed at the wrong artifact.
 
 ## Rationale
 
@@ -108,7 +167,7 @@ K.I.S.S. ranks last and does not justify dropping automation.
 
 ⚠️ **Core value conflict: Free and Frugal** — behavioral evals invoke a model
 per case, which is not free at any meaningful volume, and GitHub Actions
-minutes are free only on public repos. Structural checks (phase 1) are free
+minutes are free only on public repos. Structural and per-task checks (phases 1 and 2) are free
 and unaffected. Before any behavioral-eval work starts we must decide: run
 them on a hard-capped budget, run them only on changed agents, run them
 locally on demand rather than per push, or substitute assertions that need no
