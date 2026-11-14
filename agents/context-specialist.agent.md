@@ -100,7 +100,7 @@ Callers provide these parameters through delegation prompt:
 | Files specified by loaded implementation skill section | Source tree files in target project           |
 | Git operations confined to `working_directory`         | Commits spanning multiple working directories |
 
-## Governing Constraints
+## Constraints
 
 <!-- BEGIN: common-constraints -->
 

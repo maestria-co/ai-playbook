@@ -4,7 +4,7 @@ Structural validator for agent-defs repo.
 
 Checks:
 - All agents have required frontmatter keys (description, name, model)
-- All agents are on claude-sonnet-4.6
+- All agents declare a model from ALLOWED_MODELS
 - All specialist agents have Behavior Tiers, Anti-Rationalization, Scope Guard, Constraints
 - All skill references in agents resolve to real directories on disk
 - No stale agent references (workspace-manager, monorepo-manager)
@@ -31,6 +31,14 @@ SKILLKIT_SKILLS = {
     "initialize-workspace", "jira-story", "knowledge-graduation", "linear-story",
     "planning-tasks", "post-meeting", "researching-options", "start-worktree",
     "using-skills", "context-review",
+}
+
+# The only models agents may declare. This is the single source of truth —
+# update it here when the fleet moves, and CI will flag any agent left behind.
+ALLOWED_MODELS = {
+    "claude-opus-5",
+    "claude-sonnet-5",
+    "claude-haiku-4-5-20251001",
 }
 
 REQUIRED_FRONTMATTER = ["description", "name", "model"]
@@ -72,8 +80,13 @@ def validate():
 
         # Model version
         m = re.search(r"^model:\s*(.+)", content, re.MULTILINE)
-        if m and "claude-sonnet-4.6" not in m.group(1):
-            warnings.append(f"[{fname}] Model not claude-sonnet-4.6: {m.group(1).strip()}")
+        if m:
+            model = m.group(1).strip()
+            if model not in ALLOWED_MODELS:
+                errors.append(
+                    f"[{fname}] Model not in allowlist: {model} "
+                    f"(allowed: {', '.join(sorted(ALLOWED_MODELS))})"
+                )
 
         # Required sections (all agents except manager)
         if not is_manager:
