@@ -56,9 +56,10 @@ Branch `fix/validate-ci`, pushed 2026-11-14.
    `ALLOWED_MODELS` allowlist, raised from warning to error.
 3. ✅ Added `.github/workflows/validate.yml` running `validate.py --strict`
    on push and PR. First automated pass/fail signal in the repo.
-4. ⬜ **Not done.** Make `validate.py` exit non-zero on drift between the
-   `CLAUDE.md` / `skills/GUIDE.md` index tables and what is on disk. The
-   indexes are hand maintained and nothing catches a stale row.
+4. ✅ Added an index-drift check: every repo-rooted path cited in
+   `CLAUDE.md` and `skills/GUIDE.md` must resolve. It immediately caught
+   real rot — all three indexes cited `evaluate-skill`, a skill with no
+   directory. Rows repointed to `writing-skills`.
 
 Confirmed free: the repo is public, so Actions minutes are unlimited.
 
@@ -81,14 +82,24 @@ it proves nothing broke, not that the right thing was built. See ADR-002,
 4. Add the graduation path: a per-task check that proves generally true
    moves into `validate.py` as a standing invariant.
 
+**Decided 2026-11-14: the planner writes a task's checks, not the coder.**
+A coder that writes its own passing condition reproduces the
+self-assessment problem one level up. This raises the bar on `@planner` and
+on `skills/task-plan/` — writing a spec precise enough to be mechanically
+checked is the real work that Level 4 names when it calls the human a
+product manager.
+
 Step 3 is the one that changes agent behavior. Steps 1 and 2 only make it
 possible.
 
-### Phase 3 — Decide the eval-cost question
-Blocked on the Free and Frugal conflict in ADR-002. Decide how behavioral
-evals get paid for — hard budget cap, changed-agents-only, local-on-demand,
-or model-free assertions — and record it as ADR-003.
-**No Phase 4 work starts until this is decided.**
+### Phase 3 — Decide the eval-cost question — DONE
+Resolved in `.context/decisions/ADR-003-eval-cost.md`. Two tiers:
+model-free assertions run in CI on every push; behavioral evals that need a
+model run locally, on demand. No new spend, and Phase 4 is unblocked.
+
+Carry forward the limitation ADR-003 records: a model-free assertion
+verifies what an agent *declares*, never what it *does*. The cheap tier
+does not substitute for the expensive one.
 
 ### Phase 4 — Behavioral evals
 Structural checks catch a malformed artifact. Per-task checks catch an
@@ -96,9 +107,17 @@ undone task. Neither catches an artifact that is well-formed and wrong — an
 agent that routes to the wrong specialist or skips a handoff.
 
 Executable cases asserting an agent routes, refuses, or delegates as
-intended. Assert on shape and routing, never exact wording. Start with the
-Manager: highest leverage (see ADR-001), and its misrouting cascades to
-every specialist.
+intended. Assert on shape and routing, never exact wording.
+
+**Order decided 2026-11-14:** `manager`, then `coder`, then `reviewer`.
+Manager first because its misrouting cascades to every specialist (see
+ADR-001). Then `coder` as the most-invoked agent, then `reviewer` as the
+last check before a merge.
+
+Split each agent's cases by tier per ADR-003: whatever can be asserted
+without a model goes into `validate.py` and runs in CI; the rest goes in the
+local on-demand suite. That suite needs one documented command and a
+recorded last-run date, or it rots exactly as `validate.py` did.
 
 ### Phase 5 — Close the lessons loop
 `task-retrospective` and `knowledge-graduation` both exist and both wait for
@@ -130,13 +149,25 @@ measurement. That is precisely what Phase 4 tests.
 
 ## Open questions
 
-1. ~~Is this repo public or private?~~ **Answered 2026-11-14: public.**
-   Actions minutes are unlimited and free.
-2. **Does `validate.py` own the model allowlist, or does it read it from a
-   single source?** A hardcoded list rots again. It just did.
-3. **Which agent after the Manager** gets evals first in Phase 4 — `coder`
-   (most invoked) or `reviewer` (last line of defense before merge)?
-4. **Who writes a task's per-task checks in Phase 2** — the planner when it
-   writes the spec, or the coder when it does the work? The planner is the
-   honest answer, because a coder writing its own passing condition is the
-   same self-assessment problem one level up.
+All six questions from the first pass are answered. Recorded 2026-11-14.
+
+1. ~~Public or private?~~ **Public.** Actions minutes unlimited and free.
+2. ~~Does `validate.py` own the model allowlist?~~ **It owns it**, as a named
+   `ALLOWED_MODELS` constant at the top of the file. Still a hardcoded list,
+   so it can still rot — but it now rots visibly, as a CI error rather than
+   a warning nobody reads.
+3. ~~Index-drift check now or later?~~ **Now.** Done, Phase 1 step 4.
+4. ~~Who writes a task's per-task checks?~~ **The planner.** See Phase 2.
+5. ~~How do evals get paid for?~~ **Two tiers.** See ADR-003.
+6. ~~Which agent after the Manager?~~ **`coder`, then `reviewer`.** See Phase 4.
+
+### New, from the Phase 1 work
+
+7. **Does "evaluate a SKILL.md file" need its own skill?** All three index
+   docs pointed at `evaluate-skill`, which does not exist. The rows now
+   point at `writing-skills`, which covers skill quality and hardening but
+   does not advertise evaluation. If evaluation deserves a dedicated skill,
+   the rows are wrong and should point at it instead.
+8. **Who owns the local eval suite's last-run date?** ADR-003 relies on it
+   to stop the suite rotting, and calls the mitigation weak. A person
+   checking a date is the kind of manual step Cruise Control dislikes.

@@ -163,7 +163,11 @@ K.I.S.S. ranks last and does not justify dropping automation.
 - Running evals calls a model, which costs money. **Free and Frugal conflict —
   see below.** No eval work proceeds until the cost question is answered.
 
-## Open question: eval cost
+## Open question: eval cost — RESOLVED
+
+**Closed 2026-11-14 by ADR-003**, which splits checks into a free model-free
+tier in CI and a local on-demand tier for anything needing a model. The
+conflict below is recorded as it stood.
 
 ⚠️ **Core value conflict: Free and Frugal** — behavioral evals invoke a model
 per case, which is not free at any meaningful volume, and GitHub Actions
@@ -177,4 +181,5 @@ model call. This ADR does not decide it.
 
 - `scripts/validate.py` — the existing structural oracle
 - `.context/tasks/mje0008/plan.md` — gap assessment and sequencing
+- `.context/decisions/ADR-003-eval-cost.md` — closes the eval-cost question
 - `TRUE_NORTH.md` — Cruise Control, K.I.S.S., Free and Frugal, and their order
