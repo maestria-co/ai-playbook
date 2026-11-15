@@ -89,8 +89,36 @@ on `skills/task-plan/` — writing a spec precise enough to be mechanically
 checked is the real work that Level 4 names when it calls the human a
 product manager.
 
+5. Add a CI gate that requires the checks to exist. If a PR's diff touches
+   `agents/*.agent.md` or `skills/*/SKILL.md`, a matching eval or check file
+   must be present in the diff too. Model-free, so it runs in CI per
+   ADR-003 tier 1.
+
 Step 3 is the one that changes agent behavior. Steps 1 and 2 only make it
-possible.
+possible, and step 5 is what stops it being skipped.
+
+### Enforce in CI, remind in the hook
+
+"End of session" and "on push / on MR" are different events and must not be
+conflated. A session-end hook runs on one person's machine when their
+session ends. It does not fire for a teammate, for a cloud session, or for
+a push from the web. It can therefore **remind, never enforce**.
+
+| Mechanism | Scope | Can it block? | Role |
+|---|---|---|---|
+| CI check on PR | Everyone, always | Yes | Enforce that evals are present |
+| Session-end hook | This machine, this session | No | Warn before the push, so CI is not where you find out |
+
+Build the CI check first. The hook is a convenience on top, and shipping
+only the hook would give us the feeling of a gate with none of the effect.
+
+**Astonishment warning.** This repo's hooks are Copilot CLI hooks in
+`.github/hooks/hooks.json` (`sessionStart`, `sessionEnd`, `postToolUse`).
+Claude Code hooks are configured separately in `settings.json` with
+different event names. Adding a Claude Code hook creates a second hook
+system doing adjacent work in a different file, which a newcomer will not
+expect. Decide deliberately: either keep hooks Copilot-only and put
+enforcement entirely in CI, or document both clearly in one place.
 
 ### Phase 3 — Decide the eval-cost question — DONE
 Resolved in `.context/decisions/ADR-003-eval-cost.md`. Two tiers:
@@ -116,8 +144,16 @@ last check before a merge.
 
 Split each agent's cases by tier per ADR-003: whatever can be asserted
 without a model goes into `validate.py` and runs in CI; the rest goes in the
-local on-demand suite. That suite needs one documented command and a
-recorded last-run date, or it rots exactly as `validate.py` did.
+local on-demand suite.
+
+**The runner is off the shelf.** ADR-004 adopts `claude plugin eval` rather
+than building one. It gives us `--threshold` for a pass/fail exit code,
+`--max-cost-usd` for a hard budget cap, and `--ablation with-without` to
+measure whether a skill changes behavior at all — a measurement we have
+never had for the 42-skill library.
+
+Blocked on ADR-004's spike: this repo has no plugin manifest, so whether it
+resolves as a target is unproven. Run the spike before writing cases.
 
 ### Phase 5 — Close the lessons loop
 `task-retrospective` and `knowledge-graduation` both exist and both wait for
@@ -127,6 +163,28 @@ task-count threshold, and have it open a PR rather than ask.
 Note the dependency: Phase 2 step 4 makes checks graduate. This phase makes
 documented lessons graduate. Same mechanism, two artifact types — build the
 second on the first rather than separately.
+
+### Keeping `.context/` current
+
+The goal is that `.context/` is never stale. Split it the same way ADR-003
+splits everything else, because the two halves have very different costs and
+risks:
+
+| Half | Cost | Automatic? |
+|---|---|---|
+| **Detect** staleness — compare `git log` dates for code paths against the dates in `.context/` | Free, model-free | Yes. Session-end hook and CI |
+| **Rewrite** the docs — `context-maintenance` / `context-review` | Model calls | No. Deliberate, reviewed |
+
+Detection writes a flag or a warning. It never edits a document.
+
+Do **not** have a session-end hook invoke an agent to rewrite `.context/`.
+Three reasons: it spends model calls on every session end whether anything
+changed or not; it produces documentation nobody reviewed; and if it commits,
+it writes to the repo outside a PR, which is the one place our new gates do
+not look. The value of a context doc is that it is trustworthy, and an
+unreviewed auto-rewrite is the fastest way to lose that.
+
+So: automate the nagging, keep the writing deliberate.
 
 ## Guardrails: what is already here
 
@@ -163,11 +221,19 @@ All six questions from the first pass are answered. Recorded 2026-11-14.
 
 ### New, from the Phase 1 work
 
-7. **Does "evaluate a SKILL.md file" need its own skill?** All three index
-   docs pointed at `evaluate-skill`, which does not exist. The rows now
-   point at `writing-skills`, which covers skill quality and hardening but
-   does not advertise evaluation. If evaluation deserves a dedicated skill,
-   the rows are wrong and should point at it instead.
+7. ~~Does "evaluate a SKILL.md file" need its own skill?~~ **Yes, and we
+   take it off the shelf rather than write one.** `claude plugin eval`
+   already scores skills and reports an ablation delta — see ADR-004. The
+   `writing-skills` rows stay as the authoring reference. Revisit the row
+   wording once the ADR-004 spike confirms the runner resolves here.
+9. **Does adopting Claude Code's eval format break the repo's cross-tool
+   goal?** `CLAUDE.md` advertises `.copilot` compatibility, and eval cases
+   in Claude Code's format are not portable to Copilot CLI. Named in
+   ADR-004; needs a call before many cases are written.
+10. **One hook system or two?** The repo's hooks are Copilot CLI hooks in
+   `.github/hooks/hooks.json`. Claude Code hooks live in `settings.json`
+   with different event names. Adding the latter means two hook systems
+   doing adjacent work in different files. See Phase 2.
 8. **Who owns the local eval suite's last-run date?** ADR-003 relies on it
    to stop the suite rotting, and calls the mitigation weak. A person
    checking a date is the kind of manual step Cruise Control dislikes.
