@@ -24,6 +24,38 @@ Specifies assessment standards, issue severity rankings, and a systematic multi-
 
 **Maintainability Factors**: Limit method length to reasonable bounds. Manage cyclomatic complexity actively. Preserve clear responsibility boundaries between components. Prevent circular dependency graphs.
 
+## Structural Fixes Over Instance Fixes
+
+When a bug class is "this recurs whenever someone forgets," fix the structure, not
+the instances. Prefer the fix that makes the mistake impossible over the one that
+makes it merely discouraged. Four examples from one session:
+
+- Six test classes wrote `public new async Task InitializeAsync()` where they meant
+  `override`. `new` hides the method without joining the interface map, so the test
+  framework silently called the base version and all six classes' seeding never ran —
+  no compiler warning, 41 of 56 suite failures. The fix was not correcting six
+  keywords: the base entry point was made non-virtual and delegates to a new
+  `protected virtual SeedAsync()`, so the mistake became impossible to repeat.
+- Removing a blanket `InvalidOperationException → 409` mapping broke five tests,
+  because five genuine conflicts had silently depended on it. The fix was a
+  `ConflictException` base type matched once by the middleware, so the next conflict
+  is correct by construction instead of by convention.
+- A reflection test now fails the build if any request body has a non-nullable enum,
+  lacks a validator, or lacks a null-check rule — enforcing the pattern structurally
+  instead of relying on review catching it.
+- A shared `NotDeleted` SQL predicate replaced copy-pasted filters, with the
+  deliberate exceptions documented at each opt-out site.
+
+**Corollary — record exceptions explicitly:** when you add a guard, name the
+deliberate exceptions (an explicit allow-list, a comment at each opt-out site) so a
+future tidy-up can't silently remove them. Add a test that fails if an allow-list
+entry goes stale.
+
+**Corollary — find what taught the bug:** a README in the repo where the `new`/
+`override` mistake occurred explicitly recommended the `new` keyword — that's how the
+mistake reached six files. When you fix a recurring mistake, find and fix whatever
+taught it, not just the code that learned it.
+
 ## Severity Classifications
 
 **Critical Priority**: Security vulnerabilities, data corruption risks, runtime crashes, breaking modifications to public contracts, faulty business logic implementation.
