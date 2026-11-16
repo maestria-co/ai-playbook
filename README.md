@@ -174,6 +174,48 @@ An unrecognized token is passed through unchanged with a warning rather than dro
 
 ---
 
+## Git Hooks
+
+Two hooks enforce repo rules locally, before anything reaches GitHub. They
+are plain git hooks, separate from the Copilot CLI hooks described under
+Task Tracking below.
+
+| Hook | What it does |
+|---|---|
+| `commit-msg` | Rejects a commit message that is not Conventional Commits. Rules in `skills/commit-discipline/SKILL.md`. |
+| `pre-push` | Runs `python3 scripts/validate.py --strict` — the same command CI runs — and rejects the push if it fails. |
+
+### Setup
+
+Install once per machine:
+
+```bash
+git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+```
+
+This is global, so both hooks fire in every repo on the machine. `pre-push`
+exits silently where there is no `scripts/validate.py`, and `commit-msg`
+only checks message format, so neither interferes with unrelated projects.
+
+### Bypassing
+
+```bash
+git commit --no-verify    # skip commit-msg
+git push --no-verify      # skip pre-push
+```
+
+`pre-push` is an early warning, not the gate. CI runs the same check on
+every push and pull request, so a bypassed push still goes red. The point of
+the hook is to find out in two seconds on your machine instead of two
+minutes later in Actions.
+
+### Why `pre-push` and CI run the identical command
+
+If the local check and the CI check drift apart, a push passes locally and
+fails remotely, and people stop trusting the hook. Both run
+`python3 scripts/validate.py --strict`. Change the checks in `validate.py`
+and both places follow.
+
 ## Task Tracking with Hooks
 
 Agent-defs now includes **global task tracking** using a hybrid architecture.
