@@ -15,6 +15,65 @@ Definition lives in `.context/decisions/ADR-002-level-4-ai-engineering.md`.
 That ADR's test governs this plan: a change counts as Level 4 progress only
 if it adds or strengthens a pass/fail signal that runs without a human.
 
+## Start here (cold resume)
+
+**Status:** definition complete and merged. Implementation not started.
+**Next action:** Phase 2 — build the spec completeness evaluator.
+
+| | |
+|---|---|
+| Done | Phase 1 (#27), Phase 3 (ADR-003), all definition docs (#28), skill rename (#29) |
+| Next | **Phase 2** — per-task acceptance checks + the evaluator |
+| Blocked | Phase 4 — `claude plugin eval` gated by early access |
+| Not started | Phase 2b, Phase 5 |
+
+Read in this order: ADR-002 Scope (what the goal actually is) → ADR-002
+"Tests are necessary and not sufficient" (the central idea) → Phase 2 below.
+
+## Progress Log
+
+**2026-11-17 — Definition complete, scope corrected twice.**
+- ADR-002 through ADR-006 written; all six original open questions closed.
+- Correction 1: the goal is enabling Level 4 in *consumer* repos (goal B),
+  not this repo developing itself (goal A). Added ADR-002 Scope + Phase 2b.
+- Correction 2: a test suite does not decide done. Added the three-layer
+  model and made the spec completeness evaluator Phase 2's core deliverable.
+- Phase 1 reclassified: real value, but goal A only. `validate.py` does not
+  transfer to consumer repos.
+
+**2026-11-16 — ADR-004 spike, $0, blocked.**
+- `claude plugin eval` gated behind early access; both `init` and run refuse.
+- It **exits 0** when gated, so a CI step would pass green running nothing.
+- ADR-005: evaluate skills not agents; `superpowers:writing-skills` already
+  prescribes manual ablation, so Phase 4 is only partly blocked.
+- ADR-006 + #29: renamed the two confusingly-named agent-eval skills.
+
+**2026-11-14/15 — Phase 1 built and merged (#27).**
+- Found `main` red and unnoticed: missing `## Constraints`, stale model pin.
+- Added CI workflow, `ALLOWED_MODELS` allowlist, index-drift check, pre-push
+  hook. Index-drift check immediately caught `evaluate-skill`, a phantom
+  skill cited in all three index docs.
+
+## Key Files
+
+| File | Why |
+|---|---|
+| `.context/decisions/ADR-002-*.md` | The target, scope, and three-layer model |
+| `.context/decisions/ADR-003-*.md` | Two-tier cost rule governing every check |
+| `skills/task-plan/SKILL.md` | Phase 2 edits this — the AC format lives here |
+| `scripts/validate.py` | The standing oracle; Phase 2's evaluator sits beside it |
+| `skills/_shared/context_template/context/testing.md` | Phase 2b's `Run tests:` field |
+| `skills/initialize-repo/SKILL.md` | Phase 2b edits this |
+
+## Blockers
+
+| Blocker | Affects | Status |
+|---|---|---|
+| `claude plugin eval` early access not enabled | Phase 4 automation | Re-check periodically. Manual ablation via `superpowers:writing-skills` works now |
+| Stale skills in `~/.claude/skills/` after the #29 rename | Local environment only | `rm -rf ~/.claude/skills/agent-evaluation ~/.claude/skills/agentic-evaluation && ./install.sh` |
+
+No blocker prevents Phase 2 starting.
+
 ## Where we are: Level 2, wearing Level 3's clothes
 
 | Level 4 requirement | Status | Evidence |
@@ -82,7 +141,7 @@ Branch `fix/validate-ci`, pushed 2026-11-14.
 
 Confirmed free: the repo is public, so Actions minutes are unlimited.
 
-### Phase 2 — Per-task acceptance checks (free, no model calls)
+### Phase 2 — Per-task acceptance checks (free, no model calls)  ← CURRENT
 The spec is the definition of done. `validate.py` is not and never will be:
 it proves nothing broke, not that the right thing was built. See ADR-002,
 "Two oracles, by lifetime."
