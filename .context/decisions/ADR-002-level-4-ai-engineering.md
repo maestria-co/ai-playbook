@@ -72,14 +72,45 @@ agent and skill Markdown, and a consumer application repo has none. What
 transfers is everything under `skills/`, because that is what gets
 installed.
 
-### The consumer's oracle is its own test suite
+### Tests are necessary and not sufficient
 
-For goal B, the thing that decides "done" is the consumer repo's tests —
-not ours. That has a consequence the rest of this ADR does not state:
+An earlier draft of this ADR said the consumer's oracle is its own test
+suite. That is wrong, and the error matters.
 
-**A repo with no runnable test command cannot do Level 4 at all.** There is
-nothing for an agent to iterate against. The spec can be perfect and the
-loop still cannot close.
+A green test suite proves that **the behaviors someone wrote tests for**
+work. It says nothing about whether the spec was fulfilled. Three ways a
+suite goes green on an unmet spec:
+
+1. **Nothing tested AC 3.** The suite is green, the criterion was never
+   implemented, and no one notices.
+2. **Nothing maps AC 3 to a test.** Even at full coverage, no artifact says
+   which check proves which criterion, so "all seven criteria are met" is
+   not a statement anything can evaluate.
+3. **The agent wrote passing tests for the wrong thing.** Tests the agent
+   authored and graded are the self-assessment problem wearing a green tick.
+
+So Level 4 needs three layers, not one:
+
+| Layer | Answers | Who provides it |
+|---|---|---|
+| Tests | "Does this behavior work?" | The consumer repo |
+| AC → check mapping | "Which check proves which criterion?" | The spec, written by the planner |
+| **Spec completeness evaluator** | "Is every criterion accounted for, and did every machine-checked one pass?" | The kit |
+
+The third layer is the thing that actually decides done. Tests are an input
+to it, not a substitute for it. And it is the layer that does not exist
+anywhere today — not here, and not in a consumer repo.
+
+Note what the evaluator must refuse to do: report green when a criterion has
+no check. A criterion with no check is an **unknown**, and an unknown is not
+a pass. It must also report the human-judged criteria separately rather than
+quietly omitting them, or it produces a false green — "5 of 7 verified, 2
+await review" is the honest output, and "all tests passed" is not.
+
+### A repo with no runnable test command still cannot do Level 4
+
+That remains true. There is nothing for the mapping to point at, so the loop
+cannot close no matter how good the spec is.
 
 `context_template/context/testing.md` has a `Run tests:` placeholder, so the
 foundation half-exists. But nothing requires it to be filled in, and no

@@ -108,13 +108,40 @@ on `skills/task-plan/` — writing a spec precise enough to be mechanically
 checked is the real work that Level 4 names when it calls the human a
 product manager.
 
-5. Add a CI gate that requires the checks to exist. If a PR's diff touches
-   `agents/*.agent.md` or `skills/*/SKILL.md`, a matching eval or check file
-   must be present in the diff too. Model-free, so it runs in CI per
-   ADR-003 tier 1.
+5. **Build the spec completeness evaluator.** This is the phase's central
+   deliverable, not a nice-to-have. A script that reads a task's spec and
+   answers one question: *is every acceptance criterion accounted for, and
+   did every machine-checked one pass?*
 
-Step 3 is the one that changes agent behavior. Steps 1 and 2 only make it
-possible, and step 5 is what stops it being skipped.
+   It must fail, not pass, when:
+   - a criterion carries no tier label
+   - a machine-checked criterion names no command
+   - a named command does not exist or cannot run
+   - any machine-checked command exits non-zero
+
+   And it must report human-judged criteria separately rather than omitting
+   them. The honest output is "5 of 7 verified, 2 await review"; the
+   dishonest one is "all tests passed". **A criterion with no check is an
+   unknown, and an unknown is not a pass.**
+
+   Model-free, so it runs in CI per ADR-003 tier 1. It is the artifact that
+   makes "iterate until the specs pass" a real instruction rather than a
+   figure of speech.
+
+6. Add a CI gate that requires the checks to exist. If a PR's diff touches
+   `agents/*.agent.md` or `skills/*/SKILL.md`, a matching eval or check file
+   must be present in the diff too.
+
+Step 3 changes agent behavior; step 5 is what makes the change checkable.
+Steps 1, 2 and 6 only make those two possible.
+
+**Why a test suite is not enough here.** Green tests prove the behaviors
+somebody wrote tests for work. They do not prove the spec was fulfilled — a
+criterion nobody tested still shows green, and nothing links a criterion to
+the check that proves it. See ADR-002, "Tests are necessary and not
+sufficient." The evaluator in step 5 is the layer that closes that, and it
+exists nowhere today: not in this repo, not in a consumer repo, not in the
+test runner.
 
 ### Enforce in CI, remind in the hook
 
@@ -161,8 +188,11 @@ will finish on such a repo without complaint.
    a placeholder, and something checks it was filled.
 
 The honest framing for a consumer: the kit does not make a repo Level 4
-capable. The repo's own test suite does. The kit makes that capability
-usable by agents — and tells you when it is absent.
+capable, and neither does its test suite alone. The repo's tests supply the
+evidence; the kit's spec completeness evaluator (Phase 2 step 5) decides
+whether that evidence covers every acceptance criterion. Phase 2b's job is
+only to guarantee the tests exist and run, so the evaluator has something
+real to point at.
 
 ### Phase 3 — Decide the eval-cost question — DONE
 Resolved in `.context/decisions/ADR-003-eval-cost.md`. Two tiers:
