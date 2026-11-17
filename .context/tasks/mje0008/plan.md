@@ -19,7 +19,7 @@ if it adds or strengthens a pass/fail signal that runs without a human.
 | Automated pass/fail signal | **No** | `scripts/validate.py` exists but runs only by hand |
 | Signal runs without a human | **No** | No `.github/workflows/` at all |
 | Agents iterate until green | **No** | Nothing to iterate against |
-| Behavioral evals of agents | **No** | `agent-evaluation` and `agentic-evaluation` are human-judgment rubrics, not executable |
+| Behavioral evals | **No** | The two agent-eval skills are human-judgment rubrics, not executable. Nothing evaluates the 42 **skills** at all — see ADR-005 |
 | Lessons captured durably | **Partial** | `.context/retrospectives/` + `task-retrospective` + `knowledge-graduation` exist; graduation is manual and unprompted |
 
 ### The headline finding
@@ -162,6 +162,17 @@ while running nothing. Assert on output, not the exit code.
 
 Nothing else in this plan depends on Phase 4. Phase 2 is model-free and
 unblocked — do that instead. See ADR-004 for the re-review conditions.
+
+**But Phase 4 is no longer fully blocked.** ADR-005 decides we evaluate
+**skills** first, not agents, and that the method is already installed:
+`superpowers:writing-skills` v7.0.0 prescribes running a scenario without
+the skill for a baseline, then with it — ablation by hand, the same method
+the gated tool automates. What the block costs us is scoring, the cost
+ceiling, and repeatability; not the ability to learn whether a skill works.
+
+First measurement worth taking, because the answer is genuinely unknown:
+**how many of the 42 skills change behavior at all?** One that never fires
+is pure token cost.
 
 ### Phase 5 — Close the lessons loop
 `task-retrospective` and `knowledge-graduation` both exist and both wait for
