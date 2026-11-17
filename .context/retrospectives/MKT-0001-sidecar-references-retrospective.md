@@ -24,7 +24,7 @@
 
 ### 3. **Cross-Platform Compatibility Verified**
 - Confirmed sidecar pattern works for both GitHub Copilot and Claude
-- Existing `agentic-evaluation` skill already using this pattern (validation)
+- Existing `agent-file-review` skill already using this pattern (validation)
 - Installation script handles nested `references/` folders correctly
 - Relative file paths work on both platforms
 

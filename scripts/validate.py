@@ -27,7 +27,7 @@ AGENTS_DIR = os.path.join(REPO, "agents")
 
 # Skills installed from the skill kit — not owned by this repo, don't require GUIDE.md coverage
 SKILLKIT_SKILLS = {
-    "agentic-evaluation", "asana-story", "code-identifier", "commit-discipline",
+    "agent-file-review", "asana-story", "code-identifier", "commit-discipline",
     "dependency-management", "design-first", "initialize-monorepo", "initialize-repo",
     "initialize-workspace", "jira-story", "knowledge-graduation", "linear-story",
     "planning-tasks", "post-meeting", "researching-options", "start-worktree",

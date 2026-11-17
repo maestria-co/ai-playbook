@@ -69,5 +69,5 @@
 - [x] "Manager token count ~5,100 tokens is an accepted tradeoff for the orchestrator role"
   → promote to `.context/decisions/` as an ADR
 - [x] "When adding Anti-Rationalization rows, audit Process section for contradictions"
-  → promote to `skills/agent-evaluation/SKILL.md` as a check item
+  → promote to `skills/agent-system-audit/SKILL.md` as a check item
 - [x] Commit `scripts/validate.sh` as a permanent artifact
