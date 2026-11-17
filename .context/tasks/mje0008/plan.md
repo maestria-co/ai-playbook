@@ -152,8 +152,16 @@ than building one. It gives us `--threshold` for a pass/fail exit code,
 measure whether a skill changes behavior at all — a measurement we have
 never had for the 42-skill library.
 
-Blocked on ADR-004's spike: this repo has no plugin manifest, so whether it
-resolves as a target is unproven. Run the spike before writing cases.
+**Blocked.** The spike ran 2026-11-16 and cost $0: `claude plugin eval` is
+gated behind early access and not enabled on this account. Both `init` and
+the run command return only "`plugin eval` is currently in early access".
+It never reached the manifest question.
+
+Watch for: the gated command exits **0**, so a CI step calling it would pass
+while running nothing. Assert on output, not the exit code.
+
+Nothing else in this plan depends on Phase 4. Phase 2 is model-free and
+unblocked — do that instead. See ADR-004 for the re-review conditions.
 
 ### Phase 5 — Close the lessons loop
 `task-retrospective` and `knowledge-graduation` both exist and both wait for

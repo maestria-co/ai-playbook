@@ -1,7 +1,7 @@
 # ADR-004: Use `claude plugin eval` Instead of Building an Eval Harness
 
 **Date:** 2026-11-15
-**Status:** Accepted, pending a spike
+**Status:** Blocked — spike run 2026-11-16, feature not available
 **Decided by:** mje0002
 **Supersedes:** Partially supersedes ADR-003's assumption that we build the local suite
 
@@ -50,7 +50,67 @@ hand-built runner would not have given us that for free.
 
 **K.I.S.S.** Zero new infrastructure. One command and a directory of cases.
 
-## The spike this depends on
+## Spike result: blocked on early access
+
+Run 2026-11-16 against Claude Code 2.1.236. **Cost: $0** — it never got far
+enough to call a model.
+
+Both `claude plugin eval init --bare` and `claude plugin eval . --max-cost-usd 1`
+return the same thing and nothing else:
+
+```
+`plugin eval` is currently in early access
+```
+
+The feature is gated and not enabled on this account. Note the exit code is
+**0**, not an error — so a CI step calling it would pass silently while
+running no evals at all. Any future wiring must assert on output, not just
+the exit code.
+
+We therefore never reached the manifest question. Access blocks first.
+
+### What the spike did establish
+
+`claude plugin details <name>` is **not** gated and reports a component
+inventory plus projected token cost, including an always-on figure. Run
+against an installed plugin it works today. That is directly useful to
+ADR-001, which accepted the Manager's token size as a tradeoff without a
+way to measure the fleet's total cost.
+
+But it takes an installed plugin *name* — there is no `--plugin-dir` on it —
+so using it here still requires this repo to be installed as a Claude Code
+plugin.
+
+So both the gated and the ungated tooling converge on one precondition:
+**this repo would have to be a Claude Code plugin**, with a
+`.claude-plugin/` manifest.
+
+### Correction to this ADR's earlier concern
+
+This ADR originally flagged that adding a manifest might break the
+`.copilot` compatibility `CLAUDE.md` advertises. On inspection that risk
+looks low: `.copilot` compatibility is about folder layout (`agents/`,
+`skills/`), and a manifest is an additive file Copilot ignores. The real
+blocker is access, not compatibility.
+
+Not yet verified, because `claude plugin init` scaffolds into
+`~/.claude/skills/<name>/` and auto-loads next session. That is a change to
+the developer's global environment and was left undone deliberately.
+
+## Next review
+
+Re-run the two commands above when early access opens. Until then Phase 4
+cannot start, and **nothing else in the plan depends on it** — Phase 2 is
+model-free and unblocked.
+
+Options if access does not arrive:
+1. Wait. Phase 2 is the valuable work and needs none of this.
+2. Install this repo as a plugin to unlock `claude plugin details`, getting
+   the token measurement without the eval runner.
+3. Reopen build-vs-buy. Off The Shelf would still prefer a third-party
+   runner over a bespoke one.
+
+## The spike this depended on
 
 Status is "pending a spike" for one reason: **this repo is not a Claude Code
 plugin.** It has no `plugin.json` and no `.claude-plugin/` directory — it is
