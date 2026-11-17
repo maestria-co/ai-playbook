@@ -40,6 +40,53 @@ unless it adds or strengthens an automated pass/fail signal.** Better prompts
 are Level 2 and 3 work. We will keep doing it, but we will not count it as
 progress on this axis.
 
+## Scope: two goals, and which one is the point
+
+This repo is a kit. `install.sh` copies it to `~/.claude`, and
+`initialize-repo` sets up `.context/` in other projects. Its value is what
+it does to **other** repos. So "make the harness Level 4" splits in two, and
+the split is easy to lose:
+
+| | Goal | What it means |
+|---|---|---|
+| **A** | This repo develops *itself* at Level 4 | Agents build the harness's own Markdown against executable checks |
+| **B** | This repo *enables* Level 4 in a consumer repo | A team installs the kit and can then spec a feature, have agents build it, and have them iterate until checks pass |
+
+**B is the point. A is dogfooding.** A is worth doing — a kit that cannot
+hold itself to its own standard is not credible, and it is where we learn
+what the practice costs. But A is not a route to B, and progress on A must
+not be reported as progress on B.
+
+### Which work serves which
+
+| Phase | Serves A | Serves B |
+|---|---|---|
+| 1 — `validate.py`, CI, index-drift, pre-push | Yes | **No** |
+| 2 — per-task acceptance checks in `task-plan` | Yes | **Yes — this is what ships** |
+| 2b — consumer repo readiness | No | **Yes** |
+| 4 — evaluate the 42 skills | Yes | Yes |
+| 5 — lessons loop | Yes | Partly |
+
+The asymmetry to hold on to: **`validate.py` does not transfer.** It checks
+agent and skill Markdown, and a consumer application repo has none. What
+transfers is everything under `skills/`, because that is what gets
+installed.
+
+### The consumer's oracle is its own test suite
+
+For goal B, the thing that decides "done" is the consumer repo's tests —
+not ours. That has a consequence the rest of this ADR does not state:
+
+**A repo with no runnable test command cannot do Level 4 at all.** There is
+nothing for an agent to iterate against. The spec can be perfect and the
+loop still cannot close.
+
+`context_template/context/testing.md` has a `Run tests:` placeholder, so the
+foundation half-exists. But nothing requires it to be filled in, and no
+agent treats it as a gate — `initialize-repo` will finish happily on a repo
+with no working test command, leaving a consumer that is structurally
+incapable of the thing the kit promises. Phase 2b closes that.
+
 ## What "the specs pass" means here
 
 This repo ships Markdown — agents, skills, prompts — not a running

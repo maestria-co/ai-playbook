@@ -2,9 +2,14 @@
 
 ## Task
 
-Define what Level 4 AI engineering means for this repo, assess the gap, and
-sequence the changes that close it. Definition and assessment only — each
-change below becomes its own branch and PR.
+Define what Level 4 AI engineering means, assess the gap, and sequence the
+changes that close it. Definition and assessment only — each change below
+becomes its own branch and PR.
+
+**The goal is that a team installs this kit and can then do Level 4
+development in their own repo.** This repo holding itself to the same
+standard is dogfooding, not the objective. ADR-002's Scope section tags
+every phase by which of the two it serves.
 
 Definition lives in `.context/decisions/ADR-002-level-4-ai-engineering.md`.
 That ADR's test governs this plan: a change counts as Level 4 progress only
@@ -42,6 +47,20 @@ noise, then get ignored on purpose, then get deleted.
 ## Sequencing
 
 Ordered by dependency. Each phase is a separate branch and PR.
+
+**Read the scope split in ADR-002 first.** Goal A is this repo developing
+itself at Level 4; goal B is this repo enabling Level 4 in a consumer repo.
+B is the point, A is dogfooding. Each phase below is tagged, because
+progress on A must not be reported as progress on B.
+
+| Phase | A | B |
+|---|---|---|
+| 1 — standing oracle | ✅ | ❌ |
+| 2 — per-task acceptance checks | ✅ | ✅ ships |
+| 2b — consumer repo readiness | ❌ | ✅ |
+| 3 — eval cost decision | ✅ | ✅ |
+| 4 — evaluate the 42 skills | ✅ | ✅ |
+| 5 — lessons loop | ✅ | partly |
 
 **Revised 2026-11-14.** The old order put behavioral evals before per-task
 acceptance checks. That was wrong twice over: the acceptance checks are the
@@ -119,6 +138,31 @@ different event names. Adding a Claude Code hook creates a second hook
 system doing adjacent work in a different file, which a newcomer will not
 expect. Decide deliberately: either keep hooks Copilot-only and put
 enforcement entirely in CI, or document both clearly in one place.
+
+### Phase 2b — Consumer repo readiness (goal B)
+
+Phase 2 gives `task-plan` machine-checkable criteria. That ships. But a
+consumer repo also needs something to check *against*, and for an
+application repo that is **its own test suite**, not `scripts/validate.py`
+— which checks agent and skill Markdown a consumer does not have.
+
+The gap: a repo with no runnable test command cannot do Level 4 at all.
+There is nothing for an agent to iterate against. Today `initialize-repo`
+will finish on such a repo without complaint.
+
+1. `initialize-repo` must identify the repo's test command and **run it**,
+   not merely record it in `context/testing.md`. A command that was never
+   executed is a guess.
+2. If no test command exists or it fails to run, say so plainly: this repo
+   is not Level 4 ready, and here is why. Do not silently complete.
+3. `task-plan` machine-checked criteria reference that command, so a
+   consumer agent knows what "the specs pass" resolves to locally.
+4. `context_template/context/testing.md` gets a required field rather than
+   a placeholder, and something checks it was filled.
+
+The honest framing for a consumer: the kit does not make a repo Level 4
+capable. The repo's own test suite does. The kit makes that capability
+usable by agents — and tells you when it is absent.
 
 ### Phase 3 — Decide the eval-cost question — DONE
 Resolved in `.context/decisions/ADR-003-eval-cost.md`. Two tiers:
