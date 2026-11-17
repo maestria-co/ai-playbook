@@ -29,8 +29,7 @@ Quick reference for selecting and composing skills in `skills/`.
 | Making a git commit                               | `commit-discipline`           |
 | Reflecting after completing a task                | `task-retrospective`          |
 | Promoting patterns to reusable skills             | `knowledge-graduation`        |
-| Evaluating a SKILL.md file                        | `evaluate-skill`              |
-| Creating or editing a skill definition            | `writing-skills`              |
+| Creating, editing, or evaluating a skill          | `writing-skills`              |
 | Evaluating an agent system for design issues      | `agent-evaluation`            |
 | Reviewing code against quality standards          | `code-quality-rules`          |
 | Resolving context root for a monorepo/workspace   | `resolve-repo-context`        |
@@ -302,7 +301,7 @@ planning-tasks
 | "Write a Linear issue for this feature"     | `linear-story`                                                                |
 | "Write an RFC for this proposal"            | `rfc-format`                                                                  |
 | "Is our `.context/` up to date?"            | `context-review`                                                              |
-| "Review this SKILL.md file"                 | `evaluate-skill`                                                              |
+| "Review this SKILL.md file"                 | `writing-skills`                                                              |
 | "This task needs architecture planning"     | `design-first` → `designing-systems` → `implementing-features`                |
 | "I just finished a task"                    | `task-retrospective` → `context-maintenance`                                  |
 | "Promote our best practices to skills"      | `knowledge-graduation`                                                        |

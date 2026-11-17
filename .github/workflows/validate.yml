@@ -1,0 +1,24 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+# Least privilege: this job only reads the checkout.
+permissions:
+  contents: read
+
+jobs:
+  structure:
+    name: Structural validation
+    runs-on: ubuntu-latest
+    steps:
+      # Pinned to a commit SHA, not a tag. Tags are mutable — a compromised
+      # or retagged action would otherwise run with our token. Comment keeps
+      # the human-readable version next to it.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # No setup-python step: validate.py is pure stdlib and ubuntu-latest
+      # ships python3. One less third-party action in the supply chain.
+      - name: Validate agents and skills
+        run: python3 scripts/validate.py --strict

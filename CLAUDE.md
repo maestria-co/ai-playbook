@@ -46,7 +46,7 @@ Pick a skill directly based on your task:
 | Reflect after completing a task             | `task-retrospective`     | `skills/task-retrospective/SKILL.md`     |
 | Promote patterns to reusable skills         | `knowledge-graduation`   | `skills/knowledge-graduation/SKILL.md`   |
 | Sync `.context/` docs with codebase         | `context-review`         | `skills/context-review/SKILL.md`         |
-| Evaluate a SKILL.md file                    | `evaluate-skill`         | `skills/evaluate-skill/SKILL.md`         |
+| Write or evaluate a SKILL.md file           | `writing-skills`         | `skills/writing-skills/SKILL.md`         |
 
 ## Agents
 
