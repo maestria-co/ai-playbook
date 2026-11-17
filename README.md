@@ -82,7 +82,7 @@ Some skills use a **sidecar references pattern** to keep the main SKILL.md conci
 **Example skills using this pattern:**
 - `implementing-features` — See `references/code-patterns.md` for implementation examples
 - `writing-tests` — See `references/code-patterns.md`, `edge-cases.md`, and `troubleshooting.md` for testing examples
-- `agentic-evaluation` — See `references/output-template.md` for report structure
+- `agent-file-review` — See `references/output-template.md` for report structure
 
 **Why this pattern:**
 - ✅ Main files remain actionable without reading references

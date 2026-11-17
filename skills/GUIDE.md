@@ -30,7 +30,7 @@ Quick reference for selecting and composing skills in `skills/`.
 | Reflecting after completing a task                | `task-retrospective`          |
 | Promoting patterns to reusable skills             | `knowledge-graduation`        |
 | Creating, editing, or evaluating a skill          | `writing-skills`              |
-| Evaluating an agent system for design issues      | `agent-evaluation`            |
+| Evaluating an agent system for design issues      | `agent-system-audit`          |
 | Reviewing code against quality standards          | `code-quality-rules`          |
 | Resolving context root for a monorepo/workspace   | `resolve-repo-context`        |
 | Formatting a spec as a Jira user story            | `jira-story`                  |
@@ -373,7 +373,7 @@ All skills follow the conventions in `skills/_shared/conventions.md`:
 | `log-query`                   | Findings summary (in chat)                                   |
 | `code-analysis`               | Analysis report (in chat or `.context/`)                     |
 | `writing-skills`              | `skills/[new-skill]/SKILL.md` (guidance; actual write is manual) |
-| `agent-evaluation`            | Evaluation report (in chat)                                  |
+| `agent-system-audit`          | Evaluation report (in chat)                                  |
 | `code-quality-rules`          | Nothing (quality standards reference — loaded by reviewer)   |
 | `resolve-repo-context`        | Nothing (returns structured JSON; run as explore sub-agent)  |
 | `task-plan-phase-investigation` | `plan.md` (investigation checklist + two-step seed)        |

@@ -1,10 +1,10 @@
 ---
-name: agent-evaluation
+name: agent-system-audit
 description: Use when evaluating or auditing an agent system design, reviewing agent definitions for role overlap or responsibility leakage, or when orchestrator routing clarity, skill responsibility, or sub-agent job clarity is in question.
 user-invocable: true
 ---
 
-# Agent System Evaluation
+# Agent System Audit
 
 ## Overview
 

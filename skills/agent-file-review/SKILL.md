@@ -1,9 +1,9 @@
 ---
-name: agentic-evaluation
+name: agent-file-review
 description: Evaluate agent definition files (.agent.md, system prompts) against industry best practices and produce a structured report with scores, findings, and actionable rewrites. Use this skill whenever the user asks to review, audit, evaluate, score, or improve an agent file — even if they just say "check this agent" or "is this agent any good". Also triggers for requests like "what's wrong with this agent", "review my prompt", or "grade this system prompt".
 ---
 
-# Agent Evaluation
+# Agent File Review
 
 Evaluate a provided agent file against current industry standards and produce a structured report with dimension scores, findings, and concrete rewrite suggestions.
 
