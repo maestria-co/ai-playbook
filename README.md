@@ -63,6 +63,7 @@ build-guide/      # Build guide documentation
 | `task-retrospective`     | Structured reflection after completing tasks  | `skills/task-retrospective/SKILL.md`     |
 | `knowledge-graduation`   | Promote validated patterns to reusable skills | `skills/knowledge-graduation/SKILL.md`   |
 | `evaluate-skill`         | Evaluate a SKILL.md file for quality          | `skills/evaluate-skill/SKILL.md`         |
+| `auth-security-review`   | Review auth, OIDC, Ory, and personal-data changes against published standards | `skills/auth-security-review/SKILL.md` |
 
 **Skill selection guide:** `skills/GUIDE.md`
 

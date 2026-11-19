@@ -47,6 +47,7 @@ Pick a skill directly based on your task:
 | Promote patterns to reusable skills         | `knowledge-graduation`   | `skills/knowledge-graduation/SKILL.md`   |
 | Sync `.context/` docs with codebase         | `context-review`         | `skills/context-review/SKILL.md`         |
 | Evaluate a SKILL.md file                    | `evaluate-skill`         | `skills/evaluate-skill/SKILL.md`         |
+| Review auth, OIDC, Ory, or personal-data changes | `auth-security-review` | `skills/auth-security-review/SKILL.md` |
 
 ## Agents
 

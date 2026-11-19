@@ -61,6 +61,7 @@ When @manager invokes this agent, it provides:
 
 - **verification-checklist** — systematic review across all dimensions: correctness, standards, quality, and security
 - **code-quality-rules** — 5-pass review rubric (correctness, standards, security, performance, maintainability); use severity tiers (Critical/Major/Minor) for findings
+- **auth-security-review** — load when the change touches authentication, authorization, sessions, tokens, OAuth 2.0 / OpenID Connect, Ory Kratos or Hydra, or personal data; cite the standard each finding breaks
 - **testing-discipline** — assess test quality and coverage
 - **common-constraints** — evidence-based assessment
 

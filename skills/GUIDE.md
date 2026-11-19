@@ -33,6 +33,7 @@ Quick reference for selecting and composing skills in `skills/`.
 | Creating or editing a skill definition            | `writing-skills`              |
 | Evaluating an agent system for design issues      | `agent-evaluation`            |
 | Reviewing code against quality standards          | `code-quality-rules`          |
+| Reviewing auth, OIDC, Ory, or personal-data changes | `auth-security-review`      |
 | Resolving context root for a monorepo/workspace   | `resolve-repo-context`        |
 | Formatting a spec as a Jira user story            | `jira-story`                  |
 | Formatting a spec as an Asana task                | `asana-story`                 |
@@ -376,6 +377,7 @@ All skills follow the conventions in `skills/_shared/conventions.md`:
 | `writing-skills`              | `skills/[new-skill]/SKILL.md` (guidance; actual write is manual) |
 | `agent-evaluation`            | Evaluation report (in chat)                                  |
 | `code-quality-rules`          | Nothing (quality standards reference — loaded by reviewer)   |
+| `auth-security-review`        | Findings report (in chat, or one pull request comment)       |
 | `resolve-repo-context`        | Nothing (returns structured JSON; run as explore sub-agent)  |
 | `task-plan-phase-investigation` | `plan.md` (investigation checklist + two-step seed)        |
 | `task-plan-phase-architecture` | `plan.md` Decisions section                                 |
