@@ -2,21 +2,19 @@
 
 One line per entry, with a link to a source that defines it. `SKILL.md` says when to apply each one. SOLID is in `SKILL.md`, because it is required.
 
-Where an entry is already part of Maestria's True North, the entry points there instead of redefining it.
-
 ## Code and design principles
 
 - **DRY (Don't Repeat Yourself)**: every piece of knowledge should live in one place. It is about knowledge, not look-alike code. Use the Rule of Three before extracting. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-dry-principle))
-- **KISS (Keep It Simple, Stupid)**: the simplest solution that works usually wins. A Maestria core value; see K.I.S.S. in `TRUE_NORTH.md`. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-kiss-principle))
+- **KISS (Keep It Simple, Stupid)**: the simplest solution that works usually wins. Prefer fewer tools, files, and moving parts. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-kiss-principle))
 - **YAGNI (You Aren't Gonna Need It)**: don't build features for problems you don't have yet. ([Fowler](https://martinfowler.com/bliki/Yagni.html))
-- **Principle of Least Astonishment**: a system should behave the way a newcomer expects. A Maestria principle; see `TRUE_NORTH.md`. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-principle-of-least-astonishment))
+- **Principle of Least Astonishment**: a system should behave the way a newcomer expects. If a reasonable person would be surprised by where something lives, what it is called, or what it does, change the design, not the explanation. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-principle-of-least-astonishment), [Raymond, The Art of Unix Programming](http://catb.org/esr/writings/taoup/html/ch01s06.html))
 - **Law of Demeter**: an object should only talk to its immediate friends (avoid `a.b.c.d.doThing()`). Smell: [Message Chains](https://refactoring.guru/smells/message-chains). Fix: [Hide Delegate](https://refactoring.guru/hide-delegate). ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-law-of-demeter))
 - **Separation of Concerns**: each module handles one distinct responsibility. ([Dijkstra, EWD447](https://www.cs.utexas.edu/~EWD/transcriptions/EWD04xx/EWD447.html))
 - **Composition over Inheritance**: build behavior by combining small pieces instead of deep class trees. Fix: [Replace Inheritance with Delegation](https://refactoring.guru/replace-inheritance-with-delegation). ([Wikipedia](https://en.wikipedia.org/wiki/Composition_over_inheritance))
 - **Tell, Don't Ask**: tell objects what to do instead of pulling their data out and deciding for them. Smell: [Feature Envy](https://refactoring.guru/smells/feature-envy). ([Fowler](https://martinfowler.com/bliki/TellDontAsk.html))
 - **Command-Query Separation**: a method should either change state or return data, not both. ([Fowler](https://martinfowler.com/bliki/CommandQuerySeparation.html))
 - **Fail Fast**: surface errors right away instead of limping along with bad state. ([Jim Shore, IEEE Software, on martinfowler.com](https://martinfowler.com/ieeeSoftware/failFast.pdf))
-- **Principle of Least Privilege**: give each component only the access it needs. Part of the Bury The Treasure core value; see `TRUE_NORTH.md`. ([Wikipedia](https://en.wikipedia.org/wiki/Principle_of_least_privilege))
+- **Principle of Least Privilege**: give each component only the access it needs. ([Wikipedia](https://en.wikipedia.org/wiki/Principle_of_least_privilege))
 - **Rule of Three**: wait until you've written something three times before you abstract it. Smell when ignored: [Speculative Generality](https://refactoring.guru/smells/speculative-generality). ([Wikipedia](https://en.wikipedia.org/wiki/Rule_of_three_%28computer_programming%29))
 - **Boy Scout Rule**: leave the code a little cleaner than you found it. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-scout-rule), [Fowler on opportunistic refactoring](https://martinfowler.com/bliki/OpportunisticRefactoring.html))
 - **Chesterton's Fence**: don't remove something until you understand why it's there. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#chestertons-fence))
@@ -25,7 +23,7 @@ Where an entry is already part of Maestria's True North, the entry points there 
 ## Laws about systems and abstractions
 
 - **Hyrum's Law**: with enough users, every observable behavior of your API will be depended on by somebody, documented or not. It pairs with Postel's Law. ([hyrumslaw.com](https://www.hyrumslaw.com/))
-- **Postel's Law (Robustness Principle)**: be conservative in what you send and liberal in what you accept. At a security boundary, validate strictly instead: Bury The Treasure comes first. ([RFC 1122 §1.2.2](https://www.rfc-editor.org/rfc/rfc1122#section-1.2.2); its costs: [RFC 9413](https://www.rfc-editor.org/rfc/rfc9413))
+- **Postel's Law (Robustness Principle)**: be conservative in what you send and liberal in what you accept. At a security boundary, validate strictly instead: security comes first. ([RFC 1122 §1.2.2](https://www.rfc-editor.org/rfc/rfc1122#section-1.2.2); its costs: [RFC 9413](https://www.rfc-editor.org/rfc/rfc9413))
 - **Law of Leaky Abstractions (Joel Spolsky)**: every non-trivial abstraction leaks eventually. ([Joel on Software](https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/))
 - **Gall's Law**: complex systems that work grew out of simple systems that worked. Complex systems designed from scratch tend to fail. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#galls-law))
 - **Conway's Law**: systems end up mirroring the communication structure of the org that builds them. ([Fowler](https://martinfowler.com/bliki/ConwaysLaw.html))
@@ -42,7 +40,7 @@ Where an entry is already part of Maestria's True North, the entry points there 
 ## Architecture (Robert C. Martin, Eric Evans)
 
 - **The Dependency Rule**: source code dependencies point inward, toward business rules. Business rules never import frameworks, databases, or the UI. ([The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html))
-- **Ubiquitous Language**: code, tickets, and conversation use the same words the business uses. If the business says "lesson", the class is not `Session`. This is Least Astonishment applied to the domain. ([Fowler](https://martinfowler.com/bliki/UbiquitousLanguage.html))
+- **Ubiquitous Language**: code, tickets, and conversation use the same words the business uses. If the business says "order", the class is not `Purchase`. This is Least Astonishment applied to the domain. ([Fowler](https://martinfowler.com/bliki/UbiquitousLanguage.html))
 - **Bounded Context**: one model per area of the business, with a clear edge, instead of one model that tries to fit everything. ([Fowler](https://martinfowler.com/bliki/BoundedContext.html))
 - **Aggregate**: a cluster of objects that changes together and is saved together, reached through one root. ([Fowler](https://martinfowler.com/bliki/DDD_Aggregate.html))
 - **Monolith First**: start with one deployable unit, and split it only when a boundary has proven itself. ([Fowler](https://martinfowler.com/bliki/MonolithFirst.html))
@@ -61,7 +59,7 @@ Where an entry is already part of Maestria's True North, the entry points there 
 
 - **Service Level Objectives**: set a measurable reliability target from the user's point of view, and alert on it rather than on every metric. ([SRE book](https://sre.google/sre-book/service-level-objectives/))
 - **Error budgets**: 100% reliability is the wrong target. The gap between the target and 100% is a budget to spend on shipping changes. ([Embracing Risk](https://sre.google/sre-book/embracing-risk/), [Error Budget Policy](https://sre.google/workbook/error-budget-policy/))
-- **Eliminate toil**: manual, repetitive work that a machine could do should be automated. This is the Cruise Control core value. ([SRE book](https://sre.google/sre-book/eliminating-toil/))
+- **Eliminate toil**: manual, repetitive work that a machine could do should be automated. ([SRE book](https://sre.google/sre-book/eliminating-toil/))
 - **Blameless postmortems**: after an incident, write down what happened and fix the system, not the person. ([SRE book](https://sre.google/sre-book/postmortem-culture/))
 - **Stability patterns**: every call that crosses a network gets a timeout, and repeated failures trip a circuit breaker so one failing dependency can't take down the rest (bulkheads). ([Release It!](https://pragprog.com/titles/mnee2/release-it-second-edition/))
 

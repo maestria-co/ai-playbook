@@ -1,8 +1,8 @@
 # Sources and Reading
 
-The people below built real systems, watched some of them fail, and wrote down what they learned. Use their lessons so we don't have to repeat their mistakes.
+The people below built real systems, watched some of them fail, and wrote down what they learned. Use their lessons instead of repeating their mistakes.
 
-**(free online)** marks a source you can read in full at no cost. Reach for those first (Free and Frugal).
+**(free online)** marks a source you can read in full at no cost.
 
 ## Trusted authors
 
