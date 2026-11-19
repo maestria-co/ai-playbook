@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 # commit-msg — reject commits that don't follow Conventional Commits.
 # Rules live in skills/commit-discipline/SKILL.md.
-# Install once for every repo on this machine:
-#   git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+#
+# Install once per clone, from the repo root:
+#   git config --local core.hooksPath .githooks
+#
+# This file is tracked, so it travels with the repo. Each clone still needs
+# the one config command above — git will not run a hook it was not pointed at.
 
 first_line=$(head -n1 "$1")
 
@@ -23,7 +27,7 @@ Commit rejected: message must follow Conventional Commits.
   e.g.   feat(auth): add token refresh
 
 Got: $first_line
-See ai-playbook/skills/commit-discipline/SKILL.md
+See skills/commit-discipline/SKILL.md
 MSG
   exit 1
 fi
