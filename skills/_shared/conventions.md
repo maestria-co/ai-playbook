@@ -244,3 +244,23 @@ Next step: [proposed action]
 - ❌ Continuing autonomous work for 10+ actions without a human check-in
 - ❌ Making irreversible changes without explicit authorization
 - ❌ Declaring completion without verifying outputs against acceptance criteria
+
+---
+
+## Writing Skills in This Repo
+
+`skills/writing-skills/` is copied from [obra/superpowers](https://github.com/obra/superpowers/tree/2ce8aa15d05bd57213e6f746f953aafb7ded7a8b/skills/writing-skills) (MIT, see its `LICENSE`). Follow it for how to write and test a skill. To update it, copy the newer upstream folder over it and re-apply the two local changes: remove links that leave the skill's folder, and replace `superpowers:` skill references with plain wording. Keep repo-specific rules here, not in that folder, so the copy stays easy to update.
+
+Two rules apply only to this repo:
+
+**Step and phase headings carry the skill name.** When a skill has numbered steps or phases, prefix every heading with the skill name, and keep the full path for nested workflows:
+
+```markdown
+## skill-name: Step 1: Do Something
+## skill-name: Stage 1: Preparation
+### skill-name: Stage 1: Step 1: Do X
+```
+
+Why: an agent that lands on one heading can tell which skill, stage, and step it is in without scrolling back.
+
+**Register every new skill.** Add it to the routing table in `skills/GUIDE.md` and the skill catalog in `README.md`. If it is part of a multi-skill sequence, also add it to the workflow table in `skills/using-skills/SKILL.md`. Why: `scripts/validate.py` fails when a skill is missing from `GUIDE.md`, and agents find skills through these tables.
