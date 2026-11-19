@@ -5,18 +5,13 @@
 # ever diverge, a push passes locally and fails in CI, and people start
 # ignoring the hook. One check, two places it runs.
 #
-# Install once for every repo on this machine:
-#   git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+# Install once per clone, from the repo root:
+#   git config --local core.hooksPath .githooks
 #
 # Skip a single push (use sparingly, CI still enforces):
 #   git push --no-verify
 
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
-
-# core.hooksPath is global, so this hook fires in every repo on the machine.
-# Only act where there is something to check.
-validator="$repo_root/scripts/validate.py"
-[[ -f "$validator" ]] || exit 0
 
 if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-push: python3 not found, skipping validation (CI will still run it)" >&2
@@ -25,7 +20,7 @@ fi
 
 echo "pre-push: running structural validation..."
 
-if python3 "$validator" --strict; then
+if python3 "$repo_root/scripts/validate.py" --strict; then
   exit 0
 fi
 
