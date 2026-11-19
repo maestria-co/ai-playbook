@@ -1,6 +1,6 @@
 # Principles and Laws Catalog
 
-One line per entry, with a link to a source that defines it. `SKILL.md` says when to apply each one. SOLID is in `SKILL.md`, because it is required.
+One line per entry, with a link to a source that defines it. SOLID, the Rule of Three, and how to cite a principle are in `SKILL.md`.
 
 ## Code and design principles
 
@@ -16,8 +16,9 @@ One line per entry, with a link to a source that defines it. `SKILL.md` says whe
 - **Fail Fast**: surface errors right away instead of limping along with bad state. ([Jim Shore, IEEE Software, on martinfowler.com](https://martinfowler.com/ieeeSoftware/failFast.pdf))
 - **Principle of Least Privilege**: give each component only the access it needs. ([Wikipedia](https://en.wikipedia.org/wiki/Principle_of_least_privilege))
 - **Rule of Three**: wait until you've written something three times before you abstract it. Smell when ignored: [Speculative Generality](https://refactoring.guru/smells/speculative-generality). ([Wikipedia](https://en.wikipedia.org/wiki/Rule_of_three_%28computer_programming%29))
-- **Boy Scout Rule**: leave the code a little cleaner than you found it. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-scout-rule), [Fowler on opportunistic refactoring](https://martinfowler.com/bliki/OpportunisticRefactoring.html))
+- **Boy Scout Rule**: leave the code a little cleaner than you found it. Keep the cleanup inside files the change already touches, so the diff stays reviewable. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-scout-rule), [Fowler on opportunistic refactoring](https://martinfowler.com/bliki/OpportunisticRefactoring.html))
 - **Chesterton's Fence**: don't remove something until you understand why it's there. ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#chestertons-fence))
+- **Design patterns (Gang of Four)**: use a pattern only when the problem it solves is already in the code, and use the pattern's standard name so readers recognize it. ([refactoring.guru catalog](https://refactoring.guru/design-patterns/catalog))
 - **Tesler's Law (Conservation of Complexity)**: every system has complexity that can't be removed, only moved, so decide who carries it (the user or the developer). ([Hacker Laws](https://github.com/dwmkerr/hacker-laws#the-law-of-conservation-of-complexity-teslers-law))
 
 ## Laws about systems and abstractions
@@ -44,6 +45,13 @@ One line per entry, with a link to a source that defines it. `SKILL.md` says whe
 - **Bounded Context**: one model per area of the business, with a clear edge, instead of one model that tries to fit everything. ([Fowler](https://martinfowler.com/bliki/BoundedContext.html))
 - **Aggregate**: a cluster of objects that changes together and is saved together, reached through one root. ([Fowler](https://martinfowler.com/bliki/DDD_Aggregate.html))
 - **Monolith First**: start with one deployable unit, and split it only when a boundary has proven itself. ([Fowler](https://martinfowler.com/bliki/MonolithFirst.html))
+
+## Dependency injection (Mark Seemann)
+
+- **Interfaces are not abstractions**: an interface with one implementation adds a file without decoupling anything. Add one at an I/O boundary a test must replace, or when a second implementation exists. ([Seemann](https://blog.ploeh.dk/2010/12/02/Interfacesarenotabstractions/))
+- **Impureim sandwich**: read input, run pure logic, write output. A pure core gets Dependency Inversion without a framework. ([Seemann](https://blog.ploeh.dk/2020/03/02/impureim-sandwich/), [Functional architecture is Ports and Adapters](https://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters/), [Dependency rejection](https://blog.ploeh.dk/2017/02/02/dependency-rejection/))
+- **Composition Root**: build the object graph in one place at the app's entry point and pass dependencies in. ([Seemann](https://blog.ploeh.dk/2011/07/28/CompositionRoot/))
+- **Service Locator is an anti-pattern**: it hides what a class needs. ([Seemann](https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/))
 
 ## Lean and continuous improvement (Toyota, *The Goal*, *The Phoenix Project*)
 
