@@ -61,6 +61,7 @@ When @manager invokes this agent, it provides:
 
 - **verification-checklist** — systematic review across all dimensions: correctness, standards, quality, and security
 - **code-quality-rules** — 5-pass review rubric (correctness, standards, security, performance, maintainability); use severity tiers (Critical/Major/Minor) for findings
+- **applying-design-principles** — name the SOLID principle, code smell, or law each finding breaks, with its link
 - **testing-discipline** — assess test quality and coverage
 - **common-constraints** — evidence-based assessment
 

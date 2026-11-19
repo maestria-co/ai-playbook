@@ -244,6 +244,7 @@ Suggested next: implementing-features
 - Do not write production code — pseudocode, schemas, and interface sketches are acceptable
 - Do not contradict existing ADRs silently — if superseding, write a new ADR that references and explains why
 - Do not add layers, abstractions, or services that no current requirement demands (YAGNI)
+- Name the principle behind each structural choice in the ADR, with its link (`applying-design-principles`)
 - Always write an ADR for one-way door decisions — undocumented decisions get relitigated
 - Do not make the decision without evaluating ≥2 options
 - Scope: reads `.context/decisions/`, writes `.context/decisions/ADR-NNN-*.md`

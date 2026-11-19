@@ -12,7 +12,7 @@ Specifies assessment standards, issue severity rankings, and a systematic multi-
 
 ## Assessment Standards
 
-**Code Hygiene**: Purge all commented-out code blocks. Strip debug print statements. Never silently swallow exceptions—handle errors explicitly at every failure point. Never commit secrets—use environment variables. Choose descriptive identifiers consistently. Replace magic numbers with named constants. Apply the Don't Repeat Yourself principle rigorously.
+**Code Hygiene**: Purge all commented-out code blocks. Strip debug print statements. Never silently swallow exceptions—handle errors explicitly at every failure point. Never commit secrets—use environment variables. Choose descriptive identifiers consistently. Replace magic numbers with named constants. Apply Don't Repeat Yourself to knowledge, not to look-alike code: extract shared code on the third copy (Rule of Three), not the second.
 
 **Security Posture**: Never expose sensitive data through logging or error messages. Validate and sanitize all untrusted input at system boundaries. Prevent SQL injection through parameterized queries exclusively. Apply output encoding to block XSS attacks. Ban eval() and related dynamic execution. Verify auth/authz implementation thoroughly—confirm authorization logic executes at the service tier, never solely in presentation layers. Keep credentials out of repositories. New API endpoints and data paths must enforce access restrictions. Changes touching authentication or authorization warrant heightened scrutiny—verify modifications don't accidentally broaden permissions.
 
@@ -22,7 +22,7 @@ Specifies assessment standards, issue severity rankings, and a systematic multi-
 
 **Verification Evidence**: Confirm build and test execution actually occurred—demand output artifacts or reproducible steps, never accept assumptions.
 
-**Maintainability Factors**: Limit method length to reasonable bounds. Manage cyclomatic complexity actively. Preserve clear responsibility boundaries between components. Prevent circular dependency graphs.
+**Maintainability Factors**: Limit method length to reasonable bounds. Manage cyclomatic complexity actively. Preserve clear responsibility boundaries between components. Prevent circular dependency graphs. New code must follow SOLID; cite the principle or code smell with its link, as `applying-design-principles` describes.
 
 ## Structural Fixes Over Instance Fixes
 
@@ -92,6 +92,7 @@ Execute comprehensive reviews through multiple targeted inspection passes rather
 - Could an unfamiliar developer comprehend this without external documentation?
 - Are identifiers meaningful and consistent with project conventions?
 - Is complexity warranted, or could simpler approaches achieve identical outcomes?
+- Does new code follow SOLID? Is there a named code smell (refactoring.guru catalog)? Cite it per `applying-design-principles`.
 - Are unexplained literal values, cryptic abbreviations, or deceptive names present?
 
 ### Pass 5: Substantiation & Scope Adherence

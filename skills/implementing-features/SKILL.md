@@ -76,6 +76,7 @@ Write the smallest change that satisfies the spec:
 - No speculative refactors ("while I'm here I'll also...")
 - No unasked features (YAGNI)
 - One concern per function
+- Follow SOLID, and extract shared code on the third copy, not the second (`applying-design-principles`)
 - Inject dependencies; avoid global state — untestable code will fail in `writing-tests`
 
 For bugs: fix the root cause, not just the symptom. State what the root cause was.
