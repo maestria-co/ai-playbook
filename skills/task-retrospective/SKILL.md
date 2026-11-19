@@ -16,6 +16,8 @@ description: >
 Capture what was learned during a task so the knowledge isn't lost when context clears.
 A good retrospective takes 5 minutes and prevents hours of repeated mistakes.
 
+Run it as Kaizen: blameless, ask "why?" until you reach a process cause (Five Whys), and end with one small change you can ship. Why: blame hides the real cause, and small changes actually get made. See `applying-design-principles` (Lean and continuous improvement).
+
 ---
 
 ## When to Run

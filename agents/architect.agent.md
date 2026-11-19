@@ -70,6 +70,7 @@ On every invocation, apply the `context-review` skill (`skills/context-review/SK
 
 - **designing-systems** — structured ADR creation and design evaluation
 - **design-first** — determine if lightweight or thorough design is needed
+- **applying-design-principles** — SOLID, Gang of Four patterns, and system laws (Gall, Conway, Hyrum, Postel, CAP), with sources to cite
 - **context-loader** — read `.context/` to ground decisions in project reality
 - **common-constraints** — evidence-based reasoning, no speculative decisions
 

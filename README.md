@@ -63,6 +63,7 @@ build-guide/      # Build guide documentation
 | `task-retrospective`     | Structured reflection after completing tasks  | `skills/task-retrospective/SKILL.md`     |
 | `knowledge-graduation`   | Promote validated patterns to reusable skills | `skills/knowledge-graduation/SKILL.md`   |
 | `evaluate-skill`         | Evaluate a SKILL.md file for quality          | `skills/evaluate-skill/SKILL.md`         |
+| `applying-design-principles` | Apply and cite SOLID, code smells, design patterns, and software laws | `skills/applying-design-principles/SKILL.md` |
 
 **Skill selection guide:** `skills/GUIDE.md`
 

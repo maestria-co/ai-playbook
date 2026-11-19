@@ -62,6 +62,7 @@ When @manager invokes this agent, it provides:
 
 - **implementing-features** — structured implementation workflow
 - **code-quality-rules** — 5-pass review rubric; apply during self-review before handoff
+- **applying-design-principles** — SOLID (required), Rule of Three before abstracting, patterns only when the problem is present
 - **testing-discipline** — TDD practices, test quality alongside code
 - **verification-checklist** — verify before reporting complete
 - **common-constraints** — evidence-based completion, self-review, read-first

@@ -47,6 +47,7 @@ Pick a skill directly based on your task:
 | Promote patterns to reusable skills         | `knowledge-graduation`   | `skills/knowledge-graduation/SKILL.md`   |
 | Sync `.context/` docs with codebase         | `context-review`         | `skills/context-review/SKILL.md`         |
 | Write or evaluate a SKILL.md file           | `writing-skills`         | `skills/writing-skills/SKILL.md`         |
+| Apply or cite SOLID, smells, patterns, laws | `applying-design-principles` | `skills/applying-design-principles/SKILL.md` |
 
 ## Agents
 
