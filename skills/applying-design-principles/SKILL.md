@@ -99,6 +99,16 @@ A review lists its findings in this order:
 
 Name each smell from the [refactoring.guru smells catalog](https://refactoring.guru/refactoring/smells) and the refactoring that fixes it ([refactoring.guru techniques](https://refactoring.guru/refactoring/techniques), [Fowler's catalog](https://refactoring.com/catalog/)). Word comments by [Hanlon's Razor](https://github.com/dwmkerr/hacker-laws#hanlons-razor): assume a mistake, not malice.
 
+## Reading a Linked Source
+
+When you need more from a linked source than this skill says, run:
+
+```bash
+python3 <this skill's base directory>/scripts/fetch_link.py <url>
+```
+
+It prints the page as markdown from this skill's `cache/` folder, and fetches the page only when there is no copy or the copy is more than 60 days old. A link with `#section` prints only that section. Use it instead of a web fetch tool for every link in this skill.
+
 ## References
 
 - `references/principles-and-laws.md`: the full catalog with a source for each entry, including Domain-Driven Design, Clean Architecture, dependency injection, lean, SRE, and the laws for debugging and planning.
