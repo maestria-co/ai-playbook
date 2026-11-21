@@ -300,3 +300,13 @@ Pattern output too vague? Wrong scope? Test blocked? See [`TROUBLESHOOTING.md`](
 - **Context awareness** — write state to `.context/` before context clears; use git as checkpoints
 - **Human checkpoints** — stop and check in after 3–5 major actions or before irreversible changes
 - **Verify before done** — check each acceptance criterion explicitly before signaling completion
+
+---
+
+## License
+
+[MIT](LICENSE). Copyright (c) 2026 Maestria Solutions LLC.
+
+## Credits
+
+- `skills/writing-skills/` is adapted from the `writing-skills` skill in [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent, used under the MIT License (Copyright (c) 2025 Jesse Vincent). Its test-driven method for writing and testing skills is the foundation of how this repo evaluates skills.
