@@ -143,11 +143,33 @@ All agents follow the rules in `_shared/`:
 
 Agents use the `.context/` directory to persist knowledge across sessions:
 
-| Path                           | Purpose                                              |
-| ------------------------------ | ---------------------------------------------------- |
-| `.context/overview.md` | High-level project description, goals, tech stack    |
-| `.context/decisions/`          | Architecture Decision Records (ADRs)                 |
-| `.context/retrospectives/`     | Rolling learning log — agents append, humans promote |
+| Path | Purpose | Shape |
+| --- | --- | --- |
+| `.context/overview.md` | High-level project description, goals, tech stack | file |
+| `.context/architecture.md` | System structure, layers, integrations | file → folder |
+| `.context/standards.md` | Code style, naming, error handling | file → folder |
+| `.context/testing.md` | Test framework, conventions, mocking | file → folder |
+| `.context/decisions/` | Architecture Decision Records (ADRs) | always a folder |
+| `.context/retrospectives/` | Rolling learning log — agents append, humans promote | folder, max 10 entries |
+| `.context/tasks/` | One folder per task, each with `plan.md` | folder |
+| `.context/workflows/` | PR format, branching, CI | folder |
+
+**The layout rules are canonical in `skills/_shared/conventions.md`.** Do not
+restate them here — read them there.
+
+"file → folder" means it starts as a single file and is promoted to a folder
+by `context-maintenance` once it passes 300 lines. **A promoted entry is read
+at `<base>/README.md`, not `<base>.md`.** So resolve both before concluding a
+repo documents nothing:
+
+```bash
+[ -f ".context/standards.md" ] && cat .context/standards.md \
+  || cat .context/standards/README.md 2>/dev/null \
+  || echo "no standards documented"
+```
+
+An absent context file is not "no conventions to follow" — it is a gap to
+report.
 
 **Before starting work**, agents should read `.context/overview.md` if it exists.  
 **After significant decisions**, agents should write to `.context/decisions/`.  

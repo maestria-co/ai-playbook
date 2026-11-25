@@ -49,7 +49,7 @@ When @manager invokes this agent, it provides:
 ## Process
 
 1. **Read first**: Read the spec, then existing code for patterns, then `.context/decisions/`. Don't write until you understand the codebase shape.
-2. **Read standards**: Check `.context/standards.md` for naming conventions, error handling patterns, and code style requirements.
+2. **Read standards**: Check `.context/standards.md` — or `.context/standards/README.md` if the repo has promoted it to a folder — for naming conventions, error handling patterns, and code style requirements. If neither exists, report the gap; do not assume there are no conventions.
 3. **Clarify if needed**: If acceptance criteria are ambiguous, ask one focused question before writing any code. If a gap is discovered **mid-implementation**, stop, ask @manager one focused question, and wait for the answer — do not fill spec gaps with assumptions.
 4. **Write testable code**: Structure the implementation so @tester can verify it without mocking internals. Inject dependencies; avoid global state. Do not write test files — route test authoring to @tester.
 5. **Implement minimally**: Write the smallest change that satisfies the spec. No speculative refactors, no unasked features (YAGNI).

@@ -121,6 +121,20 @@ Add `branching.md` and `ci-cd.md` alongside it only if the project has non-obvio
 workflows (complex branching, multi-step CI).
 If the project has a rich domain with many entities or project-specific terminology, also create `.context/domains/`.
 
+**Create folders only for the four above.** The layout rules are in
+`skills/_shared/conventions.md`; the part that matters at init time:
+
+| Entry | Shape at init |
+|---|---|
+| `overview.md`, `architecture.md`, `standards.md`, `testing.md` | **flat files** |
+| `decisions/`, `retrospectives/`, `tasks/`, `workflows/` | folders |
+
+Do **not** create `standards/`, `testing/`, or `architecture/` as folders here,
+however much content the repo seems to warrant. Those are promoted later by
+`context-maintenance` when a file passes 300 lines. Splitting at init time
+produces four near-empty files instead of one useful one, and it is how six
+repos ended up with six different shapes.
+
 ### Step 3 — Copy and Populate Files
 
 **Universal files (copy verbatim from template):**

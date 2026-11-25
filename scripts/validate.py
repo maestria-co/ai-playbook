@@ -50,6 +50,14 @@ INDEX_DOCS = ["CLAUDE.md", os.path.join("skills", "GUIDE.md")]
 # The commit-msg hook ships twice: once for this repo, once inside the template
 # `initialize-repo` installs into a consumer repo. Two copies drift, so the
 # check that they are byte-identical runs in CI rather than relying on memory.
+# `.context/` layout, per skills/_shared/conventions.md. A flat file is promoted
+# to a folder of the same name at 300 lines, and a promoted entry is read at
+# <base>/README.md. Six Maestria repos grew six different shapes because nothing
+# checked. These three rules are the ones worth enforcing.
+PROMOTABLE = ["standards", "testing", "architecture"]
+PROMOTE_AT_LINES = 300
+MAX_RETROSPECTIVE_ENTRIES = 10
+
 HOOK_COPIES = [
     os.path.join(".githooks", "commit-msg"),
     os.path.join("skills", "_shared", "context_template", "githooks", "commit-msg"),
@@ -172,6 +180,61 @@ def validate():
         for h, p in zip(HOOK_COPIES, hook_paths):
             if not os.access(p, os.X_OK):
                 errors.append(f"[githooks] Hook is not executable: {h}")
+
+    # .context/ layout conventions
+    ctx = os.path.join(REPO, ".context")
+    if os.path.isdir(ctx):
+        # decisions/ is always a folder, never a file
+        if os.path.isfile(os.path.join(ctx, "decisions.md")):
+            errors.append(
+                "[.context] decisions must be a folder, not decisions.md — "
+                "one ADR per file"
+            )
+        if not os.path.isdir(os.path.join(ctx, "decisions")):
+            errors.append("[.context] Missing required folder: decisions/")
+
+        # Each promotable entry must exist in exactly one shape
+        for base in PROMOTABLE:
+            flat = os.path.join(ctx, base + ".md")
+            folder = os.path.join(ctx, base)
+            has_flat, has_folder = os.path.isfile(flat), os.path.isdir(folder)
+            if has_flat and has_folder:
+                errors.append(
+                    f"[.context] {base} exists as both {base}.md and {base}/ — "
+                    "pick one shape"
+                )
+            elif has_folder and not os.path.isfile(
+                os.path.join(folder, "README.md")
+            ):
+                errors.append(
+                    f"[.context] {base}/ has no README.md — a promoted entry "
+                    "needs an entry point, since agents no longer find "
+                    f"{base}.md"
+                )
+            elif has_flat:
+                n = sum(1 for _ in open(flat, encoding="utf-8"))
+                if n > PROMOTE_AT_LINES:
+                    warnings.append(
+                        f"[.context] {base}.md is {n} lines (over "
+                        f"{PROMOTE_AT_LINES}) — promote it to {base}/ via "
+                        "context-maintenance"
+                    )
+            elif not has_folder:
+                warnings.append(f"[.context] Missing {base}.md")
+
+        # retrospectives/ caps at 10 entries, excluding scaffolding
+        retro = os.path.join(ctx, "retrospectives")
+        if os.path.isdir(retro):
+            entries = [
+                f for f in os.listdir(retro)
+                if f.endswith(".md") and f not in ("README.md", "template.md")
+            ]
+            if len(entries) > MAX_RETROSPECTIVE_ENTRIES:
+                errors.append(
+                    f"[.context] retrospectives/ has {len(entries)} entries, "
+                    f"max {MAX_RETROSPECTIVE_ENTRIES} — promote the lessons "
+                    "and archive them"
+                )
 
     return errors, warnings
 

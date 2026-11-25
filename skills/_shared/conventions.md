@@ -136,6 +136,61 @@ Before I proceed, one question: [single focused question]?
 
 ---
 
+## `.context/` Layout
+
+One convention, written down once, so a newcomer guesses right and six repos
+do not grow six shapes.
+
+| Entry | Shape | Rule |
+|---|---|---|
+| `overview.md` | file | Always a file |
+| `architecture.md` | file → folder | Flat until it grows |
+| `standards.md` | file → folder | Flat until it grows |
+| `testing.md` | file → folder | Flat until it grows |
+| `decisions/` | **always a folder** | Never a file — one ADR per file |
+| `retrospectives/` | folder | **At most 10 entries**, excluding `README.md` and `template.md` |
+| `tasks/` | folder | One folder per task |
+
+**Start flat.** A new repo gets `standards.md`, `testing.md`, and
+`architecture.md` as single files. Most repos never need more.
+
+**Promote on growth, never on taste.** When one of those files passes 300
+lines, `context-maintenance` converts it to a folder of the same name and
+leaves a `README.md` inside as the entry point. `standards.md` becomes
+`standards/README.md` plus `standards/naming.md`, `standards/errors.md`, and
+so on. The promotion is a maintenance action with a threshold, not a judgment
+call made at init time.
+
+**`decisions/` is always a folder.** An ADR is the highest-value thing in
+`.context/`, each one is immutable once accepted, and they are referenced
+individually by number. Collapsing them into a single `decisions.md` destroys
+all three properties.
+
+**`retrospectives/` caps at 10 entries.** Past that, `context-maintenance`
+promotes the lessons and archives the entries. An uncapped retrospective
+folder becomes a graveyard nobody reads.
+
+### Reading either shape
+
+An agent told to read `.context/standards.md` finds nothing in a repo that has
+already promoted to `standards/`. Reading nothing is indistinguishable from
+finding nothing to say, so the agent proceeds uninformed and silent. Always
+resolve both:
+
+```bash
+# standards, testing, architecture — file first, then folder entry point
+for base in standards testing architecture; do
+  if [ -f ".context/$base.md" ]; then cat ".context/$base.md"
+  elif [ -f ".context/$base/README.md" ]; then cat ".context/$base/README.md"
+  fi
+done
+```
+
+If neither exists, say so. Do not treat an absent context file as "no
+conventions to follow."
+
+---
+
 ## Context Window Management
 
 The context window is the most important resource to manage. Performance degrades as it fills.
