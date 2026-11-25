@@ -36,7 +36,7 @@ Restate the research question precisely before investigating.
 
 **Check 2 — Check for prior research**
 
-Read `.context/research/` to see if this question (or a close variant) was already researched.
+Read `.context/tasks/*/research/` to see if this question (or a close variant) was already researched.
 
 - If recent research exists (< 30 days) → read it. Determine if circumstances have changed
   enough to warrant re-investigation. If not, return the existing recommendation.
@@ -106,7 +106,9 @@ adding value. Make the call.
 
 ### Step 6 — Save the Report
 
-Write the full report to `.context/research/[topic-slug].md`.
+Write the full report to `.context/tasks/[task-id]/research/[topic-slug].md`. If there is no
+task id, generate one (`local-YYYY-MM-DD-<slug>`) — a report belongs to the
+work that prompted it, so it is pruned when that task folder is.
 
 Report structure:
 ```markdown
@@ -139,7 +141,7 @@ Research complete: [Topic]
 Recommendation: [Option] — [one sentence]
 Main tradeoff: [what we're accepting]
 Confidence: [High/Medium/Low]
-Full report: .context/research/[slug].md
+Full report: .context/tasks/[task-id]/research/[slug].md
 Follow-up unknowns: [none | question to investigate]
 ```
 
@@ -169,7 +171,7 @@ Main tradeoff: jsonwebtoken uses synchronous crypto by default; for high-through
 services, jose's async WebCrypto API is faster.
 Confidence: High
 
-Full report: .context/research/jwt-library-selection.md
+Full report: .context/tasks/MAE-0042/research/jwt-library-selection.md
 
 Key finding: jsonwebtoken has 50M+ weekly downloads, maintained by Auth0, full 
 TypeScript types via @types/jsonwebtoken. CVE history clean since 2022 patch.
@@ -205,7 +207,7 @@ which violates the 30-second constraint but is borderline. Expand-contract is th
 only approach that guarantees zero read downtime. Trigger-based sync is an 
 alternative but adds DB-level complexity that's harder to reason about.
 
-Full report: .context/research/postgres-zero-downtime-column-rename.md
+Full report: .context/tasks/local-2026-11-25-column-rename/research/postgres-zero-downtime-column-rename.md
 </output>
 </example>
 
@@ -236,6 +238,6 @@ pattern can handle the technical side.
 - Do not write production code — usage snippets illustrating an API are acceptable
 - Do not make final architecture decisions — make recommendations; decisions are recorded in ADRs via `designing-systems`
 - Do not do unbounded research — scope the question first, timebox the investigation, produce output
-- Always save the report to `.context/research/` — do not deliver findings only in chat
+- Always save the report to `.context/tasks/[task-id]/research/` — do not deliver findings only in chat
 - Do not fabricate citations — if uncertain about a source, say "unverified" explicitly
 - If the question is a business/product decision, say so and stop

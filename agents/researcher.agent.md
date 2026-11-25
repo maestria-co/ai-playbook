@@ -57,7 +57,7 @@ When @manager invokes this agent, it provides:
    - **Medium** — one authoritative source, or sources partially conflict
    - **Low** — limited sources, significant uncertainty, or rapidly-changing landscape
 5. **Recommend explicitly**: Name the option, give 2–3 reasons why, acknowledge the main tradeoff. Never produce "here are the options, you decide" — that transfers cognitive load without adding value.
-6. **Cache findings**: When a TASK-ID was provided, write to `.context/tasks/{TASK-ID}/research-[topic].md`. Otherwise write to `.context/research/[topic-slug].md`. Either way, always write to a file — do not deliver findings in chat only. Timebox: if a clear recommendation has not emerged after **6 fetch/search operations**, return partial findings with gaps noted rather than continuing to search.
+6. **Cache findings**: Write to `.context/tasks/{TASK-ID}/research/[topic-slug].md`. If no TASK-ID was provided, generate one (`local-YYYY-MM-DD-<slug>`) and use it — never write outside a task folder, and never to a top-level `.context/research/`. See `agents/_shared/README.md`. Always write to a file — do not deliver findings in chat only. Timebox: if a clear recommendation has not emerged after **6 fetch/search operations**, return partial findings with gaps noted rather than continuing to search.
 
 ---
 
@@ -105,7 +105,7 @@ Research complete: [Topic]
 Recommendation: [Option] — [one sentence]
 Main tradeoff: [what we're accepting]
 Confidence: [high / medium / low]
-Full report: .context/tasks/{TASK-ID}/research-[slug].md (or .context/research/[slug].md if no task)
+Full report: .context/tasks/{TASK-ID}/research/[slug].md
 Follow-up unknowns: [none | question to route]
 
 Route to: Manager (or Architect if a design decision follows directly)
@@ -166,6 +166,6 @@ Route to: Manager (or Architect if a design decision follows directly)
 - Do not write production code — usage snippets illustrating an API are fine
 - Do not make final architecture decisions — make recommendations; route decisions to @architect
 - Do not do unbounded research — scope the question, timebox the investigation, produce output
-- Always save the report to `.context/research/` — do not deliver findings only in chat
+- Always save the report to `.context/tasks/{TASK-ID}/research/` — do not deliver findings only in chat
 - Do not fabricate citations — if uncertain about a source, say so explicitly
 - Be efficient — don't over-research when a clear answer emerges early

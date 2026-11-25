@@ -215,7 +215,7 @@ planning-tasks
 ### `researching-options`
 
 - **Input:** A specific technical question
-- **Output:** `.context/research/[topic].md` — recommendation with evidence
+- **Output:** `.context/tasks/[task-id]/research/[topic].md` — recommendation with evidence
 - **When NOT to use:** Obvious answers, business/product decisions
 - **Degree of freedom:** High
 
@@ -337,7 +337,7 @@ All skills follow the conventions in `skills/_shared/conventions.md`:
 | `planning-tasks`              | `.context/plans/`                                            |
 | `task-plan`                   | `.context/tasks/[TASK-ID]/plan.md`                           |
 | `design-first`                | Nothing (triage decision) or lightweight design in `plan.md` |
-| `researching-options`         | `.context/research/`                                         |
+| `researching-options`         | `.context/tasks/[task-id]/research/`                         |
 | `designing-systems`           | `.context/decisions/`                                        |
 | `implementing-features`       | Source code files                                            |
 | `writing-tests`               | Test files                                                   |

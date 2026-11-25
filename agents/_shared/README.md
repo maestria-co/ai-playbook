@@ -157,6 +157,23 @@ Agents use the `.context/` directory to persist knowledge across sessions:
 **The layout rules are canonical in `skills/_shared/conventions.md`.** Do not
 restate them here — read them there.
 
+### Investigation output is always task-scoped
+
+`researcher` and `code-researcher` write their reports to
+`.context/tasks/<task-id>/research/<topic-slug>.md`. There is no top-level
+`.context/research/` — a report belongs to the work that prompted it, so it is
+pruned when that task folder is pruned. A standalone research folder has no
+lifecycle and accumulates forever.
+
+**No task id?** Generate one rather than writing outside a task folder:
+
+```
+local-YYYY-MM-DD-<slug>      e.g. local-2026-11-25-oauth-libraries
+```
+
+A locally generated id is a real task folder in every other respect. If the
+work later gets a tracker id, rename the folder.
+
 "file → folder" means it starts as a single file and is promoted to a folder
 by `context-maintenance` once it passes 300 lines. **A promoted entry is read
 at `<base>/README.md`, not `<base>.md`.** So resolve both before concluding a

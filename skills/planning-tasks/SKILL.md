@@ -137,7 +137,7 @@ Plan: OAuth 2.0 Authentication
 ### Task 1: Research refresh token rotation approach (S)
 Depends on: none
 Input: .context/decisions/ADR-003-auth-strategy.md, current auth middleware
-Output: .context/research/oauth-refresh-tokens.md
+Output: .context/tasks/MAE-0031/research/oauth-refresh-tokens.md
 Acceptance criteria:
 - [ ] At least 2 approaches compared
 - [ ] Recommendation made with security rationale
@@ -145,7 +145,7 @@ Scope out: Implementation — research only
 
 ### Task 2: Create OAuthProvider model and migration (M)
 Depends on: Task 1
-Input: .context/research/oauth-refresh-tokens.md, src/models/User.js (style reference)
+Input: .context/tasks/MAE-0031/research/oauth-refresh-tokens.md, src/models/User.js (style reference)
 Output: src/models/OAuthProvider.js, db/migrations/YYYYMMDD-create-oauth-provider.js
 Acceptance criteria:
 - [ ] Model includes userId foreign key referencing users table
