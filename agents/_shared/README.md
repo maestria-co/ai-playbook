@@ -145,11 +145,11 @@ Agents use the `.context/` directory to persist knowledge across sessions:
 
 | Path                           | Purpose                                              |
 | ------------------------------ | ---------------------------------------------------- |
-| `.context/project-overview.md` | High-level project description, goals, tech stack    |
+| `.context/overview.md` | High-level project description, goals, tech stack    |
 | `.context/decisions/`          | Architecture Decision Records (ADRs)                 |
 | `.context/retrospectives/`     | Rolling learning log — agents append, humans promote |
 
-**Before starting work**, agents should read `.context/project-overview.md` if it exists.  
+**Before starting work**, agents should read `.context/overview.md` if it exists.  
 **After significant decisions**, agents should write to `.context/decisions/`.  
 **After completing tasks**, agents should append to the current retrospective log.
 

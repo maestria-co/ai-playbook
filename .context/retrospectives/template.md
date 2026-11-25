@@ -26,7 +26,7 @@
 - [Who should act on it: human / agent / both]
 
 ### Promote?
-- [ ] Yes → [target: agent file / ADR / project-overview]
+- [ ] Yes → [target: agent file / ADR / overview]
 - [x] No — one-off, no action needed
 
 ---

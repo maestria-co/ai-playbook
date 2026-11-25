@@ -153,7 +153,7 @@ The context window is the most important resource to manage. Performance degrade
 
 ### Resuming after a context reset
 
-1. Read `.context/project-overview.md`
+1. Read `.context/overview.md`
 2. Run `git log --oneline -10`
 3. Read any in-progress state files
 

@@ -27,7 +27,7 @@ risk than it creates.
 
 **Check 1 — Understand the project context**
 
-Read `.context/project-overview.md` if it exists.
+Read `.context/overview.md` if it exists.
 
 - If it exists → read it before proceeding. Note the tech stack, current state, and constraints.
 - If it does not exist → proceed, but note that your plan will lack full project context.

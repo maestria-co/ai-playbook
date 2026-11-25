@@ -27,7 +27,7 @@ approach. If you know what to build and how, use `implementing-features` directl
 
 **Check 1 — Read project context**
 
-Read `.context/project-overview.md` and scan `.context/decisions/` for relevant prior ADRs.
+Read `.context/overview.md` and scan `.context/decisions/` for relevant prior ADRs.
 
 - If a prior ADR exists for this topic → read it. If you're superseding it, document why.
 - If no prior ADR exists → proceed.

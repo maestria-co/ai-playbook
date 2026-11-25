@@ -22,9 +22,9 @@ Run these checks before scanning. If either fails, abort the skill and proceed w
 
 **Check 1 — Verify codebase context**
 
-Look for `.context/overview.md` or `.context/project-overview.md` in the current working directory.
+Look for `.context/overview.md` in the current working directory.
 
-- If neither exists → not a structured codebase. **Abort skill.**
+- If it does not exist → not a structured codebase. **Abort skill.**
 - If found → read it to understand the project before proceeding.
 
 **Check 2 — Check the cache**
@@ -42,7 +42,7 @@ Work through each step in order. Read the current `.context/` file, scan the rel
 
 ### Step 1 — `overview.md`
 
-Target: `.context/overview.md` (or `project-overview.md`)
+Target: `.context/overview.md`
 
 - Verify tech stack versions still match manifest files (`*.csproj`, `package.json`, etc.)
 - Update `## Current State` (or equivalent):

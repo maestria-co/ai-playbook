@@ -178,7 +178,7 @@ Use existing pattern from: src/routes/auth.js (for route structure)
 </context>
 ```
 
-Alternatively, update your `.context/project-overview.md` with a "Conventions" section so it's always available.
+Alternatively, update your `.context/overview.md` with a "Conventions" section so it's always available.
 
 ---
 
@@ -190,7 +190,7 @@ Alternatively, update your `.context/project-overview.md` with a "Conventions" s
 
 ```bash
 git log --oneline -10         # what changed recently
-cat .context/project-overview.md
+cat .context/overview.md
 cat .context/tasks/[ID]/brief.md
 cat .context/tasks/[ID]/plan.md   # what's the current task list
 ```

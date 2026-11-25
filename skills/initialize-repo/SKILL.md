@@ -28,10 +28,32 @@ If `.context/` already exists with content, do not overwrite — use `context-re
 
 **Check 1 — Verify no existing context**
 
-Look for `.context/overview.md` in the current working directory.
+Do not decide this on one filename. A repo whose overview is named something
+else reads as uninitialized and gets a second, competing set of context files.
+Check for **any** of these three signals:
 
-- If it exists and has content beyond placeholders → **Abort.** Report: "`.context/` already exists. Use `context-review` to update it."
-- If it does not exist, or contains only `[PLACEHOLDER]` markers → proceed.
+```bash
+ls .context/decisions/*.md 2>/dev/null | head -1   # any ADR
+ls .context/standards.md 2>/dev/null               # standards doc
+ls .context/overview.md 2>/dev/null                # overview doc
+```
+
+- If **any** of the three is present with content beyond placeholders →
+  **Abort.** Report: "`.context/` already exists. Use `context-review` to
+  update it."
+- If none is present, or they contain only `[PLACEHOLDER]` markers → proceed.
+
+`decisions/` and `standards.md` are the load-bearing signals: a repo that has
+recorded a decision or written down its conventions is initialized, whatever
+its overview file is called. Checking three paths instead of one costs nothing
+and removes the failure mode where a guard passes by finding nothing.
+
+**Found 2026-11-25 in this repo.** Its overview was named
+`.context/project-overview.md`, so the old single-filename check found nothing
+and reported "proceed" against a `.context/` holding six ADRs, eleven task
+folders, and a populated `standards.md`. Following the skill literally would
+have written a second overview file next to the real one — and broken this
+skill's own constraint against overwriting populated context.
 
 **Check 2 — Locate the skill kit template**
 
