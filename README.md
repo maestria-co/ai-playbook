@@ -188,15 +188,16 @@ Task Tracking below.
 
 ### Setup
 
-Install once per machine:
+The hooks live in `.githooks/`, tracked in this repo. Point git at them once
+per clone, from the repo root:
 
 ```bash
-git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+git config --local core.hooksPath .githooks
 ```
 
-This is global, so both hooks fire in every repo on the machine. `pre-push`
-exits silently where there is no `scripts/validate.py`, and `commit-msg`
-only checks message format, so neither interferes with unrelated projects.
+Local, not global — `pre-push` runs this repo's `scripts/validate.py`, which
+no other repo has. Each clone needs the command once; git will not run a hook
+it was not pointed at, and `core.hooksPath` is not something a clone inherits.
 
 ### Bypassing
 

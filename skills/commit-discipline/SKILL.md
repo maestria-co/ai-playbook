@@ -18,11 +18,15 @@ should (and shouldn't) be committed.
 
 ### Enforcement
 
-`scripts/git-hooks/commit-msg` rejects any message that doesn't match this format. Turn it on once per machine:
+`.githooks/commit-msg` rejects any message that doesn't match this format. The
+hook is tracked in the repo; point git at it once per clone, from the repo root:
 
 ```
-git config --global core.hooksPath <path-to-ai-playbook>/scripts/git-hooks
+git config --local core.hooksPath .githooks
 ```
+
+A repo set up by `initialize-repo` already has the hook file — see
+`skills/initialize-repo/SKILL.md`. It still needs this command per clone.
 
 ---
 

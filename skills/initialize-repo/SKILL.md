@@ -178,6 +178,42 @@ Read `.context/testing.md` for test framework and patterns.
 Read `.context/decisions/index.md` for architectural decision records.
 ```
 
+### Step 4a — Install the `commit-msg` Hook
+
+Copy the Conventional Commits hook into the target repo as a **tracked** file, so
+it travels to everyone who clones. Source it from the template directory resolved
+by **find-context-template**:
+
+```
+<template_dir>/githooks/commit-msg → .githooks/commit-msg
+```
+
+**Install only if you can do so without taking something away.** Check all three
+before copying:
+
+```bash
+existing_path=$(git config --local --get core.hooksPath)
+ls .githooks/commit-msg 2>/dev/null
+ls .git/hooks/commit-msg 2>/dev/null
+```
+
+| Finding | Action |
+|---|---|
+| Nothing set, no hook present | Copy the file, `chmod +x`, report it installed |
+| `.githooks/commit-msg` already exists | **Do not overwrite.** Report that the repo already has one and leave it alone |
+| `.git/hooks/commit-msg` exists | **Do not overwrite.** Report the conflict — the repo has an untracked hook that `core.hooksPath` would disable |
+| `core.hooksPath` already set elsewhere | **Stop.** The repo uses husky, lefthook, or pre-commit. Report it; do not change the setting |
+
+Never run `git config core.hooksPath` yourself, and never overwrite a hook you
+did not write. Setting `core.hooksPath` replaces `.git/hooks` wholesale, so
+changing it silently disables every hook the repo already had. Reporting a
+conflict is the correct outcome, not a failure.
+
+The hook file alone does not enforce anything — git only runs hooks it was
+pointed at. Print the config command in the output (Step 5) so a human runs it
+deliberately. A clone does not inherit `core.hooksPath`, so each clone needs it
+once.
+
 ### Step 5 — Verification
 
 Confirm all required files exist and are non-empty:
@@ -206,11 +242,21 @@ Tech stack detected: [language, framework, test runner]
 Files created: [count]
 Files with TODOs: [count] — these need human input
 
+Commit hook: [installed | already present, left alone | skipped — reason]
+
 Next steps:
 1. Review .context/overview.md — fill in business goals, external links, compliance
-2. Commit .context/ to version control
-3. Tell your team — link to META.md
+2. Commit .context/ and .githooks/ to version control
+3. Turn on the git hooks — once per clone, from the repo root:
+
+   git config --local core.hooksPath .githooks
+
+4. Tell your team — link to META.md, and tell them to run the command in step 3
 ```
+
+Always print step 3, even when the hook was already present or skipped. The
+file being on disk is not the same as git being pointed at it, and that gap is
+exactly what people miss.
 
 ---
 
@@ -220,4 +266,5 @@ Next steps:
 - Use real file paths from the codebase in examples — never generic ones
 - Leave `<!-- TODO: [reason] -->` for anything that cannot be inferred from code
 - Do not invent business rules — only document what's visible in the code
-- Do not modify source code during this skill — only `.context/`, `CLAUDE.md`, and `copilot-instructions.md`
+- Do not modify source code during this skill — only `.context/`, `.githooks/`, `CLAUDE.md`, and `copilot-instructions.md`
+- Never overwrite an existing git hook, and never set `core.hooksPath` — report the conflict instead

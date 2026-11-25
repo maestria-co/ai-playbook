@@ -47,6 +47,14 @@ ALLOWED_MODELS = {
 # before: a table row outlives the file it points at.
 INDEX_DOCS = ["CLAUDE.md", os.path.join("skills", "GUIDE.md")]
 
+# The commit-msg hook ships twice: once for this repo, once inside the template
+# `initialize-repo` installs into a consumer repo. Two copies drift, so the
+# check that they are byte-identical runs in CI rather than relying on memory.
+HOOK_COPIES = [
+    os.path.join(".githooks", "commit-msg"),
+    os.path.join("skills", "_shared", "context_template", "githooks", "commit-msg"),
+]
+
 # A backticked path ending in .md / .py / .sh
 PATH_REF = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|py|sh))`")
 
@@ -147,6 +155,23 @@ def validate():
                 continue
             if not os.path.exists(os.path.join(REPO, ref)):
                 errors.append(f"[{doc}] Stale reference, path does not exist: {ref}")
+
+    # The two commit-msg copies must stay byte-identical
+    hook_paths = [os.path.join(REPO, h) for h in HOOK_COPIES]
+    missing = [h for h, p in zip(HOOK_COPIES, hook_paths) if not os.path.isfile(p)]
+    if missing:
+        for h in missing:
+            errors.append(f"[githooks] Required hook copy not found: {h}")
+    else:
+        bodies = [open(p, "rb").read() for p in hook_paths]
+        if bodies[0] != bodies[1]:
+            errors.append(
+                "[githooks] commit-msg copies have drifted: "
+                f"{HOOK_COPIES[0]} != {HOOK_COPIES[1]}"
+            )
+        for h, p in zip(HOOK_COPIES, hook_paths):
+            if not os.access(p, os.X_OK):
+                errors.append(f"[githooks] Hook is not executable: {h}")
 
     return errors, warnings
 
