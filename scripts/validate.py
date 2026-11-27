@@ -244,7 +244,13 @@ def validate():
             elif not has_folder:
                 warnings.append(f"[.context] Missing {base}.md")
 
-        # retrospectives/ caps at 10 entries, excluding scaffolding
+        # retrospectives/ caps at 10 entries, excluding scaffolding.
+        #
+        # os.listdir counts top-level *.md only, so entries archived into
+        # retrospectives/archive/ do not count toward the cap. That is the
+        # stated remedy for going over, not an accident of the
+        # implementation — context-maintenance names the same path. Keep the
+        # two in step.
         retro = os.path.join(ctx, "retrospectives")
         if os.path.isdir(retro):
             entries = [
