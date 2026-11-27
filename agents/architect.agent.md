@@ -28,7 +28,7 @@ Follow `agents/_shared/conventions.md` for tone, format, and behavioral norms.
 When @manager invokes this agent, it provides:
 
 - **Design question or structural change** that needs evaluation
-- **Project context** — tech stack and architecture from `.context/overview.md` and `.context/architecture.md` (or `.context/architecture/README.md` if promoted to a folder)
+- **Project context** — tech stack and architecture from `.context/overview.md` and `.context/architecture.md` (or `.context/architecture/README.md` if promoted to a folder). If neither architecture path exists, report the gap; do not record an ADR against an undocumented architecture without saying so.
 - **Existing decisions** — relevant ADRs from `.context/decisions/`
 - **Research findings** — if @researcher was consulted first
 - **Constraints** — business requirements, performance targets, team capabilities
