@@ -184,6 +184,19 @@ def validate():
     # .context/ layout conventions
     ctx = os.path.join(REPO, ".context")
     if os.path.isdir(ctx):
+        # overview.md is the one canonical name. This is the bug that opened
+        # PR #35: this repo called it project-overview.md, so a guard looking
+        # for overview.md found nothing and reported "proceed" against six
+        # ADRs. The rename is only a one-time cleanup unless something keeps
+        # it renamed.
+        if not os.path.isfile(os.path.join(ctx, "overview.md")):
+            errors.append("[.context] Missing required file: overview.md")
+        if os.path.isfile(os.path.join(ctx, "project-overview.md")):
+            errors.append(
+                "[.context] project-overview.md is drift — rename to "
+                "overview.md"
+            )
+
         # decisions/ is always a folder, never a file
         if os.path.isfile(os.path.join(ctx, "decisions.md")):
             errors.append(
