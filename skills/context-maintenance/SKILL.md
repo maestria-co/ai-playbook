@@ -161,9 +161,21 @@ ls .context/retrospectives/*.md 2>/dev/null \
 ```
 
 Over 10: promote the lessons per the Retrospective Promotion Workflow above,
-then archive the promoted entries. Archive only what has been promoted — the
-constraint against deleting unpromoted retrospectives still holds, so if 10
-entries are all unpromoted, promote first and archive second.
+then move the promoted entries into `retrospectives/archive/`:
+
+```bash
+mkdir -p .context/retrospectives/archive/
+git mv .context/retrospectives/<entry>.md .context/retrospectives/archive/
+```
+
+`validate.py` counts top-level `*.md` only, so an archived entry stops
+counting against the cap. Use this exact path — a sibling folder or a rename
+leaves CI red, and deleting instead loses the entry.
+
+Archive only what has been promoted. The constraint against deleting
+unpromoted retrospectives still holds, so if all 10 are unpromoted, promote
+first and archive second. Going over the cap is a hard CI error, so this is
+the remedy to reach for, not a judgment call.
 
 ---
 
