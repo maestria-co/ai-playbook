@@ -86,7 +86,42 @@ Before finalizing, check explicitly:
 
 ### Step 4 — Decide and Write the ADR
 
-Write the ADR to `.context/decisions/ADR-NNN-title.md`.
+#### A number is claimed when the work lands, not when the ADR is drafted
+
+Write an ADR whenever the thinking is ready — drafting early is encouraged. But **do not take a
+number for work that is not done.**
+
+| State of the work | File name | Status | In the index? |
+| --- | --- | --- | --- |
+| Not started, or in progress | `ADR-NEXT-<slug>.md` | `Proposed (future)` | **No** |
+| Done and in force | `ADR-NNN-<slug>.md` | `Accepted` | **Yes** |
+
+On completion, rename it to the next free number and add the index entry **in the same change**.
+
+The index is a list of **decisions in force**, not of drafts. If an ADR is listed, it is live and can
+be cited; if it is not listed, it is not yet binding.
+
+**Never pre-assign a number in a backlog story, a plan, or another ADR.** Refer to a future ADR by
+its slug ("the customer-media-storage ADR"), never by a number it has not earned. A number reserved
+for unfinished work is a number two authors will both believe is theirs, and the collision surfaces
+only when the second one tries to commit. Observed failure mode: two backlog stories reserved
+numbers; both were taken by work that actually shipped; the placeholders were renumbered; and one of
+the new numbers was taken again within days. `ADR-NEXT` cannot collide, because it says plainly that
+no number has been claimed.
+
+When you do claim a number, derive it — never guess:
+
+```bash
+ls .context/decisions/ | grep -oE 'ADR-[0-9]+' | sort -u | tail -1
+```
+
+Check the index and any inline ADRs too: some repos record early ADRs inline in `decisions.md` or
+`README.md` and later ones as files, while sharing **one** numbering space.
+
+#### Writing it
+
+Write the ADR to `.context/decisions/ADR-NEXT-<slug>.md`, or `ADR-NNN-<slug>.md` if the work it
+decides is already done.
 
 ADR format:
 ```markdown
@@ -121,7 +156,10 @@ Cons: ...
 - [What monitoring/validation is needed]
 ```
 
-Update `.context/decisions/README.md` to add the new ADR to the index.
+**Index it only if the work is done.** For a completed decision, add it to the index
+(`.context/decisions/README.md`, or `.context/decisions.md` — follow whichever the repo already
+uses) in the same change that lands the work. For an `ADR-NEXT` draft, leave the index untouched:
+adding it would advertise a decision as in force before it is.
 
 ### Step 5 — Produce Implementation Guidance
 
