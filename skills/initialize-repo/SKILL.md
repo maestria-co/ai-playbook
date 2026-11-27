@@ -121,7 +121,8 @@ Add `branching.md` and `ci-cd.md` alongside it only if the project has non-obvio
 workflows (complex branching, multi-step CI).
 If the project has a rich domain with many entities or project-specific terminology, also create `.context/domains/`.
 
-**Create folders only for the four above.** The layout rules are in
+**Create only the folders named above** — the four in the `mkdir`, plus
+`domains/` when the project warrants it. The layout rules are in
 `skills/_shared/conventions.md`; the part that matters at init time:
 
 | Entry | Shape at init |
