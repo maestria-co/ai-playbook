@@ -50,6 +50,11 @@ INDEX_DOCS = ["CLAUDE.md", os.path.join("skills", "GUIDE.md")]
 # The commit-msg hook ships twice: once for this repo, once inside the template
 # `initialize-repo` installs into a consumer repo. Two copies drift, so the
 # check that they are byte-identical runs in CI rather than relying on memory.
+HOOK_COPIES = [
+    os.path.join(".githooks", "commit-msg"),
+    os.path.join("skills", "_shared", "context_template", "githooks", "commit-msg"),
+]
+
 # `.context/` layout, per skills/_shared/conventions.md. A flat file is promoted
 # to a folder of the same name at 300 lines, and a promoted entry is read at
 # <base>/README.md. Six Maestria repos grew six different shapes because nothing
@@ -57,11 +62,6 @@ INDEX_DOCS = ["CLAUDE.md", os.path.join("skills", "GUIDE.md")]
 PROMOTABLE = ["standards", "testing", "architecture"]
 PROMOTE_AT_LINES = 300
 MAX_RETROSPECTIVE_ENTRIES = 10
-
-HOOK_COPIES = [
-    os.path.join(".githooks", "commit-msg"),
-    os.path.join("skills", "_shared", "context_template", "githooks", "commit-msg"),
-]
 
 # A backticked path ending in .md / .py / .sh
 PATH_REF = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|py|sh))`")
