@@ -14,16 +14,38 @@ Without it, every agent starts from zero. With it, every agent starts informed.
 
 ## 2. Separation of Concerns
 
-| File | Role | Characteristics |
-|---|---|---|
-| `CLAUDE.md` / `copilot-instructions.md` | Entry point — project facts + context imports | Under 80 lines. Changes rarely. Agent reads on every task. |
-| `.context/overview.md` | What the project is | Tech stack, purpose, current phase. |
-| `.context/architecture.md` | How the system is structured | Layers, data flow, integrations. Not decisions, not code style. |
-| `.context/standards.md` | How to write code here | Style, naming, error handling, patterns. |
-| `.context/testing.md` | How to test here | Framework, file conventions, mocking. |
-| `.context/decisions/` | Why key choices were made | Individual ADR files. Grows over time. |
-| `.context/retrospectives/` | Lessons learned per task | Individual dated files. Grows over time. |
-| `.context/tasks/` | Per-task work artifacts | Created by agents during tasks. |
+**This table is the canonical layout spec.** It is the one list of what
+belongs in `.context/` and what shape each entry takes. Do not restate it
+elsewhere — link here.
+
+| File | Role | Shape | Characteristics |
+|---|---|---|---|
+| `CLAUDE.md` / `copilot-instructions.md` | Entry point — project facts + context imports | file | Under 80 lines. Changes rarely. Agent reads on every task. |
+| `.context/META.md` | This file — what belongs where | file | The layout spec. Ships with the template. |
+| `.context/overview.md` | What the project is | **always a file** | Tech stack, purpose, current phase. Never `project-overview.md`. |
+| `.context/architecture.md` | How the system is structured | file → folder | Layers, data flow, integrations. Not decisions, not code style. |
+| `.context/standards.md` | How to write code here | file → folder | Style, naming, error handling, patterns. |
+| `.context/testing.md` | How to test here | file → folder | Framework, file conventions, mocking. |
+| `.context/decisions/` | Why key choices were made | **always a folder** | One ADR per file. Grows over time. |
+| `.context/retrospectives/` | Lessons learned per task | folder | Dated files, **max 10**; archive the rest to `retrospectives/archive/`. |
+| `.context/tasks/` | Per-task work artifacts | folder | One folder per task. Research reports live in `tasks/<id>/research/`. |
+| `.context/workflows/` | PR format, branching, CI | folder | Always created. `pull-requests.md` is required. |
+| `.context/domains/` | Entities, glossary, domain rules | folder | **Conditional** — only for a repo with a rich domain or its own vocabulary. |
+
+### Shapes
+
+**`file → folder`** means it starts as a single file and is promoted by
+`context-maintenance` once it passes **300 lines**. A promoted entry is read at
+`<base>/README.md`, so `standards.md` becomes `standards/README.md` plus
+`standards/naming.md` and friends. Promote on the threshold, never on taste —
+splitting a 120-line file into four 30-line files is harder to read, not
+easier.
+
+**`always a file`** / **`always a folder`** do not change. `decisions/` is a
+folder because an ADR is immutable once accepted and cited by number;
+collapsing them into one `decisions.md` destroys both properties. `overview.md`
+is one fixed name because tooling looks for it — a repo that calls it
+`project-overview.md` reads as uninitialized.
 
 Keep `CLAUDE.md` short by keeping detail here. If `CLAUDE.md` grows past 80 lines, promote content to `.context/`.
 

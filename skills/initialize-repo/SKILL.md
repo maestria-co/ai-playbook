@@ -122,15 +122,10 @@ workflows (complex branching, multi-step CI).
 If the project has a rich domain with many entities or project-specific terminology, also create `.context/domains/`.
 
 **Create only the folders named above** — the four in the `mkdir`, plus
-`domains/` when the project warrants it. The layout rules are in
-`skills/_shared/conventions.md`; the part that matters at init time:
+`domains/` when the project warrants it. The full layout spec is the table in
+the template's `context/META.md`, which is copied into the repo in Step 3.
 
-| Entry | Shape at init |
-|---|---|
-| `overview.md`, `architecture.md`, `standards.md`, `testing.md` | **flat files** |
-| `decisions/`, `retrospectives/`, `tasks/`, `workflows/` | folders |
-
-Do **not** create `standards/`, `testing/`, or `architecture/` as folders here,
+The part that matters at init time: do **not** create `standards/`, `testing/`, or `architecture/` as folders here,
 however much content the repo seems to warrant. Those are promoted later by
 `context-maintenance` when a file passes 300 lines. Splitting at init time
 produces four near-empty files instead of one useful one, and it is how six

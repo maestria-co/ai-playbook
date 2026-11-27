@@ -55,7 +55,8 @@ HOOK_COPIES = [
     os.path.join("skills", "_shared", "context_template", "githooks", "commit-msg"),
 ]
 
-# `.context/` layout, per skills/_shared/conventions.md. A flat file is promoted
+# `.context/` layout, per the table in context_template/context/META.md. A flat
+# file is promoted
 # to a folder of the same name at 300 lines, and a promoted entry is read at
 # <base>/README.md. Six Maestria repos grew six different shapes because nothing
 # checked. These three rules are the ones worth enforcing.

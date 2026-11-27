@@ -154,8 +154,9 @@ Agents use the `.context/` directory to persist knowledge across sessions:
 | `.context/tasks/` | One folder per task, each with `plan.md` | folder |
 | `.context/workflows/` | PR format, branching, CI | folder |
 
-**The layout rules are canonical in `skills/_shared/conventions.md`.** Do not
-restate them here — read them there.
+**The layout spec is canonical in the template's `context/META.md`.** Do not
+restate it here — read it there. How to *read* either shape without being
+fooled by an absent file is in `skills/_shared/conventions.md`.
 
 ### Investigation output is always task-scoped
 
