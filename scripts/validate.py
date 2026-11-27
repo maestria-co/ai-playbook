@@ -197,7 +197,16 @@ def validate():
                 "overview.md"
             )
 
-        # decisions/ is always a folder, never a file
+        # decisions/ is always a folder, never a file.
+        #
+        # Severity is deliberately asymmetric: a missing decisions/ is an
+        # error, while a missing standards/testing/architecture is only a
+        # warning below. An ADR is immutable, numbered and cited by number, so
+        # the folder has to exist before the first one is written; the other
+        # three are documentation a repo can legitimately not have written yet.
+        # Do not flatten these to match each other in either direction.
+        # (--strict collapses the distinction in CI, which is the point: a
+        # warning is a nudge locally and a gate on the default branch.)
         if os.path.isfile(os.path.join(ctx, "decisions.md")):
             errors.append(
                 "[.context] decisions must be a folder, not decisions.md — "
