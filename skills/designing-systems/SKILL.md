@@ -115,8 +115,14 @@ When you do claim a number, derive it — never guess:
 ls .context/decisions/ | grep -oE 'ADR-[0-9]+' | sort -u | tail -1
 ```
 
-Check the index and any inline ADRs too: some repos record early ADRs inline in `decisions.md` or
-`README.md` and later ones as files, while sharing **one** numbering space.
+Check the index too: it shares **one** numbering space with the files beside it, so an entry listed
+there but not yet written as a file still owns its number.
+
+If you find a `.context/decisions.md`, stop and report it rather than adding to it. Collapsing ADRs
+into a single file is drift — `META.md` says `decisions/` is always a folder, and
+`scripts/validate.py` fails on that file. Splitting it is not your call either: ADR numbers are
+cited from other documents, so guessing where one entry ends and the next begins invents numbers
+those documents then point at. `context-maintenance` owns that drift.
 
 #### Writing it
 
@@ -156,10 +162,9 @@ Cons: ...
 - [What monitoring/validation is needed]
 ```
 
-**Index it only if the work is done.** For a completed decision, add it to the index
-(`.context/decisions/README.md`, or `.context/decisions.md` — follow whichever the repo already
-uses) in the same change that lands the work. For an `ADR-NEXT` draft, leave the index untouched:
-adding it would advertise a decision as in force before it is.
+**Index it only if the work is done.** For a completed decision, add it to the index at
+`.context/decisions/README.md` in the same change that lands the work. For an `ADR-NEXT` draft,
+leave the index untouched: adding it would advertise a decision as in force before it is.
 
 ### Step 5 — Produce Implementation Guidance
 
