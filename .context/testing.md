@@ -46,6 +46,8 @@ git config --local core.hooksPath .githooks
 | Index-doc paths resolve | error | A table row that outlived its file |
 | Required hook copies exist and are executable | error | A hook git will silently not run |
 | Shipped file pairs are byte-identical | error | The copy consumers get drifting from the one we run |
+| `.context/META.md` exists | error | The layout spec missing from the repo that defines it |
+| `.context/workflows/pull-requests.md` exists | error | The PR format every repo needs, absent |
 | `.context/overview.md` exists | error | The entry point agents read on every task |
 | No `.context/project-overview.md` | error | A relapse of the drift that opened PR #35 |
 | `decisions`/`retrospectives` are folders, not `.md` files | error | ADR numbers and dated entries collapsed into one file |
