@@ -33,14 +33,38 @@ git config --local core.hooksPath .githooks
 
 ## What `scripts/validate.py` asserts
 
-| Check | Failure mode it catches |
-| --- | --- |
-| Required frontmatter (`name`, `description`, `model`) | An agent the harness cannot load |
-| `model` is in `ALLOWED_MODELS` | A model pin that outlived the fleet |
-| Required sections per agent tier | A specialist missing `## Constraints` |
-| Skill references resolve to real directories | A cited skill with no folder |
-| Index-doc paths resolve | A table row that outlived its file |
-| `commit-msg` hook copies are byte-identical | The two shipped copies drifting apart |
+| Check | Severity | Failure mode it catches |
+| --- | --- | --- |
+| Required frontmatter (`name`, `description`, `model`) | error | An agent the harness cannot load |
+| `model` is in `ALLOWED_MODELS` | error | A model pin that outlived the fleet |
+| Required sections per agent tier | error | A specialist missing `## Constraints` |
+| Skill references resolve to real directories | error | A cited skill with no folder |
+| No stale agent references | error | A rename that missed a caller |
+| No `codebase` tool in a tools list | error | A tool grant contradicting the no-raw-source rule |
+| `GUIDE.md` exists | error | The routing table gone missing |
+| Custom skill is mentioned in `GUIDE.md` | warning | A skill nothing routes to |
+| Index-doc paths resolve | error | A table row that outlived its file |
+| Required hook copies exist and are executable | error | A hook git will silently not run |
+| Shipped file pairs are byte-identical | error | The copy consumers get drifting from the one we run |
+| `.context/overview.md` exists | error | The entry point agents read on every task |
+| No `.context/project-overview.md` | error | A relapse of the drift that opened PR #35 |
+| `decisions`/`retrospectives` are folders, not `.md` files | error | ADR numbers and dated entries collapsed into one file |
+| `decisions/`/`retrospectives/` exist | error | A repo with nowhere to record a decision |
+| Promotable entry exists in exactly one shape | error | `standards.md` and `standards/` both present, agents reading one |
+| Promoted folder has a `README.md` | error | A promotion that removed the path agents read |
+| Flat file over 300 lines | warning | A file past the promotion threshold |
+| Promotable entry absent entirely | warning | Conventions nobody wrote down |
+| `retrospectives/` over 10 entries | error | A log nobody prunes |
+
+---
+
+**This table is itself the drift class it describes.** Nothing pairs a row
+with the check it summarizes — the Index-doc check verifies that backticked
+*paths* resolve, which cannot catch a row describing behavior the script no
+longer has. It was already stale once: the five `.context/` layout checks
+landed without rows, in the same commit as a table claiming to list what the
+script asserts. If you add or remove a check, edit this table in the same
+commit.
 
 ---
 
