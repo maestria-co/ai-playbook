@@ -70,7 +70,21 @@ root, and reports "proceed". That is exactly the bug this convention exists to
 prevent, one level up. `initialize-monorepo` and `context-specialist-impl`
 both already use `overview.md` for a root node.
 
+A workspace root is an **aggregate** node — it describes a set of
+repositories and holds no code — so it declares the shape and takes the
+reduced layout: no `standards.md`, `testing.md`, `retrospectives/` or
+`tasks/`, all of which belong to the repositories themselves.
+
+It is also not a git repository, so it needs no `workflows/pull-requests.md`.
+The checker tests for a `.git` beside `.context/` rather than asking, which
+means each project in the workspace is still required to document its own PR
+format and the workspace root is not.
+
 ```markdown
+---
+context_shape: aggregate
+---
+
 # Workspace Overview
 
 **Workspace:** [workspace-name]

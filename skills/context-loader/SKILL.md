@@ -30,6 +30,21 @@ Always read in this order. Stop as soon as you have enough context for the task.
 1. `CLAUDE.md` or `.github/copilot-instructions.md` — big picture, key commands
 2. `.context/overview.md` — tech stack, architecture, current state
 
+`overview.md` also tells you **what kind of node this is**, via its
+`context_shape` key — `project` when absent. Read it before Level 2, because
+it decides which of the files below exist at all:
+
+| Shape | Level 2 and 3 files that exist |
+|---|---|
+| `project` | all of them |
+| `aggregate` | `architecture.md`, `decisions/`, `domains/`, `workflows/` only |
+
+An `aggregate` node — a monorepo root, a grouping directory, a workspace root
+— holds no `standards.md`, `testing.md`, `retrospectives/` or `tasks/` by
+design. Do not report those as gaps there, and do not go looking for a
+project's conventions at a node that has no code. When you need them, they
+are in the project node you are actually working in.
+
 ### Level 2 — Read Based on Task Type
 
 | Task type              | Read these `.context/` files                                           |
@@ -44,6 +59,8 @@ Always read in this order. Stop as soon as you have enough context for the task.
 | UI/styling work        | `styling.md` (if frontend project), `standards.md`                     |
 
 ### Level 3 — Read When Resuming
+
+Project shape only — an aggregate node has neither of the first two.
 
 1. `.context/retrospectives/` — last few entries for recent lessons
 2. `.context/tasks/[TASK-ID]/plan.md` — if resuming a specific task

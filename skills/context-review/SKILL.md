@@ -50,9 +50,30 @@ layout check before reconciling anything:
 ```
 
 It asserts `.context/` matches the spec in `.context/META.md` section 2 —
-required files present, `decisions/` and `retrospectives/` as folders, each
-promotable entry in exactly one shape, promoted folders carrying a
-`README.md`, retrospectives under the cap. Exit 1 means at least one `ERROR:`.
+required files present, `decisions/` as a folder, each promotable entry in
+exactly one shape, promoted folders carrying a `README.md`, and at a project
+node `retrospectives/` as a folder under its cap. Exit 1 means at least one
+`ERROR:`.
+
+**First, settle the context shape.** The checker's rule set depends on
+`context_shape` in `overview.md`, and this skill is the migration path for
+every node that predates the key. Read it; if it is absent, decide which it is
+and **write it** before fixing anything else, because the findings you are
+about to act on depend on it:
+
+| Evidence | Shape |
+|---|---|
+| Code at this node — a build manifest, source tree, or test suite | `project` |
+| No code of its own; subdirectories are the projects. A monorepo root, a grouping directory like `services/`, a workspace root | `aggregate` |
+
+When the evidence is genuinely mixed — a repo root holding both its own code
+and sub-projects — it is a `project`. The reduced aggregate layout drops
+`standards.md` and `testing.md`, and a node with code needs both.
+
+An absent key already behaves as `project`, so writing `project` changes no
+behavior and is still worth doing: it is the difference between a node that
+declares what it is and one that is assumed. Writing `aggregate` is the case
+that matters — it is what stops the findings below from being wrong.
 
 If the script is absent, the repo predates it — copy it from the template at
 `<template_dir>/scripts/check-context-layout.sh` and run it.
@@ -65,6 +86,8 @@ If the script is absent, the repo predates it — copy it from the template at
 | `missing required file: workflows/pull-requests.md` | Copy from the template, then fill the Repo Configuration block from evidence — see `initialize-repo` Step 3a |
 | `<base>/ has no README.md` | Write one: a short index linking each file already in that folder |
 | `missing <base>.md` | Create it as part of the step for that file below |
+| `<base> at an aggregate node` | **Report.** The entry does not belong at this shape, but deleting documentation is never mechanical — the content may need moving to a project node first |
+| `unrecognized context_shape` | Fix the typo. Valid values are `project` and `aggregate`; nothing else |
 | `<base>.md is NNN lines (over 300)` | Hand to `context-maintenance` — promotion is its job, not this skill's |
 | `project-overview.md is drift` | Rename to `overview.md` and update every reference |
 | `exists as both <base>.md and <base>/` | **Report.** Deciding which content wins needs a human |
@@ -83,6 +106,11 @@ decisions.md found (N decisions, M lines). Spec requires decisions/ with one
 ADR per file. This needs a human: ADR numbers are cited by other documents,
 so the split cannot be guessed.
 ```
+
+Then re-run the checker. A shape written in this step changes which findings
+apply, so the first run's output is stale the moment you write the key — and
+acting on a stale list is how an aggregate node acquires the `standards.md`
+the spec says it must not have.
 
 Do not write the cache file as fresh while an unreported ERROR stands — a
 structurally broken `.context/` reviewed for content is worse than one that

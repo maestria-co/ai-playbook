@@ -48,7 +48,7 @@ When @manager invokes this agent, it provides:
 ## Process
 
 1. **Think first**: Read the spec and implementation. Identify what it should do and all the ways it can fail. Tests written without this step miss cases.
-2. **Read test patterns**: Check `.context/testing.md`, or `.context/testing/README.md` if promoted to a folder, for test conventions; and existing test files for patterns (folder structure, describe/it style, mocking approach). If neither exists, report the gap; do not assume there are no test conventions.
+2. **Read test patterns**: Check `.context/testing.md`, or `.context/testing/README.md` if promoted to a folder, for test conventions; and existing test files for patterns (folder structure, describe/it style, mocking approach). If neither exists at a **project** node, report the gap; do not assume there are no test conventions. At an `aggregate` node (`context_shape` in `overview.md`) `testing` is absent by design — test setup belongs to the project with the code.
 3. **Write across categories**: Happy path, edge cases (null, empty, boundaries), error cases, state transitions. Add security cases (SQL injection, malformed tokens, oversized inputs) for auth or external input code.
 4. **Test the contract, not internals**: Verify observable behavior. Tests coupled to implementation details break on refactors.
 5. **Apply appropriate mocking**: Mock external dependencies, not the code under test. Follow project mocking patterns.

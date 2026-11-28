@@ -120,9 +120,19 @@ Understand which packages depend on which others to document relationships and b
 
 ### Root `.context/overview.md`
 
+The root is an **aggregate** node: it describes what the packages share, not
+code of its own. Declare that in the frontmatter, because the layout checker
+reads it to pick its rule set — and an absent key means `project`, which would
+have the root asked for `standards.md`, `testing.md`, `retrospectives/` and
+`tasks/` it is not supposed to have.
+
 Template:
 
 ````markdown
+---
+context_shape: aggregate
+---
+
 # [Monorepo Name] Overview
 
 ## Repository Type
@@ -208,9 +218,17 @@ For each package/service:
 
 ### Package `.context/overview.md`
 
+A package **is** a project node — the code lives here — so it takes the full
+layout and the default shape. The key is written out rather than left implicit
+so the contrast with the root is visible in the file itself.
+
 Template:
 
 ````markdown
+---
+context_shape: project
+---
+
 # [Package Name]
 
 ## Purpose

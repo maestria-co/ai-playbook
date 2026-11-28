@@ -18,26 +18,74 @@ Without it, every agent starts from zero. With it, every agent starts informed.
 belongs in `.context/` and what shape each entry takes. Do not restate it
 elsewhere — link here.
 
-| File | Role | Shape | Characteristics |
-|---|---|---|---|
-| `CLAUDE.md` / `copilot-instructions.md` | Entry point — project facts + context imports | file | Under 80 lines. Changes rarely. Agent reads on every task. |
-| `.context/META.md` | This file — what belongs where | file | The layout spec. Ships with the template. |
-| `.context/README.md` | Orientation — what this directory is and how it is used | file | **Optional** — not shipped in the template. Write one if newcomers need the tour; nothing requires or checks it. |
-| `.context/overview.md` | What the project is | **always a file** | Tech stack, purpose, current phase. Never `project-overview.md`. |
-| `.context/architecture.md` | How the system is structured | file → folder | Layers, data flow, integrations. Not decisions, not code style. |
-| `.context/standards.md` | How to write code here | file → folder | Style, naming, error handling, patterns. |
-| `.context/testing.md` | How to test here | file → folder | Framework, file conventions, mocking. |
-| `.context/decisions/` | Why key choices were made | **always a folder** | One ADR per file. Grows over time. |
-| `.context/retrospectives/` | Lessons learned per task | folder | Dated files, **max 10**; archive the rest to `retrospectives/archive/`. |
-| `.context/tasks/` | Per-task work artifacts | folder | One folder per task. Research reports live in `tasks/<id>/research/`. |
-| `.context/workflows/` | PR format, branching, CI | folder | Always created. `pull-requests.md` is required. |
-| `.context/domains/` | Entities, glossary, domain rules | folder | **Conditional** — only for a repo with a rich domain or its own vocabulary. |
+Not every node in a repository holds the same things, so each entry also says
+which **context shape** it applies to — see [Context shape](#context-shape)
+below. `both` means required or allowed everywhere.
+
+| File | Role | Shape | Shapes | Characteristics |
+|---|---|---|---|---|
+| `CLAUDE.md` / `copilot-instructions.md` | Entry point — project facts + context imports | file | both | Under 80 lines. Changes rarely. Agent reads on every task. |
+| `.context/META.md` | This file — what belongs where | file | both | The layout spec. Ships with the template. |
+| `.context/README.md` | Orientation — what this directory is and how it is used | file | both | **Optional** — not shipped in the template. Write one if newcomers need the tour; nothing requires or checks it. |
+| `.context/overview.md` | What the project is | **always a file** | both | Tech stack, purpose, current phase. Never `project-overview.md`. |
+| `.context/architecture.md` | How the system is structured | file → folder | both | Layers, data flow, integrations. Not decisions, not code style. |
+| `.context/standards.md` | How to write code here | file → folder | project | Style, naming, error handling, patterns. |
+| `.context/testing.md` | How to test here | file → folder | project | Framework, file conventions, mocking. |
+| `.context/decisions/` | Why key choices were made | **always a folder** | both | One ADR per file. Grows over time. |
+| `.context/retrospectives/` | Lessons learned per task | folder | project | Dated files, **max 10**; archive the rest to `retrospectives/archive/`. |
+| `.context/tasks/` | Per-task work artifacts | folder | project | One folder per task. Research reports live in `tasks/<id>/research/`. |
+| `.context/workflows/` | PR format, branching, CI | folder | git root | Created wherever a `.git` begins, with `pull-requests.md` required. A node inside a repository inherits its repository's. |
+| `.context/domains/` | Entities, glossary, domain rules | folder | both | **Conditional** — only for a repo with a rich domain or its own vocabulary. |
 
 **Conditional** and **Optional** entries are never required: nothing fails
 when `domains/` or `README.md` is absent. No check rejects an entry this table
 does not list either, which is why a file sitting in `.context/` needs a row
 here rather than being left to inference — "is this allowed?" should be
 answerable from the spec, not from whether a checker happens to complain.
+
+### Context shape
+
+A repository is not always one project. A monorepo has a root that describes
+what is shared and packages that describe themselves; a workspace has a root
+that describes a set of repositories. Those nodes hold different things, so
+`.context/overview.md` declares which kind it is:
+
+```yaml
+---
+context_shape: project   # or: aggregate
+---
+```
+
+| Shape | What the node is | Holds |
+|---|---|---|
+| `project` | Code lives here. A standalone repo, or one package inside a monorepo. | Everything in the table above. |
+| `aggregate` | No code of its own — it describes what its children share. A monorepo root, a grouping directory, a workspace root. | Only the cross-cutting entries: `overview.md`, `META.md`, `decisions/`, `architecture/`, `workflows/`, `domains/`. |
+
+**An absent key means `project`.** That is the common case and the shape every
+existing repo already has, so the key is only needed on the nodes that are not
+projects. An unrecognized value is an error rather than a silent fall back to
+the default — a typo must not quietly buy the wrong rule set.
+
+**What `aggregate` deliberately does not hold:** `standards.md`, `testing.md`,
+`retrospectives/` and `tasks/`. Code style and test setup belong to the
+project that has the code; retrospectives and tasks belong to the project the
+work happened in. An aggregate node that grows these is describing its
+children instead of what they share.
+
+`workflows/` is the one entry keyed to neither shape. PR format, branching
+strategy and CI belong to a **repository**, so the folder is required wherever
+a `.git` begins and nowhere else: a monorepo root has one, a grouping
+directory inside it has none, a workspace root is a folder of repositories and
+has none, and each repository in that workspace has its own.
+
+`decisions/` is a folder at **both** shapes. A cross-project decision is an
+ADR with a wider blast radius, not a different kind of artifact — it is still
+immutable once accepted and still cited by number, so it still gets one file
+per entry.
+
+Shape governs layout only. It is not a permission boundary and not a
+visibility rule: an agent working in a project node still reads its ancestors'
+context.
 
 ### Shapes
 

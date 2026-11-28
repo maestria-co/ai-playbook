@@ -127,11 +127,20 @@ Run these periodically (or after every 3–5 tasks):
 The layout rules live in `skills/_shared/conventions.md`. This check is where
 they get enforced. Both thresholds are numbers, not judgment calls.
 
+**First read `context_shape` from `overview.md`** (`project` when absent). At
+an `aggregate` node — a monorepo root, a grouping directory, a workspace root
+— only `architecture` is promotable, and the retrospectives cap does not
+apply because the node holds no retrospectives. Promoting or capping files
+that are absent by design is how a maintenance pass starts inventing
+structure the spec does not want.
+
 **Promote a flat file to a folder at 300 lines.** Applies to `standards.md`,
 `testing.md`, and `architecture.md`:
 
 ```bash
-for base in standards testing architecture; do
+# project shape; at an aggregate node use: bases="architecture"
+bases="standards testing architecture"
+for base in $bases; do
   f=".context/$base.md"
   if [ -f "$f" ]; then
     n=$(wc -l < "$f")

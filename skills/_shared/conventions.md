@@ -152,8 +152,16 @@ finding nothing to say, so the agent proceeds uninformed and silent. Always
 resolve both:
 
 ```bash
-# standards, testing, architecture — file first, then folder entry point
-for base in standards testing architecture; do
+# Which entries this node should have depends on its context_shape; an absent
+# key means project. Only then is a missing standards/testing a real gap.
+shape=$(sed -n 's/^context_shape:[[:space:]]*\([A-Za-z]*\).*/\1/p' \
+          .context/overview.md 2>/dev/null | head -1)
+[ -n "$shape" ] || shape=project
+if [ "$shape" = aggregate ]; then bases="architecture"
+else bases="standards testing architecture"; fi
+
+# file first, then folder entry point
+for base in $bases; do
   if [ -f ".context/$base.md" ]; then cat ".context/$base.md"
   elif [ -f ".context/$base/README.md" ]; then cat ".context/$base/README.md"
   else echo "GAP: no $base documented — .context/$base.md and $base/README.md both absent"
