@@ -34,7 +34,7 @@ below. `both` means required or allowed everywhere.
 | `.context/decisions/` | Why key choices were made | **always a folder** | both | One ADR per file. Grows over time. |
 | `.context/retrospectives/` | Lessons learned per task | folder | project | Dated files, **max 10**; archive the rest to `retrospectives/archive/`. |
 | `.context/tasks/` | Per-task work artifacts | folder | project | One folder per task. Research reports live in `tasks/<id>/research/`. |
-| `.context/workflows/` | PR format, branching, CI | folder | both | Always created. `pull-requests.md` is required wherever a `.git` directory begins. |
+| `.context/workflows/` | PR format, branching, CI | folder | git root | Created wherever a `.git` begins, with `pull-requests.md` required. A node inside a repository inherits its repository's. |
 | `.context/domains/` | Entities, glossary, domain rules | folder | both | **Conditional** — only for a repo with a rich domain or its own vocabulary. |
 
 **Conditional** and **Optional** entries are never required: nothing fails
@@ -71,6 +71,12 @@ the default — a typo must not quietly buy the wrong rule set.
 project that has the code; retrospectives and tasks belong to the project the
 work happened in. An aggregate node that grows these is describing its
 children instead of what they share.
+
+`workflows/` is the one entry keyed to neither shape. PR format, branching
+strategy and CI belong to a **repository**, so the folder is required wherever
+a `.git` begins and nowhere else: a monorepo root has one, a grouping
+directory inside it has none, a workspace root is a folder of repositories and
+has none, and each repository in that workspace has its own.
 
 `decisions/` is a folder at **both** shapes. A cross-project decision is an
 ADR with a wider blast radius, not a different kind of artifact — it is still

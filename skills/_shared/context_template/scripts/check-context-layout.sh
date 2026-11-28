@@ -57,13 +57,18 @@ case "$shape" in
     ;;
 esac
 
-# --- workflows/ exists at every node, but the PR format inside it follows the
-# --- git repository boundary rather than the shape: a workspace root is a
-# --- folder of repositories and has no PR format of its own, while a monorepo
-# --- root is the repository and has exactly one. Tested with -e, not -d,
-# --- because a worktree and a submodule both use a .git file.
-[ -d "$ctx/workflows" ] || err "missing required folder: workflows/"
+# --- workflows/ follows the git repository boundary, not the context shape.
+# --- PR format, branching strategy and CI are properties of a repository: a
+# --- grouping directory inside a monorepo has none of its own, and a workspace
+# --- root is a folder of repositories rather than a repository. So the folder
+# --- and its required pull-requests.md are both asked for exactly where a .git
+# --- begins — which is also what stops a package in a monorepo from being
+# --- told to restate the root's PR format.
+# ---
+# --- Tested with -e, not -d, because a worktree and a submodule both use a
+# --- .git file rather than a directory.
 if [ -e "$(dirname "$ctx")/.git" ]; then
+  [ -d "$ctx/workflows" ] || err "missing required folder: workflows/"
   [ -f "$ctx/workflows/pull-requests.md" ] ||
     err "missing required file: workflows/pull-requests.md"
 fi
