@@ -55,7 +55,7 @@ If the project has a rich domain with many entities, also create `.context/domai
 These files are universal (not project-specific). Copy them from the installed skill kit template:
 
 - Copy `~/.copilot/skills/_shared/context_template/context/META.md` → `.context/META.md`
-- Copy `~/.copilot/skills/_shared/context_template/context/decisions/index.md` → `.context/decisions/index.md`
+- Copy `~/.copilot/skills/_shared/context_template/context/decisions/README.md` → `.context/decisions/README.md`
 - Copy `~/.copilot/skills/_shared/context_template/context/decisions/ADR-001-example-decision.md` → `.context/decisions/ADR-001-example-decision.md`
 - Copy `~/.copilot/skills/_shared/context_template/context/retrospectives/README.md` → `.context/retrospectives/README.md`
 
@@ -102,7 +102,7 @@ Read `.context/overview.md` for project overview and tech stack before starting 
 Read `.context/architecture.md` for system structure and integration points.
 Read `.context/standards.md` for coding conventions and patterns.
 Read `.context/testing.md` for test framework and patterns.
-Read `.context/decisions/index.md` for architectural decision records.
+Read `.context/decisions/README.md` for architectural decision records.
 
 Reference specific context files in your prompts with `#` (e.g., `#.context/overview.md`).
 ```

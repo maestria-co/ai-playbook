@@ -1,6 +1,6 @@
 # Architecture
 
-> **AI Instruction:** Read this to understand how the system is structured before making changes that cross boundaries. This answers *how the system is built* — for *why* specific choices were made, see `decisions/index.md`.
+> **AI Instruction:** Read this to understand how the system is structured before making changes that cross boundaries. This answers *how the system is built* — for *why* specific choices were made, see `decisions/README.md`.
 
 ## System Overview
 

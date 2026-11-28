@@ -38,7 +38,7 @@ Always read in this order. Stop as soon as you have enough context for the task.
 | Bug fix                | `domains/` (affected area), `testing.md`, `standards.md`               |
 | Refactoring            | `architecture.md`, `standards.md`, `standards.md`                      |
 | Test writing           | `testing.md`, `testing.md`, `standards.md`                             |
-| Architecture decision  | `architecture.md`, `decisions/index.md`, all relevant `domains/` files |
+| Architecture decision  | `architecture.md`, `decisions/README.md`, all relevant `domains/` files |
 | New domain work        | `domains/entities.md`, `domains/glossary.md`, `architecture.md`        |
 | CI/CD changes          | `workflows/ci-cd.md`, `workflows/branching.md`                         |
 | UI/styling work        | `styling.md` (if frontend project), `standards.md`                     |

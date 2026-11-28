@@ -160,7 +160,7 @@ repos ended up with six different shapes.
 **Universal files (copy verbatim from template):**
 
 - `META.md`
-- `decisions/index.md`
+- `decisions/README.md`
 - `decisions/ADR-001-example-decision.md`
 - `retrospectives/README.md`
 
@@ -231,7 +231,7 @@ Read `.context/overview.md` for project overview and tech stack before starting 
 Read `.context/architecture.md` for system structure and integration points.
 Read `.context/standards.md` for coding conventions and patterns.
 Read `.context/testing.md` for test framework and patterns.
-Read `.context/decisions/index.md` for architectural decision records.
+Read `.context/decisions/README.md` for architectural decision records.
 ```
 
 ### Step 4a — Install the `commit-msg` Hook
@@ -277,7 +277,7 @@ Confirm all required files exist and are non-empty:
 ```bash
 for f in .context/META.md .context/overview.md .context/architecture.md \
          .context/standards.md .context/testing.md \
-         .context/decisions/index.md .context/retrospectives/README.md; do
+         .context/decisions/README.md .context/retrospectives/README.md; do
   [ -s "$f" ] && echo "✅ $f" || echo "❌ $f — missing or empty"
 done
 ```

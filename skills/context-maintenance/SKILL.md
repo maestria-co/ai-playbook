@@ -48,7 +48,7 @@ the retrospective from becoming an unread graveyard.
 | Architecture insight           | `architecture.md`                              |
 | Domain knowledge               | `domains/entities.md` or `domains/glossary.md` |
 | Process improvement            | `workflows/` appropriate file                  |
-| Decision rationale             | `decisions/index.md` (as a new ADR)            |
+| Decision rationale             | `decisions/README.md` (as a new ADR)            |
 
 ---
 
