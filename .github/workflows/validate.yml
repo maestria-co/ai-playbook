@@ -22,3 +22,9 @@ jobs:
       # ships python3. One less third-party action in the supply chain.
       - name: Validate agents and skills
         run: python3 scripts/validate.py --strict
+
+      # validate.py already calls this, but run it standalone as well: it is
+      # the copy consumers get, and its own CLI contract (exit code, ERROR/WARN
+      # lines) is what context-review depends on.
+      - name: Check .context/ layout
+        run: ./scripts/check-context-layout.sh
