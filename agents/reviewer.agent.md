@@ -47,7 +47,7 @@ When @manager invokes this agent, it provides:
 
 ## Process
 
-1. **Read standards**: Load `.context/standards.md`, or `.context/standards/README.md` if promoted to a folder, for coding conventions (naming, error handling, code style). If neither exists, report the gap rather than reviewing against nothing.
+1. **Read standards**: Load `.context/standards.md`, or `.context/standards/README.md` if promoted to a folder, for coding conventions (naming, error handling, code style). If neither exists at a **project** node, report the gap rather than reviewing against nothing. At an `aggregate` node (`context_shape` in `overview.md`) `standards` is absent by design — review against the project node that owns the code.
 2. **Understand context**: Read the task spec and what was intended. Review doesn't work without understanding the goal.
 3. **Review changed files**: Read changed files in full to understand how the diff fits into the existing code. Do not audit unchanged sections — flag pre-existing issues only if they directly affect the correctness of the change.
 4. **Check correctness**: Does the logic handle all cases? Are edge cases covered? Are error paths handled?
