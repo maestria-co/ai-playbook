@@ -92,7 +92,7 @@ See `recipes/` for end-to-end examples:
 
 ## Project Context
 
-Before starting any task: `.context/project-overview.md`
+Before starting any task: `.context/overview.md`
 Architecture decisions: `.context/decisions/`
 Learning log: `.context/retrospectives/`
 Skill shared conventions: `skills/_shared/conventions.md`

@@ -27,7 +27,7 @@ approach. If you know what to build and how, use `implementing-features` directl
 
 **Check 1 — Read project context**
 
-Read `.context/project-overview.md` and scan `.context/decisions/` for relevant prior ADRs.
+Read `.context/overview.md` and scan `.context/decisions/` for relevant prior ADRs.
 
 - If a prior ADR exists for this topic → read it. If you're superseding it, document why.
 - If no prior ADR exists → proceed.
@@ -86,7 +86,54 @@ Before finalizing, check explicitly:
 
 ### Step 4 — Decide and Write the ADR
 
-Write the ADR to `.context/decisions/ADR-NNN-title.md`.
+#### A number is claimed when the work lands, not when the ADR is drafted
+
+Write an ADR whenever the thinking is ready — drafting early is encouraged. But **do not take a
+number for work that is not done.**
+
+| State of the work | File name | Status | In the index? |
+| --- | --- | --- | --- |
+| Not started, or in progress | `ADR-NEXT-<slug>.md` | `Proposed (future)` | **No** |
+| Done and in force | `ADR-NNN-<slug>.md` | `Accepted` | **Yes** |
+
+On completion, rename it to the next free number and add the index entry **in the same change**.
+
+The index is a list of **decisions in force**, not of drafts. If an ADR is listed, it is live and can
+be cited; if it is not listed, it is not yet binding.
+
+**Never pre-assign a number in a backlog story, a plan, or another ADR.** Refer to a future ADR by
+its slug ("the customer-media-storage ADR"), never by a number it has not earned. A number reserved
+for unfinished work is a number two authors will both believe is theirs, and the collision surfaces
+only when the second one tries to commit. Observed failure mode: two backlog stories reserved
+numbers; both were taken by work that actually shipped; the placeholders were renumbered; and one of
+the new numbers was taken again within days. `ADR-NEXT` cannot collide, because it says plainly that
+no number has been claimed.
+
+When you do claim a number, derive it — never guess:
+
+```bash
+{ ls .context/decisions/; cat .context/decisions/README.md 2>/dev/null; } \
+  | grep -oE 'ADR-[0-9]+' | sort -t- -k2,2n | tail -1
+```
+
+Filenames and index rows are read together, because they share **one** numbering space: an entry
+listed in the index but not yet written as a file still owns its number.
+
+The sort is numeric on the number field, not lexical. `sort -u | tail -1` picks `ADR-9` out of
+`{ADR-9, ADR-100}` and `ADR-99` out of `{ADR-99, ADR-100}`, so the next number it suggests is one
+already taken — the exact double-claim this section exists to prevent. `-t- -k2,2n` is POSIX, so it
+behaves the same in a consumer repo on any platform.
+
+If you find a `.context/decisions.md`, stop and report it rather than adding to it. Collapsing ADRs
+into a single file is drift — `META.md` says `decisions/` is always a folder, and
+`scripts/validate.py` fails on that file. Splitting it is not your call either: ADR numbers are
+cited from other documents, so guessing where one entry ends and the next begins invents numbers
+those documents then point at. `context-maintenance` owns that drift.
+
+#### Writing it
+
+Write the ADR to `.context/decisions/ADR-NEXT-<slug>.md`, or `ADR-NNN-<slug>.md` if the work it
+decides is already done.
 
 ADR format:
 ```markdown
@@ -121,7 +168,9 @@ Cons: ...
 - [What monitoring/validation is needed]
 ```
 
-Update `.context/decisions/README.md` to add the new ADR to the index.
+**Index it only if the work is done.** For a completed decision, add it to the index at
+`.context/decisions/README.md` in the same change that lands the work. For an `ADR-NEXT` draft,
+leave the index untouched: adding it would advertise a decision as in force before it is.
 
 ### Step 5 — Produce Implementation Guidance
 

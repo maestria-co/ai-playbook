@@ -136,6 +136,39 @@ Before I proceed, one question: [single focused question]?
 
 ---
 
+## Reading `.context/`
+
+What belongs in `.context/` and what shape each entry takes is specified in
+the template's `context/META.md` — one table, one place. This section is only
+about how to read it without being fooled by an absent file.
+
+Three entries can be either a flat file or a folder, depending on whether the
+repo has promoted them: `standards`, `testing`, `architecture`. A promoted
+entry is read at `<base>/README.md`.
+
+An agent told to read `.context/standards.md` finds nothing in a repo that has
+already promoted to `standards/`. Reading nothing is indistinguishable from
+finding nothing to say, so the agent proceeds uninformed and silent. Always
+resolve both:
+
+```bash
+# standards, testing, architecture — file first, then folder entry point
+for base in standards testing architecture; do
+  if [ -f ".context/$base.md" ]; then cat ".context/$base.md"
+  elif [ -f ".context/$base/README.md" ]; then cat ".context/$base/README.md"
+  else echo "GAP: no $base documented — .context/$base.md and $base/README.md both absent"
+  fi
+done
+```
+
+The `else` is the whole point of the snippet. Without it the loop prints
+nothing when both shapes are absent, which is indistinguishable from an empty
+file — the failure this section exists to kill, reintroduced one branch
+later. Report the gap; do not treat an absent context file as "no conventions
+to follow."
+
+---
+
 ## Context Window Management
 
 The context window is the most important resource to manage. Performance degrades as it fills.
@@ -153,7 +186,7 @@ The context window is the most important resource to manage. Performance degrade
 
 ### Resuming after a context reset
 
-1. Read `.context/project-overview.md`
+1. Read `.context/overview.md`
 2. Run `git log --oneline -10`
 3. Read any in-progress state files
 

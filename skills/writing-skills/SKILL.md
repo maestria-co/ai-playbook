@@ -41,11 +41,22 @@ user-invocable: true
 skills/
   skill-name/
     SKILL.md              # Core reference (required)
-    supporting-file.*     # Conditional inclusion (heavyweight reference, reusable utilities)
+    references/           # Extracted supporting content, named for what it holds
+      code-patterns.md
 ```
 
 **Inline preservation:** Principles, concepts, code snippets under 50 lines, examples.
 **File extraction:** Heavyweight reference (100+ lines), reusable scripts/templates.
+
+Extracted files go in `references/`. Name each for its content — there is no
+fixed file set:
+
+| Skill | `references/` |
+| --- | --- |
+| `implementing-features` | `code-patterns.md` |
+| `writing-tests` | `code-patterns.md`, `edge-cases.md`, `troubleshooting.md` |
+| `agent-file-review` | `output-template.md` |
+| `applying-design-principles` | `principles-and-laws.md`, `sources-and-reading.md` |
 
 ## SKILL.md Structure
 

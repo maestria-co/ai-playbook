@@ -48,7 +48,7 @@ the retrospective from becoming an unread graveyard.
 | Architecture insight           | `architecture.md`                              |
 | Domain knowledge               | `domains/entities.md` or `domains/glossary.md` |
 | Process improvement            | `workflows/` appropriate file                  |
-| Decision rationale             | `decisions/index.md` (as a new ADR)            |
+| Decision rationale             | `decisions/README.md` (as a new ADR)            |
 
 ---
 
@@ -122,10 +122,71 @@ Run these periodically (or after every 3–5 tasks):
 - If code has diverged → either update the doc (if the code is correct) or flag the code (if the doc is correct)
 - If a `.context/tasks/` folder has scope-drifted (plan describes a different task than what was built) → apply pruning trigger above
 
-### Check 4 — Bloat
+### Check 4 — Bloat and shape
 
-- `.context/` files should be concise. If any file exceeds 300 lines, consider splitting.
-- `retrospectives/` should have 10–15 entries max. Prune or archive older ones.
+The layout rules live in `skills/_shared/conventions.md`. This check is where
+they get enforced. Both thresholds are numbers, not judgment calls.
+
+**Promote a flat file to a folder at 300 lines.** Applies to `standards.md`,
+`testing.md`, and `architecture.md`:
+
+```bash
+for base in standards testing architecture; do
+  f=".context/$base.md"
+  if [ -f "$f" ]; then
+    n=$(wc -l < "$f")
+    if [ "$n" -gt 300 ]; then
+      echo "$base.md: $n lines — promote"
+    fi
+  fi
+done
+```
+
+Printing nothing means nothing needs promoting, and the exit status is 0 —
+`if`/`fi` rather than an `&&` chain for exactly that reason. The chain form
+leaves the loop's status set by its last failed test, so a healthy repo exits
+1: a clean result indistinguishable from a broken command, in a snippet whose
+whole output on a healthy repo is silence.
+
+To promote `standards.md`:
+
+1. `mkdir .context/standards/`
+2. Split by top-level section into `standards/naming.md`,
+   `standards/errors.md`, and so on
+3. Write `standards/README.md` as the entry point — a short index linking each
+   file, because that is the path agents read once the flat file is gone
+4. `git rm .context/standards.md`
+
+Never promote below the threshold. A 120-line file split into four 30-line
+files is harder to read, not easier.
+
+**`decisions/` stays a folder.** If you find a `decisions.md`, that is drift —
+split it into one file per ADR. Never the reverse.
+
+**Cap `retrospectives/` at 10 entries**, excluding `README.md` and
+`template.md`:
+
+```bash
+ls .context/retrospectives/*.md 2>/dev/null \
+  | grep -v -E '/(README|template)\.md$' | wc -l
+```
+
+Over 10: promote the lessons per the Retrospective Promotion Workflow above,
+then move the promoted entries into `retrospectives/archive/`:
+
+```bash
+mkdir -p .context/retrospectives/archive/
+git mv .context/retrospectives/<entry>.md .context/retrospectives/archive/
+```
+
+`validate.py` counts top-level `*.md` only, so an archived entry stops
+counting against the cap. Use this exact path — a sibling folder or a rename
+leaves CI red, and deleting instead loses the entry.
+
+Archive only what has been promoted. The constraint against deleting
+unpromoted retrospectives still holds, so if all 10 are unpromoted, promote
+first and archive second. Going over the cap is a hard CI error, so this is
+the remedy to reach for, not a judgment call.
 
 ---
 

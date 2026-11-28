@@ -27,14 +27,14 @@ risk than it creates.
 
 **Check 1 — Understand the project context**
 
-Read `.context/project-overview.md` if it exists.
+Read `.context/overview.md` if it exists.
 
 - If it exists → read it before proceeding. Note the tech stack, current state, and constraints.
 - If it does not exist → proceed, but note that your plan will lack full project context.
 
 **Check 2 — Check for existing plans**
 
-Check `.context/plans/` for any existing plan for this feature or goal.
+Check `.context/tasks/*/plan.md` for any existing plan for this feature or goal.
 
 - If a plan exists and is recent → read it. Determine if this is an update or a new plan.
 - If no plan exists → proceed to create one.
@@ -98,8 +98,14 @@ Mark them explicitly: `(can run parallel with Task N)`.
 
 ### Step 6 — Save the Plan
 
-Write the complete plan to `.context/plans/[feature-name].md`.
-Use kebab-case for the filename: `oauth-implementation.md`, not `OAuth Implementation.md`.
+Write the complete plan to `.context/tasks/<task-id>/plan.md`. If no tracker id
+exists, generate one (`local-YYYY-MM-DD-<slug>`) and use it — the same rule
+research reports follow. Use kebab-case for the slug:
+`local-2026-11-25-oauth-implementation`, not `OAuth Implementation`.
+
+The filename is always `plan.md`; the task id is what distinguishes one plan
+from another. A plan is a task artifact, so it is pruned when its task folder
+is — see `task-plan`, which owns the file's format.
 
 ---
 
@@ -108,7 +114,7 @@ Use kebab-case for the filename: `oauth-implementation.md`, not `OAuth Implement
 ```
 Plan: [Feature name]
 
-Saved: .context/plans/[feature-name].md
+Saved: .context/tasks/<task-id>/plan.md
 Tasks: N total (S: x, M: y, L: z)
 Unknowns flagged: [description] | none
 Parallel opportunities: Task N and Task M can run together | none
@@ -137,7 +143,7 @@ Plan: OAuth 2.0 Authentication
 ### Task 1: Research refresh token rotation approach (S)
 Depends on: none
 Input: .context/decisions/ADR-003-auth-strategy.md, current auth middleware
-Output: .context/research/oauth-refresh-tokens.md
+Output: .context/tasks/MAE-0031/research/oauth-refresh-tokens.md
 Acceptance criteria:
 - [ ] At least 2 approaches compared
 - [ ] Recommendation made with security rationale
@@ -145,7 +151,7 @@ Scope out: Implementation — research only
 
 ### Task 2: Create OAuthProvider model and migration (M)
 Depends on: Task 1
-Input: .context/research/oauth-refresh-tokens.md, src/models/User.js (style reference)
+Input: .context/tasks/MAE-0031/research/oauth-refresh-tokens.md, src/models/User.js (style reference)
 Output: src/models/OAuthProvider.js, db/migrations/YYYYMMDD-create-oauth-provider.js
 Acceptance criteria:
 - [ ] Model includes userId foreign key referencing users table
@@ -185,7 +191,7 @@ Plan: Rename user_name to username
 ### Task 1: Audit all references to user_name (S)
 Depends on: none
 Input: codebase grep results
-Output: .context/plans/username-migration-audit.md (list of all files + line numbers)
+Output: .context/tasks/local-2026-11-25-username-migration/plan.md (list of all files + line numbers)
 Acceptance criteria:
 - [ ] Every reference to user_name documented
 - [ ] Each reference categorized: SQL query, ORM, test, API response
@@ -231,5 +237,5 @@ migration. Update login handler to set it on successful auth."
 - Do not assume unknowns away — state them explicitly and create tasks to resolve them
 - Do not over-plan: a 20-task plan for a 3-hour feature adds overhead that slows execution
 - Do not under-plan: missing tasks surface as surprises mid-execution
-- Write plans to `.context/plans/` — do not deliver plans only in chat
+- Write plans to `.context/tasks/<task-id>/plan.md` — do not deliver plans only in chat
 - If goal is unclear after one clarifying question, state your assumption and proceed

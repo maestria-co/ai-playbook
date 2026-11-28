@@ -28,10 +28,56 @@ If `.context/` already exists with content, do not overwrite — use `context-re
 
 **Check 1 — Verify no existing context**
 
-Look for `.context/overview.md` in the current working directory.
+Do not decide this on one filename. A repo whose overview is named something
+else reads as uninitialized and gets a second, competing set of context files.
+Check for **any** of these three signals:
 
-- If it exists and has content beyond placeholders → **Abort.** Report: "`.context/` already exists. Use `context-review` to update it."
-- If it does not exist, or contains only `[PLACEHOLDER]` markers → proceed.
+```bash
+find .context -maxdepth 2 -name '*.md' \
+  \( -path '*/decisions/*' -o -name 'decisions.md' \
+     -o -path '*/standards/*' -o -name 'standards.md' \
+     -o -name 'overview.md' \) 2>/dev/null | head -5
+```
+
+- If it prints **anything** with content beyond placeholders → **Abort.**
+  Report: "`.context/` already exists. Use `context-review` to update it."
+- If it prints nothing, or every hit contains only `[PLACEHOLDER]` markers →
+  proceed.
+
+`decisions` and `standards` are the load-bearing signals: a repo that has
+recorded a decision or written down its conventions is initialized, whatever
+its overview file is called. Checking several paths instead of one costs
+nothing and removes the failure mode where a guard passes by finding nothing.
+
+**Each signal matches both shapes, because a drifted repo is exactly the repo
+this guard has to catch.** The drift table in this PR lists `auth-api` with
+`standards` promoted to a folder *and* `decisions/` collapsed to
+`decisions.md` — inverted from the template on both counts. A probe that only
+looked for `.context/decisions/*.md` and `.context/standards.md` would find
+nothing there, leaving `overview.md` as the sole surviving signal and the
+guard single-signal again in the one repo where it matters most.
+
+One `find` with quoted patterns, rather than a list of `ls` globs, for the
+same reason: in `zsh` an unmatched glob aborts the whole command, so
+`ls .context/decisions/*.md .context/decisions.md` prints nothing when only
+the collapsed file exists — a guard that passes by finding nothing, caused by
+the shell. `find` does its own matching, so no pattern can abort it.
+
+**Each signal probes both shapes, because a drifted repo is exactly the repo
+this guard has to catch.** The drift table in this PR lists `auth-api` with
+`standards` promoted to a folder *and* `decisions/` collapsed to
+`decisions.md` — inverted from the template on both counts. Probing only
+`.context/decisions/*.md` and `.context/standards.md` would find nothing
+there, leaving `overview.md` as the sole surviving signal and the guard
+single-signal again in the one repo where it matters most. These globs match
+either shape, so promotion and collapse both still register.
+
+**Found 2026-11-25 in this repo.** Its overview was named
+`.context/project-overview.md`, so the old single-filename check found nothing
+and reported "proceed" against a `.context/` holding six ADRs, eleven task
+folders, and a populated `standards.md`. Following the skill literally would
+have written a second overview file next to the real one — and broken this
+skill's own constraint against overwriting populated context.
 
 **Check 2 — Locate the skill kit template**
 
@@ -99,12 +145,22 @@ Add `branching.md` and `ci-cd.md` alongside it only if the project has non-obvio
 workflows (complex branching, multi-step CI).
 If the project has a rich domain with many entities or project-specific terminology, also create `.context/domains/`.
 
+**Create only the folders named above** — the four in the `mkdir`, plus
+`domains/` when the project warrants it. The full layout spec is the table in
+the template's `context/META.md`, which is copied into the repo in Step 3.
+
+The part that matters at init time: do **not** create `standards/`, `testing/`, or `architecture/` as folders here,
+however much content the repo seems to warrant. Those are promoted later by
+`context-maintenance` when a file passes 300 lines. Splitting at init time
+produces four near-empty files instead of one useful one, and it is how six
+repos ended up with six different shapes.
+
 ### Step 3 — Copy and Populate Files
 
 **Universal files (copy verbatim from template):**
 
 - `META.md`
-- `decisions/index.md`
+- `decisions/README.md`
 - `decisions/ADR-001-example-decision.md`
 - `retrospectives/README.md`
 
@@ -175,7 +231,7 @@ Read `.context/overview.md` for project overview and tech stack before starting 
 Read `.context/architecture.md` for system structure and integration points.
 Read `.context/standards.md` for coding conventions and patterns.
 Read `.context/testing.md` for test framework and patterns.
-Read `.context/decisions/index.md` for architectural decision records.
+Read `.context/decisions/README.md` for architectural decision records.
 ```
 
 ### Step 4a — Install the `commit-msg` Hook
@@ -221,7 +277,7 @@ Confirm all required files exist and are non-empty:
 ```bash
 for f in .context/META.md .context/overview.md .context/architecture.md \
          .context/standards.md .context/testing.md \
-         .context/decisions/index.md .context/retrospectives/README.md; do
+         .context/decisions/README.md .context/retrospectives/README.md; do
   [ -s "$f" ] && echo "✅ $f" || echo "❌ $f — missing or empty"
 done
 ```

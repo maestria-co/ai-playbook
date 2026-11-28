@@ -151,7 +151,7 @@ Expected output: sequenced pattern plan with delegation templates for each step.
 
 ## First Time? Try This
 
-1. **Read** `.context/project-overview.md` — 2 minutes
+1. **Read** `.context/overview.md` — 2 minutes
 2. **Create** `.context/tasks/[TASK-ID]/brief.md` — write the goal + acceptance criteria
 3. **Pick** a pattern from the table above
 4. **Paste** the template, fill in the `<context>` block, run it

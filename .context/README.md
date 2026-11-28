@@ -11,7 +11,7 @@ Unlike code, this directory captures the **why** behind decisions and the **what
 ```
 .context/
   README.md               ← This file: how the context system works
-  project-overview.md     ← High-level project description (start here)
+  overview.md     ← High-level project description (start here)
   decisions/
     README.md             ← ADR index and format guide
     ADR-001-*.md          ← Architecture Decision Records
@@ -39,13 +39,13 @@ For tasks that span multiple sessions or long context windows, use structured st
 1. Write current progress to a state file
 2. Commit completed work via git
 3. Note the next step explicitly in the state file
-4. A fresh context can read `git log --oneline`, the state file, and `project-overview.md` to resume exactly
+4. A fresh context can read `git log --oneline`, the state file, and `overview.md` to resume exactly
 
 **Starting from a fresh context:**
 
 ```
 1. git log --oneline -10       # What was recently done
-2. cat .context/project-overview.md  # Project facts
+2. cat .context/overview.md  # Project facts
 3. cat .context/progress.json  # Current task state (if exists)
 4. cat .context/retrospectives/[latest].md  # Recent learnings
 ```
@@ -58,7 +58,7 @@ For tasks that span multiple sessions or long context windows, use structured st
 
 Read relevant context before beginning any non-trivial task:
 
-- Always read `project-overview.md` for project-level context
+- Always read `overview.md` for project-level context
 - Read `decisions/` entries relevant to the area being worked in
 - Skim recent `retrospectives/` entries for recent learnings
 - Check `skills/GUIDE.md` to select the right skill for your task
@@ -69,7 +69,7 @@ Write back to `.context/` when you:
 
 - Make a significant architecture or design decision → `decisions/ADR-NNN-title.md`
 - Complete a task with learnings worth preserving → `retrospectives/YYYY-MM-DD.md`
-- Discover facts about the project that aren't documented → `project-overview.md`
+- Discover facts about the project that aren't documented → `overview.md`
 
 ### Selecting a Skill
 
@@ -103,7 +103,7 @@ Human reviews retrospective entries periodically
 Valuable learnings are promoted:
   - Skills → skills/ SKILL.md files
   - Decisions → decisions/ADR-NNN-*.md
-  - Project facts → project-overview.md
+  - Project facts → overview.md
       │
       ▼
 Every future task starts more informed
@@ -116,6 +116,6 @@ This loop is how the system improves over time without requiring manual updates 
 ## Rules
 
 - **Never delete entries** from decisions/ or retrospectives/. Superseded ADRs are marked "Superseded" but kept.
-- **Keep project-overview.md current.** It's the first thing read on every task.
+- **Keep overview.md current.** It's the first thing read on every task.
 - **Be specific in retro entries.** Vague entries ("things went well") have no learning value.
 - **Humans promote, skills append.** Skills write raw learnings. Humans decide what gets elevated to permanent documentation.

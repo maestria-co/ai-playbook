@@ -69,7 +69,7 @@ For **medium/complex tasks**, additionally load based on task type:
 - Feature → `.context/domains/`, `.context/architecture.md`, `.context/standards.md`
 - Bug fix → `.context/domains/` (affected area), `.context/testing.md`, `.context/standards.md`
 - Refactor → `.context/architecture.md`, `.context/standards.md`
-- Architecture decision → `.context/architecture.md`, `.context/decisions/index.md`, all relevant `.context/domains/`
+- Architecture decision → `.context/architecture.md`, `.context/decisions/README.md`, all relevant `.context/domains/`
 
 If `.context/` is absent, infer project details from manifest files (`package.json`, `pom.xml`, `pyproject.toml`, `*.csproj`, etc.).
 

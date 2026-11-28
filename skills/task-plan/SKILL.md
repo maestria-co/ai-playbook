@@ -135,7 +135,7 @@ Reverse-chronological entries. One per work session.
 | Bug fix requiring investigation   | Yes — helps track debugging progress  |
 | Simple one-file change            | No — overkill                         |
 | Refactoring across multiple files | Yes                                   |
-| Research task                     | No — use `.context/research/` instead |
+| Research task                     | No — use `.context/tasks/[task-id]/research/` instead |
 
 ---
 

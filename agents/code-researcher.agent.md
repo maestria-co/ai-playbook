@@ -55,7 +55,7 @@ When @manager invokes this agent, it provides:
 4. **Find all usage sites**: For refactoring-oriented research, find every caller/consumer of the target code. Stop after reading 15 files; return partial findings with a note on what remains if the scope is larger.
 5. **Detect patterns**: When researching "how we do X," collect 3–5 examples to identify the common pattern and any deviations.
 6. **Document factually**: Report what the code actually does, not what it should do. Note any surprises, inconsistencies, or tech debt discovered.
-7. **Save findings**: When a TASK-ID was provided, write to `.context/tasks/{TASK-ID}/code-analysis-[topic].md`. Otherwise write to `.context/research/[topic-slug].md`. Either way, always write to a file — do not deliver analysis in chat only.
+7. **Save findings**: Write to `.context/tasks/{TASK-ID}/research/code-analysis-[topic-slug].md`. If no TASK-ID was provided, generate one (`local-YYYY-MM-DD-<slug>`) and use it — never write outside a task folder, and never to a top-level `.context/research/`. See `agents/_shared/README.md`. Always write to a file — do not deliver analysis in chat only.
 
 ---
 
@@ -81,7 +81,7 @@ Key findings:
 Surprises / Tech debt:
 - [unexpected behavior or code quality issue]
 
-Full report: .context/tasks/{TASK-ID}/code-analysis-[slug].md (or .context/research/[slug].md if no task)
+Full report: .context/tasks/{TASK-ID}/research/code-analysis-[slug].md
 
 Route to: Manager
 ```
@@ -138,4 +138,4 @@ Route to: Manager
 - Do not speculate about what code "probably" does — trace it and verify
 - Always cite specific files and function names — vague descriptions are not helpful
 - Do not over-research — answer the question, report findings, and stop
-- Save findings to `.context/research/` — don't deliver analysis only in chat
+- Save findings to `.context/tasks/{TASK-ID}/research/` — don't deliver analysis only in chat

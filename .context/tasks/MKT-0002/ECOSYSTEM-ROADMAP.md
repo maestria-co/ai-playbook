@@ -187,7 +187,7 @@ to prevent repeating the same mistakes.
    - What pattern should be avoided?
 
 3. **Choose the Right Location:**
-   - Project-wide fact → `.context/project-overview.md`
+   - Project-wide fact → `.context/overview.md`
    - Architecture pattern → `.context/decisions/NNNN-decision.md` (new ADR)
    - Code convention → `.context/rules/conventions.md`
    - Domain knowledge → `.context/domains/[domain].md`

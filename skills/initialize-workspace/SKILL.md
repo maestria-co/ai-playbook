@@ -58,8 +58,17 @@ influence another's. Each gets its own `.context/overview.md`, `.context/standar
 
 ## Phase 4: Generate Workspace Overview
 
-Create `.context/workspace-overview.md` at the **workspace root** (not inside
-any project folder). This is the workspace-level entry point for cross-project tasks.
+Create `.context/overview.md` at the **workspace root** (not inside any
+project folder). This is the workspace-level entry point for cross-project
+tasks.
+
+The name is `overview.md`, same as every other node — the path already says
+which node it is, so a `workspace-` prefix earns nothing and costs a lot. A
+second overview filename means Check 1 in `initialize-repo` looks for
+`.context/overview.md`, finds nothing at an already-initialized workspace
+root, and reports "proceed". That is exactly the bug this convention exists to
+prevent, one level up. `initialize-monorepo` and `context-specialist-impl`
+both already use `overview.md` for a root node.
 
 ```markdown
 # Workspace Overview
@@ -133,7 +142,7 @@ For each discovered relationship, document: type, direction, interface, and spec
 
 **Workspace-level:**
 
-- [ ] `workspace-overview.md` created at workspace root
+- [ ] `overview.md` created at workspace root
 - [ ] All projects listed with tech stacks
 - [ ] Cross-project dependencies documented
 
@@ -152,7 +161,7 @@ For each discovered relationship, document: type, direction, interface, and spec
 | [project-2] | ✅ Upgraded                  | context-bootstrap-[date] |
 | [docs]      | ⏭️ Skipped (resource folder) | —                        |
 
-**Workspace overview:** `.context/workspace-overview.md`
+**Workspace overview:** `.context/overview.md`
 
 **Next steps:**
 

@@ -143,13 +143,53 @@ All agents follow the rules in `_shared/`:
 
 Agents use the `.context/` directory to persist knowledge across sessions:
 
-| Path                           | Purpose                                              |
-| ------------------------------ | ---------------------------------------------------- |
-| `.context/project-overview.md` | High-level project description, goals, tech stack    |
-| `.context/decisions/`          | Architecture Decision Records (ADRs)                 |
-| `.context/retrospectives/`     | Rolling learning log — agents append, humans promote |
+| Path | Purpose | Shape |
+| --- | --- | --- |
+| `.context/overview.md` | High-level project description, goals, tech stack | file |
+| `.context/architecture.md` | System structure, layers, integrations | file → folder |
+| `.context/standards.md` | Code style, naming, error handling | file → folder |
+| `.context/testing.md` | Test framework, conventions, mocking | file → folder |
+| `.context/decisions/` | Architecture Decision Records (ADRs) | always a folder |
+| `.context/retrospectives/` | Rolling learning log — agents append, humans promote | folder, max 10 entries |
+| `.context/tasks/` | One folder per task, each with `plan.md` | folder |
+| `.context/workflows/` | PR format, branching, CI | folder |
 
-**Before starting work**, agents should read `.context/project-overview.md` if it exists.  
+**The layout spec is canonical in the template's `context/META.md`.** Do not
+restate it here — read it there. How to *read* either shape without being
+fooled by an absent file is in `skills/_shared/conventions.md`.
+
+### Investigation output is always task-scoped
+
+`researcher` and `code-researcher` write their reports to
+`.context/tasks/<task-id>/research/<topic-slug>.md`. There is no top-level
+`.context/research/` — a report belongs to the work that prompted it, so it is
+pruned when that task folder is pruned. A standalone research folder has no
+lifecycle and accumulates forever.
+
+**No task id?** Generate one rather than writing outside a task folder:
+
+```
+local-YYYY-MM-DD-<slug>      e.g. local-2026-11-25-oauth-libraries
+```
+
+A locally generated id is a real task folder in every other respect. If the
+work later gets a tracker id, rename the folder.
+
+"file → folder" means it starts as a single file and is promoted to a folder
+by `context-maintenance` once it passes 300 lines. **A promoted entry is read
+at `<base>/README.md`, not `<base>.md`.** So resolve both before concluding a
+repo documents nothing:
+
+```bash
+[ -f ".context/standards.md" ] && cat .context/standards.md \
+  || cat .context/standards/README.md 2>/dev/null \
+  || echo "no standards documented"
+```
+
+An absent context file is not "no conventions to follow" — it is a gap to
+report.
+
+**Before starting work**, agents should read `.context/overview.md` if it exists.  
 **After significant decisions**, agents should write to `.context/decisions/`.  
 **After completing tasks**, agents should append to the current retrospective log.
 
