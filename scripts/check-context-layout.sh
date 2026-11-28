@@ -32,24 +32,87 @@ fi
 [ -f "$ctx/project-overview.md" ] &&
   err "project-overview.md is drift — rename to overview.md"
 
-# --- Always present: the spec itself, and the PR format every repo needs.
+# --- The spec itself, at every node.
 [ -f "$ctx/META.md" ] || err "missing required file: META.md"
-[ -f "$ctx/workflows/pull-requests.md" ] ||
-  err "missing required file: workflows/pull-requests.md"
 
-# --- Always folders. An ADR is immutable and cited by number; a retrospective
-# --- is one dated entry per task. Collapsing either into a single file
-# --- destroys that, so the file form is an error, not a style choice.
-for base in decisions retrospectives; do
-  [ -f "$ctx/$base.md" ] &&
-    err "$base.md is drift — $base must be a folder, one entry per file"
-  [ -d "$ctx/$base" ] || err "missing required folder: $base/"
-done
+# --- Context shape decides which rule set applies below. It is declared in
+# --- overview.md rather than inferred from which files are present, because
+# --- inferring it would mean deriving the rule from the thing the rule exists
+# --- to check — a node missing standards.md would read as "aggregate" and
+# --- stop being asked for it. Absent means project: that is what every
+# --- standalone repo is, so only non-project nodes carry a key.
+shape=project
+if [ -f "$ctx/overview.md" ]; then
+  declared=$(sed -n 's/^context_shape:[[:space:]]*\([A-Za-z]*\).*/\1/p' \
+               "$ctx/overview.md" | head -1)
+  [ -n "$declared" ] && shape="$declared"
+fi
+case "$shape" in
+  project|aggregate) ;;
+  *)
+    # Not a silent fall back to the default: a typo must not quietly buy the
+    # wrong rule set, which would make every check below meaningless.
+    err "unrecognized context_shape '$shape' in overview.md — expected project or aggregate"
+    exit 1
+    ;;
+esac
+
+# --- workflows/ exists at every node, but the PR format inside it follows the
+# --- git repository boundary rather than the shape: a workspace root is a
+# --- folder of repositories and has no PR format of its own, while a monorepo
+# --- root is the repository and has exactly one. Tested with -e, not -d,
+# --- because a worktree and a submodule both use a .git file.
+[ -d "$ctx/workflows" ] || err "missing required folder: workflows/"
+if [ -e "$(dirname "$ctx")/.git" ]; then
+  [ -f "$ctx/workflows/pull-requests.md" ] ||
+    err "missing required file: workflows/pull-requests.md"
+fi
+
+# --- decisions/ is a folder at both shapes. A cross-project decision is an ADR
+# --- with a wider blast radius, not a different kind of artifact: still
+# --- immutable once accepted, still cited by number, so still one file each.
+[ -f "$ctx/decisions.md" ] &&
+  err "decisions.md is drift — decisions must be a folder, one ADR per file"
+[ -d "$ctx/decisions" ] || err "missing required folder: decisions/"
+
+# --- retrospectives/ and tasks/ are project-only: both belong to the node the
+# --- work actually happened in, not to one describing what its children share.
+if [ "$shape" = project ]; then
+  [ -f "$ctx/retrospectives.md" ] &&
+    err "retrospectives.md is drift — retrospectives must be a folder, one dated entry per file"
+  [ -d "$ctx/retrospectives" ] || err "missing required folder: retrospectives/"
+
+  # Archived entries live in retrospectives/archive/ and are deliberately not
+  # counted: that is the stated remedy for going over.
+  if [ -d "$ctx/retrospectives" ]; then
+    n=$(find "$ctx/retrospectives" -maxdepth 1 -name '*.md' \
+          ! -name 'README.md' ! -name 'template.md' | wc -l | tr -d ' ')
+    [ "$n" -gt 10 ] &&
+      err "retrospectives/ has $n entries, max 10 — promote the lessons and git mv them to retrospectives/archive/"
+  fi
+else
+  for base in retrospectives tasks; do
+    if [ -e "$ctx/$base" ] || [ -e "$ctx/$base.md" ]; then
+      warn "$base at an aggregate node — it belongs to the project the work happened in"
+    fi
+  done
+fi
 
 # --- Promotable entries: flat file, or a folder once promoted past 300 lines.
 # --- Exactly one shape, and a promoted folder needs the entry point agents
 # --- read now that the flat file is gone.
-for base in standards testing architecture; do
+# ---
+# --- architecture applies at both shapes; standards and testing are
+# --- project-only, because code style and test setup belong to the node that
+# --- has the code. An aggregate node that grows them is describing its
+# --- children instead of what they share.
+if [ "$shape" = project ]; then
+  promotable="standards testing architecture"
+else
+  promotable="architecture"
+fi
+
+for base in $promotable; do
   flat="$ctx/$base.md"
   dir="$ctx/$base"
   if [ -f "$flat" ] && [ -d "$dir" ]; then
@@ -66,13 +129,12 @@ for base in standards testing architecture; do
   fi
 done
 
-# --- Retrospectives cap. Archived entries live in retrospectives/archive/ and
-# --- are deliberately not counted: that is the stated remedy for going over.
-if [ -d "$ctx/retrospectives" ]; then
-  n=$(find "$ctx/retrospectives" -maxdepth 1 -name '*.md' \
-        ! -name 'README.md' ! -name 'template.md' | wc -l | tr -d ' ')
-  [ "$n" -gt 10 ] &&
-    err "retrospectives/ has $n entries, max 10 — promote the lessons and git mv them to retrospectives/archive/"
+if [ "$shape" = aggregate ]; then
+  for base in standards testing; do
+    if [ -e "$ctx/$base" ] || [ -e "$ctx/$base.md" ]; then
+      warn "$base at an aggregate node — code style and test setup belong to the project with the code"
+    fi
+  done
 fi
 
 exit $([ "$errors" -gt 0 ] && echo 1 || echo 0)
