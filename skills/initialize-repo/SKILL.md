@@ -33,20 +33,44 @@ else reads as uninitialized and gets a second, competing set of context files.
 Check for **any** of these three signals:
 
 ```bash
-ls .context/decisions/*.md 2>/dev/null | head -1   # any ADR
-ls .context/standards.md 2>/dev/null               # standards doc
-ls .context/overview.md 2>/dev/null                # overview doc
+find .context -maxdepth 2 -name '*.md' \
+  \( -path '*/decisions/*' -o -name 'decisions.md' \
+     -o -path '*/standards/*' -o -name 'standards.md' \
+     -o -name 'overview.md' \) 2>/dev/null | head -5
 ```
 
-- If **any** of the three is present with content beyond placeholders →
-  **Abort.** Report: "`.context/` already exists. Use `context-review` to
-  update it."
-- If none is present, or they contain only `[PLACEHOLDER]` markers → proceed.
+- If it prints **anything** with content beyond placeholders → **Abort.**
+  Report: "`.context/` already exists. Use `context-review` to update it."
+- If it prints nothing, or every hit contains only `[PLACEHOLDER]` markers →
+  proceed.
 
-`decisions/` and `standards.md` are the load-bearing signals: a repo that has
+`decisions` and `standards` are the load-bearing signals: a repo that has
 recorded a decision or written down its conventions is initialized, whatever
-its overview file is called. Checking three paths instead of one costs nothing
-and removes the failure mode where a guard passes by finding nothing.
+its overview file is called. Checking several paths instead of one costs
+nothing and removes the failure mode where a guard passes by finding nothing.
+
+**Each signal matches both shapes, because a drifted repo is exactly the repo
+this guard has to catch.** The drift table in this PR lists `auth-api` with
+`standards` promoted to a folder *and* `decisions/` collapsed to
+`decisions.md` — inverted from the template on both counts. A probe that only
+looked for `.context/decisions/*.md` and `.context/standards.md` would find
+nothing there, leaving `overview.md` as the sole surviving signal and the
+guard single-signal again in the one repo where it matters most.
+
+One `find` with quoted patterns, rather than a list of `ls` globs, for the
+same reason: in `zsh` an unmatched glob aborts the whole command, so
+`ls .context/decisions/*.md .context/decisions.md` prints nothing when only
+the collapsed file exists — a guard that passes by finding nothing, caused by
+the shell. `find` does its own matching, so no pattern can abort it.
+
+**Each signal probes both shapes, because a drifted repo is exactly the repo
+this guard has to catch.** The drift table in this PR lists `auth-api` with
+`standards` promoted to a folder *and* `decisions/` collapsed to
+`decisions.md` — inverted from the template on both counts. Probing only
+`.context/decisions/*.md` and `.context/standards.md` would find nothing
+there, leaving `overview.md` as the sole surviving signal and the guard
+single-signal again in the one repo where it matters most. These globs match
+either shape, so promotion and collapse both still register.
 
 **Found 2026-11-25 in this repo.** Its overview was named
 `.context/project-overview.md`, so the old single-filename check found nothing
