@@ -194,7 +194,7 @@ planning-tasks
 ### `planning-tasks`
 
 - **Input:** Ambiguous goal
-- **Output:** `.context/plans/[feature].md` — ordered task list with acceptance criteria
+- **Output:** `.context/tasks/<task-id>/plan.md` — ordered task list with acceptance criteria
 - **When NOT to use:** Single well-defined task, or user already provided a breakdown
 - **Degree of freedom:** Medium
 
@@ -334,7 +334,7 @@ All skills follow the conventions in `skills/_shared/conventions.md`:
 | `context-maintenance`         | `.context/` documentation files                              |
 | `context-document-guidelines` | Nothing (quality standards reference)                        |
 | `using-skills`                | Nothing (routing only)                                       |
-| `planning-tasks`              | `.context/plans/`                                            |
+| `planning-tasks`              | `.context/tasks/[TASK-ID]/plan.md`                           |
 | `task-plan`                   | `.context/tasks/[TASK-ID]/plan.md`                           |
 | `design-first`                | Nothing (triage decision) or lightweight design in `plan.md` |
 | `researching-options`         | `.context/tasks/[task-id]/research/`                         |
