@@ -44,12 +44,23 @@ git config --local core.hooksPath .githooks
 | `GUIDE.md` exists | error | The routing table gone missing |
 | Custom skill is mentioned in `GUIDE.md` | warning | A skill nothing routes to |
 | Index-doc paths resolve | error | A table row that outlived its file |
-| Required hook copies exist and are executable | error | A hook git will silently not run |
-| Shipped file pairs are byte-identical | error | The copy consumers get drifting from the one we run |
-| `.context/META.md` exists | error | The layout spec missing from the repo that defines it |
-| `.context/workflows/pull-requests.md` exists | error | The PR format every repo needs, absent |
-| `.context/overview.md` exists | error | The entry point agents read on every task |
-| No `.context/project-overview.md` | error | A relapse of the drift that opened PR #35 |
+| Shipped file pairs exist, are byte-identical and executable | error | The copy consumers get drifting from the one we run |
+| `.context/` layout | error / warning | **Delegated** — see below |
+
+## What `scripts/check-context-layout.sh` asserts
+
+`validate.py` does not reimplement these. It shells out to the checker and
+parses its `ERROR:` / `WARN:` lines, so there is one implementation of the
+layout rules and consumers run the same file we do. CI also runs it
+standalone, because its CLI contract is what `context-review` depends on.
+
+| Check | Severity | Failure mode it catches |
+| --- | --- | --- |
+| `.context/` exists at all | error | Running the checker against an unstructured repo |
+| `overview.md` exists | error | The entry point agents read on every task |
+| No `project-overview.md` | error | A relapse of the drift that opened PR #35 |
+| `META.md` exists | error | The layout spec missing from the repo that defines it |
+| `workflows/pull-requests.md` exists | error | The PR format every repo needs, absent |
 | `decisions`/`retrospectives` are folders, not `.md` files | error | ADR numbers and dated entries collapsed into one file |
 | `decisions/`/`retrospectives/` exist | error | A repo with nowhere to record a decision |
 | Promotable entry exists in exactly one shape | error | `standards.md` and `standards/` both present, agents reading one |
@@ -57,8 +68,6 @@ git config --local core.hooksPath .githooks
 | Flat file over 300 lines | warning | A file past the promotion threshold |
 | Promotable entry absent entirely | warning | Conventions nobody wrote down |
 | `retrospectives/` over 10 entries | error | A log nobody prunes |
-
----
 
 **This table is itself the drift class it describes.** Nothing pairs a row
 with the check it summarizes — the Index-doc check verifies that backticked
