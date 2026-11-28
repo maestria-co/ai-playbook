@@ -94,10 +94,18 @@ Resolve in this order and stop at the first hit:
    history, then flag it in the PR body as provisional and ask the human to confirm:
    ```bash
    { git branch -a --format='%(refname:short)'; git tag; git log --format='%s%n%b' -500; } \
-     | grep -oiE 'MKT-[0-9]+' | tr 'a-z' 'A-Z' | sort -u | tail -1
+     | grep -oiE 'MKT-[0-9]+' | tr 'a-z' 'A-Z' | sort -t- -k2,2n | tail -1
    ```
    Scan branches, tags **and** commit messages — tickets frequently appear only in a
    commit scope and never in a branch name.
+
+   The sort is numeric on the number field, not lexical. Every id in this repo's
+   history is 4-digit zero-padded, where lexical and numeric order happen to agree,
+   so `sort -u` looks correct today and breaks the first time someone writes an
+   unpadded id — which the next line explicitly accepts as input. With `mkt-9` in a
+   branch name, `sort -u | tail -1` reports `MKT-9` as the highest and the provisional
+   id derived from it is `MKT-0010`, already taken. `-t- -k2,2n` is POSIX, so it
+   behaves the same on any platform.
 
 Normalize whatever you find to the configured casing and padding: `mkt-9` → `MKT-0009`.
 
