@@ -198,6 +198,15 @@ def validate():
                 "overview.md"
             )
 
+        # META.md is the layout spec itself, and workflows/ holds the PR
+        # format every repo needs. Both are "always created" per the spec, and
+        # neither was asserted — so this repo shipped the convention without
+        # following it. A spec the defining repo does not satisfy is a weak
+        # spec. domains/ stays unchecked: it is conditional by design.
+        for required in ("META.md", os.path.join("workflows", "pull-requests.md")):
+            if not os.path.isfile(os.path.join(ctx, required)):
+                errors.append(f"[.context] Missing required file: {required}")
+
         # decisions/ and retrospectives/ are always folders, never files.
         #
         # Collapsing either into one file destroys what makes it work: an ADR
