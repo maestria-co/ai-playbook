@@ -94,10 +94,19 @@ Resolve in this order and stop at the first hit:
    history, then flag it in the PR body as provisional and ask the human to confirm:
    ```bash
    { git branch -a --format='%(refname:short)'; git tag; git log --format='%s%n%b' -500; } \
-     | grep -oiE '<PREFIX>-[0-9]+' | tr 'a-z' 'A-Z' | sort -u | tail -1
+     | grep -oiE '<PREFIX>-[0-9]+' | tr 'a-z' 'A-Z' | sort -t- -k2,2n | tail -1
    ```
    Scan branches, tags **and** commit messages — tickets frequently appear only in a
    commit scope and never in a branch name.
+
+   The sort is numeric on the number field, not lexical. `sort -u | tail -1` picks
+   `MAE-9` out of `{MAE-9, MAE-100}` and `MAE-99` out of `{MAE-9, MAE-99, MAE-100}`,
+   so the number it reports as highest is one already taken and the provisional id
+   derived from it collides — under a heading that says not to invent a number. The
+   next line is why this bites here rather than rarely: casing and padding are
+   normalized *after* the scan, so unpadded ids like `mae-9` are expected input, and
+   one of them anywhere in branch, tag or commit history makes every answer wrong.
+   `-t- -k2,2n` is POSIX, so it behaves the same in a consumer repo on any platform.
 
 Normalize whatever you find to the configured casing and padding: `mae-9` → `MAE-0009`.
 
