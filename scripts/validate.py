@@ -198,23 +198,34 @@ def validate():
                 "overview.md"
             )
 
-        # decisions/ is always a folder, never a file.
+        # decisions/ and retrospectives/ are always folders, never files.
         #
-        # Severity is deliberately asymmetric: a missing decisions/ is an
-        # error, while a missing standards/testing/architecture is only a
-        # warning below. An ADR is immutable, numbered and cited by number, so
-        # the folder has to exist before the first one is written; the other
-        # three are documentation a repo can legitimately not have written yet.
-        # Do not flatten these to match each other in either direction.
-        # (--strict collapses the distinction in CI, which is the point: a
-        # warning is a nudge locally and a gate on the default branch.)
-        if os.path.isfile(os.path.join(ctx, "decisions.md")):
-            errors.append(
-                "[.context] decisions must be a folder, not decisions.md — "
-                "one ADR per file"
-            )
-        if not os.path.isdir(os.path.join(ctx, "decisions")):
-            errors.append("[.context] Missing required folder: decisions/")
+        # Collapsing either into one file destroys what makes it work: an ADR
+        # is immutable, numbered and cited by number, and a retrospective is
+        # one dated entry per task. Absence is an error too — a check that
+        # only validates the shape of an entry that exists passes silently on
+        # the repo that has no entry at all.
+        #
+        # Severity is deliberately asymmetric against the promotable entries
+        # below, which are warnings: these two must exist before the first
+        # entry is written, while standards/testing/architecture are docs a
+        # repo can legitimately not have written yet. Do not flatten them to
+        # match each other in either direction. (--strict collapses the
+        # distinction in CI, which is the point: a warning is a nudge locally
+        # and a gate on the default branch.)
+        for base, unit in (
+            ("decisions", "one ADR per file"),
+            ("retrospectives", "one dated entry per file"),
+        ):
+            if os.path.isfile(os.path.join(ctx, base + ".md")):
+                errors.append(
+                    f"[.context] {base} must be a folder, not {base}.md — "
+                    f"{unit}"
+                )
+            if not os.path.isdir(os.path.join(ctx, base)):
+                errors.append(
+                    f"[.context] Missing required folder: {base}/"
+                )
 
         # Each promotable entry must exist in exactly one shape
         for base in PROMOTABLE:
