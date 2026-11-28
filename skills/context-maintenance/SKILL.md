@@ -133,9 +133,20 @@ they get enforced. Both thresholds are numbers, not judgment calls.
 ```bash
 for base in standards testing architecture; do
   f=".context/$base.md"
-  [ -f "$f" ] && n=$(wc -l < "$f") && [ "$n" -gt 300 ] && echo "$base.md: $n lines — promote"
+  if [ -f "$f" ]; then
+    n=$(wc -l < "$f")
+    if [ "$n" -gt 300 ]; then
+      echo "$base.md: $n lines — promote"
+    fi
+  fi
 done
 ```
+
+Printing nothing means nothing needs promoting, and the exit status is 0 —
+`if`/`fi` rather than an `&&` chain for exactly that reason. The chain form
+leaves the loop's status set by its last failed test, so a healthy repo exits
+1: a clean result indistinguishable from a broken command, in a snippet whose
+whole output on a healthy repo is silence.
 
 To promote `standards.md`:
 
