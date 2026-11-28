@@ -82,6 +82,7 @@ Return exactly this schema:
     "git_root": "/absolute/path",
     "instructions": "/absolute/path/.github/copilot-instructions.md",
     "context": "/absolute/path/.context/",
+    "context_shape": "project | aggregate",
     "rationale": "human-readable explanation of why this root was chosen"
   },
   "available_skills": [
@@ -105,6 +106,17 @@ Return exactly this schema:
 **`instructions`**: path to the canonical instructions file — use `.claude/claude.md` if present, otherwise `.github/copilot-instructions.md`.
 
 **`available_skills`**: populated from the resolved context's skill directory. Return `[]` if no skill directory exists at the resolved root.
+
+**`context_shape`**: read `context_shape` from `<context>/overview.md`.
+Report `project` when the key is absent — that is the documented default, not
+a guess. Do not infer the shape from which files happen to be present: a
+project node that has not written `standards.md` yet would read as
+`aggregate` and its consumers would stop expecting the file.
+
+Callers need this because the two shapes hold different things. An agent told
+to read `standards.md` at an aggregate node is being pointed at a file that is
+absent *by design*, and without the shape it cannot tell that from a genuine
+documentation gap it should report.
 
 **`projects`**: list all discovered sub-projects. Set `is_resolved_context: true` on the matched project. For `cross-project` scope, mark all touched projects as `true`.
 
