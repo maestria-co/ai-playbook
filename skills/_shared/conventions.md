@@ -156,12 +156,16 @@ resolve both:
 for base in standards testing architecture; do
   if [ -f ".context/$base.md" ]; then cat ".context/$base.md"
   elif [ -f ".context/$base/README.md" ]; then cat ".context/$base/README.md"
+  else echo "GAP: no $base documented — .context/$base.md and $base/README.md both absent"
   fi
 done
 ```
 
-If neither exists, say so. Do not treat an absent context file as "no
-conventions to follow."
+The `else` is the whole point of the snippet. Without it the loop prints
+nothing when both shapes are absent, which is indistinguishable from an empty
+file — the failure this section exists to kill, reintroduced one branch
+later. Report the gap; do not treat an absent context file as "no conventions
+to follow."
 
 ---
 
