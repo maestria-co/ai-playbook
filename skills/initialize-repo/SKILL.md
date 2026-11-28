@@ -192,7 +192,7 @@ prefix, and swap the illustrative worked example for a real PR from this repo if
 
 | File                                    | Generation approach                                                                                                         | Don't duplicate                                                                |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `overview.md`                           | Infer from manifest + directory structure. Leave `<!-- TODO -->` for unknowable fields (business goals, compliance).        | —                                                                              |
+| `overview.md`                           | Infer from manifest + directory structure. Leave `<!-- TODO -->` for unknowable fields (business goals, compliance). **Keep the template's `context_shape: project` frontmatter.** | —                                                                              |
 | `architecture.md`                       | System structure: layers, data flow, key integrations, where it runs. Structural — not code style, not decisions.           | Don't repeat tech stack from `overview.md`                                     |
 | `standards.md`                          | Code style, naming conventions, error handling, structural patterns. Read 3+ source files. Use real file names as examples. | Don't describe what the code does — that's `architecture.md`                   |
 | `testing.md`                            | Test framework, how to run tests, file naming, mocking approach. Read 2–3 real test files.                                  | Don't duplicate file paths already in `standards.md`                           |
@@ -246,6 +246,13 @@ without the kit installed:
 `chmod +x` it and **run it**. A fresh `.context/` must pass — if it does not,
 Step 2 or Step 3 left something out, and that is a bug in this run rather than
 something to hand the human. Plain sh, so it works in a repo of any language.
+
+The checker reads `context_shape` from `overview.md` to pick its rule set.
+This skill only ever initializes a **project** node, which is also what an
+absent key means — so a repo initialized here passes whether or not Step 3
+kept the frontmatter. Keep it anyway: it is the difference between a node
+that declares what it is and one that is merely assumed, and
+`initialize-monorepo` and `initialize-workspace` both rely on reading it.
 
 Add it to CI if the repo has one: the layout only stays conformant if
 something checks on every push.
