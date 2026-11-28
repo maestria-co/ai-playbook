@@ -40,6 +40,55 @@ Read `.context/cache/context_update.md`.
 
 Work through each step in order. Read the current `.context/` file, scan the relevant source, and update only what has changed. Do not rewrite sections that are hand-authored, opinion-based, or business-context.
 
+### Step 0 — Structural conformance
+
+Content accuracy is pointless if an agent cannot find the file. Run the
+layout check before reconciling anything:
+
+```bash
+./scripts/check-context-layout.sh
+```
+
+It asserts `.context/` matches the spec in `.context/META.md` section 2 —
+required files present, `decisions/` and `retrospectives/` as folders, each
+promotable entry in exactly one shape, promoted folders carrying a
+`README.md`, retrospectives under the cap. Exit 1 means at least one `ERROR:`.
+
+If the script is absent, the repo predates it — copy it from the template at
+`<template_dir>/scripts/check-context-layout.sh` and run it.
+
+**Fix the mechanical findings. Report the rest.**
+
+| Finding | Action |
+|---|---|
+| `missing required file: META.md` | Copy from `<template_dir>/context/META.md`. Pure copy, no placeholders |
+| `missing required file: workflows/pull-requests.md` | Copy from the template, then fill the Repo Configuration block from evidence — see `initialize-repo` Step 3a |
+| `<base>/ has no README.md` | Write one: a short index linking each file already in that folder |
+| `missing <base>.md` | Create it as part of the step for that file below |
+| `<base>.md is NNN lines (over 300)` | Hand to `context-maintenance` — promotion is its job, not this skill's |
+| `project-overview.md is drift` | Rename to `overview.md` and update every reference |
+| `exists as both <base>.md and <base>/` | **Report.** Deciding which content wins needs a human |
+| `decisions.md is drift` | **Report.** See below |
+| `retrospectives.md is drift` | **Report.** See below |
+| `retrospectives/ has N entries` | Hand to `context-maintenance` — it owns promotion and archiving |
+
+**Never split a collapsed `decisions.md` or `retrospectives.md` automatically.**
+Both need judgment this skill does not have: where one ADR ends and the next
+begins, what number each should carry, which retrospective entry belongs to
+which task. Guessing produces ADRs with invented numbers that other documents
+then cite. Report it as a migration the human has to drive:
+
+```
+decisions.md found (N decisions, M lines). Spec requires decisions/ with one
+ADR per file. This needs a human: ADR numbers are cited by other documents,
+so the split cannot be guessed.
+```
+
+Do not write the cache file as fresh while an unreported ERROR stands — a
+structurally broken `.context/` reviewed for content is worse than one that
+reports itself broken, because the cache then suppresses the next review for
+five days.
+
 ### Step 1 — `overview.md`
 
 Target: `.context/overview.md`
@@ -117,6 +166,7 @@ triggered_by: architect-agent
 
 ## Summary
 
+- **Structural conformance:** pass / N errors reported
 - **Reviewed:** `overview.md`, `domains/`, `architecture.md`, `standards.md`, `workflows/pull-requests.md`
 - **Changes made:** yes / no
 - **Files updated:**
@@ -131,4 +181,5 @@ triggered_by: architect-agent
 - Preserve hand-authored content — if a section reads as rationale, opinion, or business context, do not alter it
 - Prefer in-place updates over appending new sections; avoid growing files unnecessarily
 - If the codebase is empty (only `.gitkeep` in source dirs), update `Current State` to reflect that but make no other changes
-- Always write the cache file at the end, even if nothing changed
+- Always write the cache file at the end, even if nothing changed — except while an unresolved structural ERROR stands, which must be reported rather than cached over
+- Never split a collapsed `decisions.md` or `retrospectives.md` — report it as a human-driven migration

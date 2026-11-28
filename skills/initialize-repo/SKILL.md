@@ -234,6 +234,22 @@ Read `.context/testing.md` for test framework and patterns.
 Read `.context/decisions/README.md` for architectural decision records.
 ```
 
+### Step 4b — Install the Layout Checker
+
+Copy the conformance checker in, so the repo can verify its own `.context/`
+without the kit installed:
+
+```
+<template_dir>/scripts/check-context-layout.sh → scripts/check-context-layout.sh
+```
+
+`chmod +x` it and **run it**. A fresh `.context/` must pass — if it does not,
+Step 2 or Step 3 left something out, and that is a bug in this run rather than
+something to hand the human. Plain sh, so it works in a repo of any language.
+
+Add it to CI if the repo has one: the layout only stays conformant if
+something checks on every push.
+
 ### Step 4a — Install the `commit-msg` Hook
 
 Copy the Conventional Commits hook into the target repo as a **tracked** file, so
