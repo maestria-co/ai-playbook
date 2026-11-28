@@ -22,6 +22,7 @@ elsewhere — link here.
 |---|---|---|---|
 | `CLAUDE.md` / `copilot-instructions.md` | Entry point — project facts + context imports | file | Under 80 lines. Changes rarely. Agent reads on every task. |
 | `.context/META.md` | This file — what belongs where | file | The layout spec. Ships with the template. |
+| `.context/README.md` | Orientation — what this directory is and how it is used | file | **Optional** — not shipped in the template. Write one if newcomers need the tour; nothing requires or checks it. |
 | `.context/overview.md` | What the project is | **always a file** | Tech stack, purpose, current phase. Never `project-overview.md`. |
 | `.context/architecture.md` | How the system is structured | file → folder | Layers, data flow, integrations. Not decisions, not code style. |
 | `.context/standards.md` | How to write code here | file → folder | Style, naming, error handling, patterns. |
@@ -31,6 +32,12 @@ elsewhere — link here.
 | `.context/tasks/` | Per-task work artifacts | folder | One folder per task. Research reports live in `tasks/<id>/research/`. |
 | `.context/workflows/` | PR format, branching, CI | folder | Always created. `pull-requests.md` is required. |
 | `.context/domains/` | Entities, glossary, domain rules | folder | **Conditional** — only for a repo with a rich domain or its own vocabulary. |
+
+**Conditional** and **Optional** entries are never required: nothing fails
+when `domains/` or `README.md` is absent. No check rejects an entry this table
+does not list either, which is why a file sitting in `.context/` needs a row
+here rather than being left to inference — "is this allowed?" should be
+answerable from the spec, not from whether a checker happens to complain.
 
 ### Shapes
 
