@@ -1,3 +1,7 @@
+---
+context_shape: project
+---
+
 # Project Overview
 
 > **AI Instruction:** Read this before starting any task. Update when you discover undocumented facts about the project that aren't obvious from the code. Keep it high-level — detail belongs in subdirectory files.
