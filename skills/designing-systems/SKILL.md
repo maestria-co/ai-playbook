@@ -112,11 +112,17 @@ no number has been claimed.
 When you do claim a number, derive it — never guess:
 
 ```bash
-ls .context/decisions/ | grep -oE 'ADR-[0-9]+' | sort -u | tail -1
+{ ls .context/decisions/; cat .context/decisions/README.md 2>/dev/null; } \
+  | grep -oE 'ADR-[0-9]+' | sort -t- -k2,2n | tail -1
 ```
 
-Check the index too: it shares **one** numbering space with the files beside it, so an entry listed
-there but not yet written as a file still owns its number.
+Filenames and index rows are read together, because they share **one** numbering space: an entry
+listed in the index but not yet written as a file still owns its number.
+
+The sort is numeric on the number field, not lexical. `sort -u | tail -1` picks `ADR-9` out of
+`{ADR-9, ADR-100}` and `ADR-99` out of `{ADR-99, ADR-100}`, so the next number it suggests is one
+already taken — the exact double-claim this section exists to prevent. `-t- -k2,2n` is POSIX, so it
+behaves the same in a consumer repo on any platform.
 
 If you find a `.context/decisions.md`, stop and report it rather than adding to it. Collapsing ADRs
 into a single file is drift — `META.md` says `decisions/` is always a folder, and
